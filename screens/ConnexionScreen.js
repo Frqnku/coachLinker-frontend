@@ -7,7 +7,7 @@ export default function ConnexionScreen({ navigation }) {
     }
 
     return (
-        <View>
+        <View style={styles.container}>
             <Text>ConnexionScreen</Text>
             <Pressable onPress={() => handleSignin()}>
                 <Text>Se connecter</Text>

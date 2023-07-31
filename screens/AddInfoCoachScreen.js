@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, Text, View, Pressable} from 'react-native'
 
-export default function AddInfoCoachScreen() {
+export default function AddInfoCoachScreen({ navigation }) {
 
   const handleSubmit = () => {
 

@@ -26,6 +26,7 @@ import { persistStore, persistReducer } from 'redux-persist'; // Import Redux Pe
 import { PersistGate } from 'redux-persist/integration/react';
 import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStoragee
 import darkMode from './reducers/darkMode';
+import { useSelector } from 'react-redux';
 
 // Redux Persist Config
 const persistConfig = {
@@ -46,14 +47,17 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
+  const isDarkMode = useSelector(state => state.darkMode.value)
   return (
-    <Tab.Navigator screenOptions={({ route }) => ({
+    <Tab.Navigator 
+    initialRouteName='Menu'
+    screenOptions={({ route }) => ({
       tabBarIcon: ({ color, size }) => {
         let iconName = '';
 
         if (route.name === 'Message') {
           iconName = 'envelope';
-        } else if (route.name === 'Profile') {
+        } else if (route.name === 'Profil') {
           iconName = 'user';
         } else if (route.name === 'Menu') {
           iconName = 'home';
@@ -65,12 +69,15 @@ const TabNavigator = () => {
 
         return <FontAwesome name={iconName} size={size} color={color} />;
       },
-      tabBarActiveTintColor: '#ec6e5b',
-      tabBarInactiveTintColor: '#335561',
+      tabBarActiveTintColor: '#F4A100',
+      tabBarActiveBackgroundColor: "#FFF3DD",
+      tabBarInactiveTintColor: isDarkMode ? "#FFF" : '#000',
+      tabBarInactiveBackgroundColor: isDarkMode ? "#000" : "#FFF",
+      tabBarStyle: { borderTopWidth: 0 },
       headerShown: false,
     })}>
       <Tab.Screen name="Message" component={MessageScreen} />
-      <Tab.Screen name="Profile" component={isCoach ? CoachProfileScreen : StudentProfileScreen} />
+      <Tab.Screen name="Profil" component={isCoach ? CoachProfileScreen : StudentProfileScreen} />
       <Tab.Screen name="Menu" component={isCoach ? CoachMenuScreen : StudentMenuScreen} />
       <Tab.Screen name="Option" component={OptionScreen} />
       <Tab.Screen name="Agenda" component={isCoach ? AgendaCoachScreen : CoachingStudentScreen} />
@@ -81,7 +88,8 @@ const TabNavigator = () => {
 // à changer plus tard
 const isLogged = true
 const isValidate = true
-const isCoach = false
+const isCoach = true
+
 
 export default function App() {
   return (

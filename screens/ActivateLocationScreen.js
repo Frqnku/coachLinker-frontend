@@ -2,10 +2,11 @@ import React from 'react'
 import { StyleSheet, Text, View, Pressable} from 'react-native'
 
 export default function ActivateLocationScreen({ navigation }) {
+
   return (
     <View style={styles.container}>
         <Text>ActivateLocationScreen</Text>
-        <Pressable onPress={navigation.navigate('ChooseRole')}>
+        <Pressable onPress={() => navigation.navigate('ChooseRole')}>
                 <Text>Next page</Text>
         </Pressable>
     </View>

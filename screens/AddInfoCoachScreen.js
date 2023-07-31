@@ -47,8 +47,10 @@ export default function AddInfoCoachScreen({ navigation }) {
 
         <View style={styles.btns}>
           <Pressable style={styles.btnPhoto}>
+            <Text>Photo</Text>
           </Pressable>
           <Pressable style={styles.btnDoc}>
+            <Text>Doc</Text>
           </Pressable>
         </View>
 
@@ -63,7 +65,7 @@ export default function AddInfoCoachScreen({ navigation }) {
           <Pressable style={styles.btnSend}>
             <Text>Envoyez un document</Text>
           </Pressable>
-          
+
         <Pressable style={styles.btnValidate} onPress={handleSubmit}>
             <Text>Valider</Text>
         </Pressable>

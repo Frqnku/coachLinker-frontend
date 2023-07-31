@@ -79,7 +79,7 @@ const TabNavigator = () => {
 };
 
 // à changer plus tard
-const isLogged = true
+const isLogged = false
 const isValidate = true
 const isCoach = false
 

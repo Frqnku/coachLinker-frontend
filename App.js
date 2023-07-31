@@ -65,8 +65,9 @@ const TabNavigator = () => {
 
         return <FontAwesome name={iconName} size={size} color={color} />;
       },
-      tabBarActiveTintColor: '#ec6e5b',
-      tabBarInactiveTintColor: '#335561',
+      tabBarActiveTintColor: '#F4A100',
+      tabBarActiveBackgroundColor: "#FFF3DD",
+      tabBarInactiveTintColor: '#000',
       headerShown: false,
     })}>
       <Tab.Screen name="Message" component={MessageScreen} />

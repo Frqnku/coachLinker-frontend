@@ -26,6 +26,7 @@ import { persistStore, persistReducer } from 'redux-persist'; // Import Redux Pe
 import { PersistGate } from 'redux-persist/integration/react';
 import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStoragee
 import darkMode from './reducers/darkMode';
+import { useSelector } from 'react-redux';
 
 // Redux Persist Config
 const persistConfig = {
@@ -46,6 +47,7 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
+  const isDarkMode = useSelector(state => state.darkMode.value)
   return (
     <Tab.Navigator screenOptions={({ route }) => ({
       tabBarIcon: ({ color, size }) => {
@@ -65,8 +67,10 @@ const TabNavigator = () => {
 
         return <FontAwesome name={iconName} size={size} color={color} />;
       },
-      tabBarActiveTintColor: '#ec6e5b',
-      tabBarInactiveTintColor: '#335561',
+      tabBarActiveTintColor: '#F4A100',
+      tabBarActiveBackgroundColor: "#FFF3DD",
+      tabBarInactiveTintColor: isDarkMode ? "#FFF" : '#000',
+      tabBarInactiveBackgroundColor: isDarkMode ? "#000" : "#FFF",
       headerShown: false,
     })}>
       <Tab.Screen name="Message" component={MessageScreen} />
@@ -82,6 +86,7 @@ const TabNavigator = () => {
 const isLogged = true
 const isValidate = false
 const isCoach = true
+
 
 export default function App() {
   return (

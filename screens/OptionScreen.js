@@ -6,6 +6,7 @@ export default function OptionScreen() {
     return (
         <View>
             <Text>OptionScreen</Text>
+            {/* ajouter le switch darkmode et la possibilité d'activer localisation */}
         </View>
     );
 }

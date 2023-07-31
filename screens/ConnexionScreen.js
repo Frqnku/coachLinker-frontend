@@ -1,11 +1,17 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Pressable } from 'react-native';
 
-export default function ConnexionScreen() {
+export default function ConnexionScreen({ navigation }) {
+    const handleSignin = () => {
 
+        navigation.navigate('Localisation')
+    }
 
     return (
         <View>
             <Text>ConnexionScreen</Text>
+            <Pressable onPress={() => handleSignin()}>
+                <Text>Se connecter</Text>
+            </Pressable>
         </View>
     );
 }

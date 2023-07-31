@@ -2,11 +2,17 @@ import React from 'react'
 import { StyleSheet, Text, View, Pressable} from 'react-native'
 
 export default function AddInfoStudentScreen({navigation}) {
+  
+  const handleSubmit = () => {
+
+    navigation.navigate('TabNavigator')
+  }
+
   return (
     <View style={styles.container}>
         <Text>AddInfoStudentScreen</Text>
-        <Pressable onPress={navigation.navigate('TabNavigator')}>
-            <Text>Go to Home</Text>
+        <Pressable onPress={handleSubmit}>
+            <Text>Valider</Text>
         </Pressable>
     </View>
   )

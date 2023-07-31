@@ -5,6 +5,7 @@ export default function CoachingStudentScreen() {
   return (
     <View style={styles.container}>
         <Text>CoachingStudentScreen</Text>
+        {/* afficher les coaching à venir et coaching passés */}
     </View>
   )
 }

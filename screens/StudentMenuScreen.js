@@ -6,6 +6,7 @@ export default function StudentMenuScreen() {
     return (
         <View>
             <Text>StudentMenuScreen</Text>
+            {/* afficher les coachs autour */}
         </View>
     );
 }

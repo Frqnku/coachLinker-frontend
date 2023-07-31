@@ -2,11 +2,17 @@ import React from 'react'
 import { StyleSheet, Text, View} from 'react-native'
 
 export default function AddInfoCoachScreen() {
+
+  const handleSubmit = () => {
+
+    navigation.navigate('Verification')
+  }
+
   return (
     <View style={styles.container}>
         <Text>AddInfoCoachScreen</Text>
-        <Pressable onPress={navigation.navigate('Verification')}>
-            <Text>Go to Home</Text>
+        <Pressable onPress={handleSubmit}>
+            <Text>Valider</Text>
         </Pressable>
     </View>
   )

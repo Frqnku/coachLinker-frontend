@@ -6,6 +6,7 @@ export default function AgendaScreen() {
     return (
         <View>
             <Text>AgendaScreen</Text>
+            {/* afficher l'écran de disponibilités modifiables */}
         </View>
     );
 }

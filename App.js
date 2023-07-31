@@ -83,7 +83,7 @@ export default function App() {
       <PersistGate loading={null} persistor={persistor}>
       <NavigationContainer>  
           <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="Home" component={!isLogged ? ConnexionScreen : (isValidate ? TabNavigator : VerificationScreen)} />
+            <Stack.Screen name="Home" component={!isLogged ? ConnexionScreen : (isValidate ? TabNavigator : VerificationScreen)} /> {/* Si pas log alors écran de connexion sinon si validé alors écran d'accueil sinon écran de verification */}
             <Stack.Screen name="Localisation" component={ActivateLocationScreen} />
             <Stack.Screen name="ChooseRole" component={ChooseRoleScreen} />
             <Stack.Screen name="AddInfoStudent" component={AddInfoStudentScreen} />

@@ -1,44 +1,29 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { StyleSheet, Text, View, Pressable} from 'react-native'
 import { useDispatch } from 'react-redux';
-import { updateCurrentLocation, statusChange } from '../reducers/users';
+import { updateCurrentLocation, updateStatus } from '../reducers/users';
 import * as Location from 'expo-location';
-import { useSelector } from 'react-redux';
 
 export default function ActivateLocationScreen({ navigation }) {
-
-  const user = useSelector((state) => state.users.value)
   const dispatch = useDispatch()
-  // const [currentLocation, setCurrentLocation] = useState({ latitude: 0, longitude:0 })
-  // const [isLocationOn, setIsLocationOn] = useState(null)
 
-//   useEffect(() => {
-//     (async () => {
-//       const { status } = await Location.requestForegroundPermissionsAsync();
-
-//   if (status === 'granted') {
-//     Location.watchPositionAsync({ distanceInterval: 10 }, (location) => {
-//       setCurrentLocation(location.coords);
-//     });
-//   }
-// })();
-//   }, []);
-
-  const handleLocationOn =  async () => {
+  const acceptPermission =  async () => {
     const { status } = await Location.requestForegroundPermissionsAsync();
 
     if(status === 'granted') {
       Location.watchPositionAsync({ distanceInterval: 10 }, (location) => {
-        console.log(location.coords)
-            dispatch(updateCurrentLocation(location.coords));
-            dispatch(statusChange())
+            dispatch(updateCurrentLocation({latitude: location.coords.latitude, longitude: location.coords.longitude}));
             navigation.navigate('ChooseRole')
       })
+    } else {
+      dispatch(updateStatus(false))
+      navigation.navigate('ChooseRole')
     }
   }
 
-  const handleLocationOff = () => {
-    
+  const denyPermission = () => {
+    dispatch(updateStatus(false))
+    navigation.navigate('ChooseRole')
   }
 
   return (
@@ -48,11 +33,11 @@ export default function ActivateLocationScreen({ navigation }) {
                 <Text>Next page</Text>
         </Pressable>
 
-        <Pressable style={styles.btnLocationOn} onPress={handleLocationOn}>
+        <Pressable style={styles.btnLocationOn} onPress={acceptPermission}>
           <Text>Oui</Text>
         </Pressable>
 
-        <Pressable style={styles.btnLocationOff} onPress={handleLocationOff}>
+        <Pressable style={styles.btnLocationOff} onPress={denyPermission}>
           <Text>Non</Text>
         </Pressable>
     </View>

@@ -23,5 +23,23 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-    }
+    },
+    darkBg: {
+      backgroundColor: '#000'
+    },
+    darkText: {
+        color: '#fff'
+    },
+    darkCard: {
+        backgroundColor: '#2E2E2E'
+    },
+    lightBg: {
+        backgroundColor: '#f2f2f2'
+    },
+    lightCard: {
+        backgroundColor: '#fff'
+    },
+    lightText: {
+        color: '#000'
+    },
 })

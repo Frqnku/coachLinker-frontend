@@ -1,11 +1,11 @@
 import { StyleSheet, Text, View } from 'react-native';
 
-export default function ConnexionScreen() {
+export default function StudentMenuScreen() {
 
 
     return (
         <View>
-            <Text>ConnexionScreen</Text>
+            <Text>StudentMenuScreen</Text>
         </View>
     );
 }

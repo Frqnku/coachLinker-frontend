@@ -4,6 +4,21 @@ import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import ActivateLocationScreen from './screens/ActivateLocationScreen';
+import AddInfoCoachScreen from './screens/AddInfoCoachScreen';
+import AddInfoStudentScreen from './screens/AddInfoStudentScreen';
+import AgendaCoachScreen from './screens/AgendaCoachScreen';
+import ChooseRoleScreen from './screens/ChooseRoleScreen';
+import CoachingStudentScreen from './screens/CoachingStudentScreen';
+import CoachMenuScreen from './screens/CoachMenuScreen';
+import CoachMenuScreen from './screens/CoachMenuScreen';
+import CoachProfileScreen from './screens/CoachProfileScreen';
+import ConnexionScreen from './screens/ConnexionScreen';
+import MessageScreen from './screens/MessageScreen';
+import OptionScreen from './screens/OptionScreen';
+import StudentMenuScreen from './screens/StudentMenuScreen';
+import StudentProfileScreen from './screens/StudentProfileScreen';
+import VerificationScreen from './screens/VerificationScreen';
 
 import { Provider } from 'react-redux';
 import { configureStore, combineReducers } from '@reduxjs/toolkit'; // Update import
@@ -35,10 +50,16 @@ const TabNavigator = () => {
       tabBarIcon: ({ color, size }) => {
         let iconName = '';
 
-        if (route.name === 'Map') {
-          iconName = 'location-arrow';
-        } else if (route.name === 'Places') {
-          iconName = 'map-pin';
+        if (route.name === 'Message') {
+          iconName = 'envelope';
+        } else if (route.name === 'Profile') {
+          iconName = 'user';
+        } else if (route.name === 'Menu') {
+          iconName = 'house';
+        } else if (route.name === 'Option') {
+          iconName = 'gear';
+        } else if (route.name === 'Agenda') {
+          iconName = 'calendar';
         }
 
         return <FontAwesome name={iconName} size={size} color={color} />;
@@ -47,8 +68,11 @@ const TabNavigator = () => {
       tabBarInactiveTintColor: '#335561',
       headerShown: false,
     })}>
-      <Tab.Screen name="Map" component={MapScreen} />
-      <Tab.Screen name="Places" component={PlacesScreen} />
+      <Tab.Screen name="Message" component={MessageScreen} />
+      <Tab.Screen name="Profile" component={isCoach ? CoachProfileScreen : StudentProfileScreen} />
+      <Tab.Screen name="Menu" component={isCoach ? CoachMenuScreen : StudentMenuScreen} />
+      <Tab.Screen name="Option" component={OptionScreen} />
+      <Tab.Screen name="Agenda" component={isCoach ? AgendaCoachScreen : CoachingStudentScreen} />
     </Tab.Navigator>
   );
 };
@@ -57,10 +81,17 @@ export default function App() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="TabNavigator" component={TabNavigator} />
-        </Stack.Navigator>
+      <NavigationContainer>  
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="Home" component={!isLogged ? ConnexionScreen : (isValidate ? TabNavigator : VerificationScreen)} />
+            <Stack.Screen name="Localisation" component={ActivateLocationScreen} />
+            <Stack.Screen name="ChooseRole" component={ChooseRoleScreen} />
+            <Stack.Screen name="AddInfoStudent" component={AddInfoStudentScreen} />
+            <Stack.Screen name="AddInfoCoach" component={AddInfoCoachScreen} />
+            <Stack.Screen name='Verification' component={VerificationScreen} />
+            <Stack.Screen name="TabNavigator" component={TabNavigator} />
+          </Stack.Navigator>
+        </NavigationContainer>
       </PersistGate>
     </Provider>
   );

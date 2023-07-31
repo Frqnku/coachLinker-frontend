@@ -15,7 +15,11 @@
     "@react-navigation/native-stack": "^6.9.13",
     "@reduxjs/toolkit": "^1.9.5",
     "expo": "~49.0.5",
+<<<<<<< HEAD
+    "expo-location": "~16.1.0",
+=======
     "expo-camera": "~13.4.2",
+>>>>>>> 901ae085ac3d1c1776e2b133dbcea1e41eaee5a4
     "expo-status-bar": "~1.6.0",
     "react": "18.2.0",
     "react-native": "0.72.3",

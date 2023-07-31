@@ -27,6 +27,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStoragee
 import darkMode from './reducers/darkMode';
 import { useSelector } from 'react-redux';
+import users from './reducers/users';
 
 // Redux Persist Config
 const persistConfig = {
@@ -35,7 +36,8 @@ const persistConfig = {
   // blacklist: ['darkMode'] Mettre tous les reducers à l'exception de ceux qu'on veut rendre persistant
 };
 const rootReducer = combineReducers({
-  darkMode
+  darkMode,
+  users
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 const store = configureStore({
@@ -86,7 +88,7 @@ const TabNavigator = () => {
 };
 
 // à changer plus tard
-const isLogged = true
+const isLogged = false
 const isValidate = true
 const isCoach = false
 

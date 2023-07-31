@@ -49,7 +49,9 @@ const Tab = createBottomTabNavigator();
 const TabNavigator = () => {
   const isDarkMode = useSelector(state => state.darkMode.value)
   return (
-    <Tab.Navigator screenOptions={({ route }) => ({
+    <Tab.Navigator 
+    initialRouteName='Menu'
+    screenOptions={({ route }) => ({
       tabBarIcon: ({ color, size }) => {
         let iconName = '';
 

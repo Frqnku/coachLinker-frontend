@@ -11,7 +11,6 @@ import AgendaCoachScreen from './screens/AgendaCoachScreen';
 import ChooseRoleScreen from './screens/ChooseRoleScreen';
 import CoachingStudentScreen from './screens/CoachingStudentScreen';
 import CoachMenuScreen from './screens/CoachMenuScreen';
-import CoachMenuScreen from './screens/CoachMenuScreen';
 import CoachProfileScreen from './screens/CoachProfileScreen';
 import ConnexionScreen from './screens/ConnexionScreen';
 import MessageScreen from './screens/MessageScreen';

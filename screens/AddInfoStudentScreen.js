@@ -1,11 +1,11 @@
 import React from 'react'
-import { StyleSheet, Text, View} from 'react-native'
+import { StyleSheet, Text, View, Pressable} from 'react-native'
 
-export default function AddInfoCoachScreen() {
+export default function AddInfoStudentScreen({navigation}) {
   return (
     <View style={styles.container}>
-        <Text>AddInfoCoachScreen</Text>
-        <Pressable onPress={navigation.navigate('Verification')}>
+        <Text>AddInfoStudentScreen</Text>
+        <Pressable onPress={navigation.navigate('TabNavigator')}>
             <Text>Go to Home</Text>
         </Pressable>
     </View>

@@ -1,10 +1,10 @@
 import React from 'react'
 import { StyleSheet, Text, View} from 'react-native'
 
-export default function CoachingStudent() {
+export default function CoachingStudentScreen() {
   return (
     <View style={styles.container}>
-        <Text>CoachingStudent</Text>
+        <Text>CoachingStudentScreen</Text>
     </View>
   )
 }

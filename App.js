@@ -71,6 +71,7 @@ const TabNavigator = () => {
       tabBarActiveBackgroundColor: "#FFF3DD",
       tabBarInactiveTintColor: isDarkMode ? "#FFF" : '#000',
       tabBarInactiveBackgroundColor: isDarkMode ? "#000" : "#FFF",
+      tabBarStyle: { borderTopWidth: 0 },
       headerShown: false,
     })}>
       <Tab.Screen name="Message" component={MessageScreen} />
@@ -84,7 +85,7 @@ const TabNavigator = () => {
 
 // à changer plus tard
 const isLogged = true
-const isValidate = false
+const isValidate = true
 const isCoach = true
 
 

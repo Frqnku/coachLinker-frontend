@@ -88,7 +88,7 @@ const TabNavigator = () => {
 // à changer plus tard
 const isLogged = true
 const isValidate = true
-const isCoach = true
+const isCoach = false
 
 
 export default function App() {

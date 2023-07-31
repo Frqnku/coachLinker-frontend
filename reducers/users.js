@@ -2,8 +2,11 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
     value: {
-    currentLocation: {},
-    status: false
+      currentLocation: {
+        latitude: 0,
+        longitude: 0
+      },
+      statusGranted: true
 }
 };
 
@@ -14,11 +17,11 @@ export const userSlice = createSlice({
     updateCurrentLocation: (state, action) => {
         state.value.currentLocation = action.payload;
     },
-    statusChange: (state) => {
-        state.value.status = !state.value.status
+    updateStatus: (state, action) => {
+        state.value.statusGranted = action.payload
     }
   },
 });
 
-export const { updateCurrentLocation, statusChange } = userSlice.actions;
+export const { updateCurrentLocation, updateStatus } = userSlice.actions;
 export default userSlice.reducer;

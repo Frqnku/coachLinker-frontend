@@ -1,86 +1,105 @@
-import React, { useState } from 'react'
-import { StyleSheet, Text, View, Pressable} from 'react-native'
-import { useDispatch } from 'react-redux';
-import { updateCurrentLocation, statusChange } from '../reducers/users';
+import React from 'react'
+import { StyleSheet, Text, View, Pressable, SafeAreaView} from 'react-native'
+import { useSelector, useDispatch } from 'react-redux';
+import { updateCurrentLocation, updateStatus } from '../reducers/users';
 import * as Location from 'expo-location';
-import { useSelector } from 'react-redux';
 
 export default function ActivateLocationScreen({ navigation }) {
-
-  const user = useSelector((state) => state.users.value)
   const dispatch = useDispatch()
-  // const [currentLocation, setCurrentLocation] = useState({ latitude: 0, longitude:0 })
-  // const [isLocationOn, setIsLocationOn] = useState(null)
+  const isDarkMode = useSelector(state => state.darkMode.value)
 
-//   useEffect(() => {
-//     (async () => {
-//       const { status } = await Location.requestForegroundPermissionsAsync();
-
-//   if (status === 'granted') {
-//     Location.watchPositionAsync({ distanceInterval: 10 }, (location) => {
-//       setCurrentLocation(location.coords);
-//     });
-//   }
-// })();
-//   }, []);
-
-  const handleLocationOn =  async () => {
+  const acceptPermission =  async () => {
     const { status } = await Location.requestForegroundPermissionsAsync();
 
     if(status === 'granted') {
       Location.watchPositionAsync({ distanceInterval: 10 }, (location) => {
-        console.log(location.coords)
-            dispatch(updateCurrentLocation(location.coords));
-            dispatch(statusChange())
+            dispatch(updateCurrentLocation({latitude: location.coords.latitude, longitude: location.coords.longitude}));
             navigation.navigate('ChooseRole')
       })
+    } else {
+      dispatch(updateStatus(false))
+      navigation.navigate('ChooseRole')
     }
   }
 
-  const handleLocationOff = () => {
-    
+  const denyPermission = () => {
+    dispatch(updateStatus(false))
+    navigation.navigate('ChooseRole')
   }
 
   return (
-    <View style={styles.container}>
-        <Text>ActivateLocationScreen</Text>
-        <Pressable onPress={() => navigation.navigate('ChooseRole')}>
-                <Text>Next page</Text>
-        </Pressable>
+    <SafeAreaView style={[styles.container, isDarkMode ? styles.darkBg : styles.lightBg]}>
+      <View style={[styles.cards, isDarkMode ? styles.darkCard : styles.lightCard]}>
+        <View style={styles.top}>
+            <Text style={[styles.title, isDarkMode ? styles.darkText : styles.lightText]}>Activer la localisation ?</Text>
+          </View>
+          
+          <View style={styles.bottom}>
+            <Pressable style={styles.btnLocation} onPress={acceptPermission}>
+              <Text style={[styles.text, styles.darkText]}>Oui, j'active la localisation</Text>
+            </Pressable>
 
-        <Pressable style={styles.btnLocationOn} onPress={handleLocationOn}>
-          <Text>Oui</Text>
-        </Pressable>
-
-        <Pressable style={styles.btnLocationOff} onPress={handleLocationOff}>
-          <Text>Non</Text>
-        </Pressable>
-    </View>
+            <Pressable style={styles.btnLocation} onPress={denyPermission}>
+              <Text style={[styles.text, styles.darkText]}>Non, je choisirai plus tard</Text>
+            </Pressable>
+          </View>
+      </View>
+    </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    btnLocationOn: {
-      height: 50,
-      width: 100,
-      backgroundColor: 'orange',
-      alignItems: 'center',
+      flex: 1,
       justifyContent: 'center',
-    },
-    btnLocationOff: {
-      height: 50,
-      width: 100,
-      backgroundColor: 'yellow',
       alignItems: 'center',
-      justifyContent: 'center'
     },
-    selectedBtn: {
-      backgroundColor: 'green'
-    }
-
+    cards: {
+      width: '80%',
+      paddingVertical: 25,
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      borderRadius: 5
+    },
+    bottom: {
+      justifyContent: 'space-around',
+      alignItems: 'center',
+      width: '100%',
+      height: 200,
+      marginTop: 15
+    },
+    btnLocation: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: '80%',
+      height: 70,
+      backgroundColor: '#F4A100',
+      borderRadius: 5
+    },
+    darkBg: {
+      backgroundColor: '#000'
+    },
+    darkText: {
+        color: '#fff'
+    },
+    darkCard: {
+        backgroundColor: '#2E2E2E'
+    },
+    lightBg: {
+        backgroundColor: '#f2f2f2'
+    },
+    lightCard: {
+        backgroundColor: '#fff'
+    },
+    lightText: {
+        color: '#000'
+    },
+    text: {
+        fontSize: 16,
+        fontWeight: 500
+    },
+    title: {
+        fontSize: 20,
+        fontWeight: 600
+    },
 })

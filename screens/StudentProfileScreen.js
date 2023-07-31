@@ -1,5 +1,5 @@
 import React from 'react'
-import {KeyboardAvoidingView, Image, TextInput, View, StyleSheet} from 'react-native';
+import {StyleSheet, KeyboardAvoidingView, Image, TextInput, View} from 'react-native';
 
 export default function StudentProfileScreen() {
   return (

@@ -4,18 +4,37 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
 import { useSelector, useDispatch } from 'react-redux';
 import { switchMode } from '../reducers/darkMode';
+import { updateCurrentLocation, updateStatus } from '../reducers/users';
+
+import * as Location from 'expo-location';
 
 export default function OptionScreen({ navigation }) {
     const dispatch = useDispatch()
     const isDarkMode = useSelector(state => state.darkMode.value)
+    const isGranted = useSelector(state => state.users.value.statusGranted)
 
     const disconnect = () => {
         /* dispatch(disconnect()) */
         navigation.navigate('Home')
     }
-    const activateLocation = () => {
-        /* dispatch(activateLocation()) */
+    const activateLocation = async () => {
+
+        if(isGranted) {
+            return
+        }
+
+        const { status } = await Location.requestForegroundPermissionsAsync();
+
+        if(status === 'granted') {
+            Location.watchPositionAsync({ distanceInterval: 10 }, (location) => {
+                    dispatch(updateCurrentLocation({latitude: location.coords.latitude, longitude: location.coords.longitude}));
+                    dispatch(updateStatus(true))
+            })
+        } else {
+            dispatch(updateStatus(false))
+        }
     }
+
     const handleSwitch = () => {
         dispatch(switchMode())
     }
@@ -38,8 +57,8 @@ export default function OptionScreen({ navigation }) {
                 <Pressable
                 style={[styles.clickableOption, isDarkMode ? styles.darkCard : styles.lightCard]}
                 onPress={activateLocation}>
-                    <FontAwesome name='location-arrow' size={24} color={isDarkMode ? '#fff' : '#000'} />
-                    <Text style={[styles.text, isDarkMode ? styles.darkText : styles.lightText]}>Activer la localisation</Text>
+                    <FontAwesome name='location-arrow' size={24} color={isGranted ? 'grey' : isDarkMode ? '#fff' : '#000'} />
+                    <Text style={[styles.text, isGranted ? styles.greyText : isDarkMode ? styles.darkText : styles.lightText]}>Activer la localisation</Text>
                 </Pressable>
                 <Pressable
                 style={[styles.clickableOption, isDarkMode ? styles.darkCard : styles.lightCard]}
@@ -48,7 +67,6 @@ export default function OptionScreen({ navigation }) {
                     <Text style={[styles.text, isDarkMode ? styles.darkText : styles.lightText]}>{isDarkMode ? 'Désactiver' : 'Activer'} le Dark mode</Text>
                 </Pressable>
             </View>
-            {/* ajouter la possibilité d'activer localisation */}
         </SafeAreaView>
     );
 }
@@ -81,6 +99,9 @@ const styles = StyleSheet.create({
     },
     darkCard: {
         backgroundColor: '#2E2E2E'
+    },
+    greyText: {
+        color: 'grey'
     },
     lightBg: {
         backgroundColor: '#f2f2f2'

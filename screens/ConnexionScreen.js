@@ -27,13 +27,13 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     input: {
-        width: '80%',
-        marginTop: 25,
-        borderBottomColor: '#ec6e5b',
-        borderBottomWidth: 1,
-        fontSize: 18,
+        fontSize : 20,
+        backgroundColor: "#F2F2F2",
+        width : "80%",
+        margin : "4%",
+        height: 40,
       },
 })

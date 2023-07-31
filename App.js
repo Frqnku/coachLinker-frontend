@@ -65,9 +65,8 @@ const TabNavigator = () => {
 
         return <FontAwesome name={iconName} size={size} color={color} />;
       },
-      tabBarActiveTintColor: '#F4A100',
-      tabBarActiveBackgroundColor: "#FFF3DD",
-      tabBarInactiveTintColor: '#000',
+      tabBarActiveTintColor: '#ec6e5b',
+      tabBarInactiveTintColor: '#335561',
       headerShown: false,
     })}>
       <Tab.Screen name="Message" component={MessageScreen} />
@@ -81,7 +80,7 @@ const TabNavigator = () => {
 
 // à changer plus tard
 const isLogged = true
-const isValidate = true
+const isValidate = false
 const isCoach = true
 
 export default function App() {

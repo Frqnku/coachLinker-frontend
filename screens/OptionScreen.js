@@ -1,12 +1,22 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
+import { switchMode } from '../reducers/darkMode';
 
 export default function OptionScreen() {
+    const dispatch = useDispatch()
+    const isDarkMode = useSelector(state => state.darkMode.value)
 
+    const handleSwitch = () => {
+        dispatch(switchMode())
+    }
 
     return (
-        <View>
-            <Text>OptionScreen</Text>
-            {/* ajouter le switch darkmode et la possibilité d'activer localisation */}
+        <View style={[styles.container, isDarkMode ? styles.darkBg : styles.lightBg]}>
+            <Text style={[isDarkMode ? styles.darkText : styles.lightText]}>OptionScreen</Text>
+            <Pressable onPress={handleSwitch}>
+                <Text style={[isDarkMode ? styles.darkText : styles.lightText]}>{isDarkMode ? 'Désactiver' : 'Activer'} le Dark mode</Text>
+            </Pressable>
+            {/* ajouter la possibilité d'activer localisation */}
         </View>
     );
 }
@@ -14,9 +24,20 @@ export default function OptionScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white',
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    darkBg: {
+        backgroundColor: '#000'
+    },
+    lightBg: {
+        backgroundColor: '#f2f2f2'
+    },
+    darkText: {
+        color: '#fff'
+    },
+    lightText: {
+        color: '#000'
     }
 })
 

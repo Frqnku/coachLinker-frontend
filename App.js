@@ -1,9 +1,10 @@
-import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
 import ActivateLocationScreen from './screens/ActivateLocationScreen';
 import AddInfoCoachScreen from './screens/AddInfoCoachScreen';
 import AddInfoStudentScreen from './screens/AddInfoStudentScreen';
@@ -24,15 +25,16 @@ import { configureStore, combineReducers } from '@reduxjs/toolkit'; // Update im
 import { persistStore, persistReducer } from 'redux-persist'; // Import Redux Persist
 import { PersistGate } from 'redux-persist/integration/react';
 import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStoragee
+import darkMode from './reducers/darkMode';
 
 // Redux Persist Config
 const persistConfig = {
-  key: 'coachLinker',
+  key: 'root',
   storage: AsyncStorage,
-  blacklist: ['user'] // Mettre tous les reducers à l'exception de ceux qu'on veut rendre persistant
+  // blacklist: ['darkMode'] Mettre tous les reducers à l'exception de ceux qu'on veut rendre persistant
 };
 const rootReducer = combineReducers({
-  //user: user
+  darkMode
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 const store = configureStore({
@@ -54,7 +56,7 @@ const TabNavigator = () => {
         } else if (route.name === 'Profile') {
           iconName = 'user';
         } else if (route.name === 'Menu') {
-          iconName = 'house';
+          iconName = 'home';
         } else if (route.name === 'Option') {
           iconName = 'gear';
         } else if (route.name === 'Agenda') {
@@ -63,8 +65,9 @@ const TabNavigator = () => {
 
         return <FontAwesome name={iconName} size={size} color={color} />;
       },
-      tabBarActiveTintColor: '#ec6e5b',
-      tabBarInactiveTintColor: '#335561',
+      tabBarActiveTintColor: '#F4A100',
+      tabBarActiveBackgroundColor: "#FFF3DD",
+      tabBarInactiveTintColor: '#000',
       headerShown: false,
     })}>
       <Tab.Screen name="Message" component={MessageScreen} />
@@ -76,13 +79,18 @@ const TabNavigator = () => {
   );
 };
 
+// à changer plus tard
+const isLogged = true
+const isValidate = true
+const isCoach = true
+
 export default function App() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
       <NavigationContainer>  
           <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="Home" component={!isLogged ? ConnexionScreen : (isValidate ? TabNavigator : VerificationScreen)} /> {/* Si pas log alors écran de connexion sinon si validé alors écran d'accueil sinon écran de verification */}
+            <Stack.Screen name="Home" component={!isLogged ? ConnexionScreen : (isValidate ? TabNavigator : VerificationScreen)} />
             <Stack.Screen name="Localisation" component={ActivateLocationScreen} />
             <Stack.Screen name="ChooseRole" component={ChooseRoleScreen} />
             <Stack.Screen name="AddInfoStudent" component={AddInfoStudentScreen} />
@@ -95,12 +103,3 @@ export default function App() {
     </Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

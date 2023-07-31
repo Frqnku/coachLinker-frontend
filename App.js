@@ -57,7 +57,7 @@ const TabNavigator = () => {
 
         if (route.name === 'Message') {
           iconName = 'envelope';
-        } else if (route.name === 'Profile') {
+        } else if (route.name === 'Profil') {
           iconName = 'user';
         } else if (route.name === 'Menu') {
           iconName = 'home';
@@ -77,7 +77,7 @@ const TabNavigator = () => {
       headerShown: false,
     })}>
       <Tab.Screen name="Message" component={MessageScreen} />
-      <Tab.Screen name="Profile" component={isCoach ? CoachProfileScreen : StudentProfileScreen} />
+      <Tab.Screen name="Profil" component={isCoach ? CoachProfileScreen : StudentProfileScreen} />
       <Tab.Screen name="Menu" component={isCoach ? CoachMenuScreen : StudentMenuScreen} />
       <Tab.Screen name="Option" component={OptionScreen} />
       <Tab.Screen name="Agenda" component={isCoach ? AgendaCoachScreen : CoachingStudentScreen} />

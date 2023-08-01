@@ -15,9 +15,6 @@ export default function StudentProfileScreen() {
     const isDarkMode = useSelector(state => state.darkMode.value)
     const user = useSelector((state) => state.users.value);
     
-  
-    
-
     const [hasPermission, setHasPermission] = useState(false);
     const [type, setType] = useState(CameraType.back);
     const [flashMode, setFlashMode] = useState(FlashMode.off);

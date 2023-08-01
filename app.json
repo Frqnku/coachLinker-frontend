@@ -7,9 +7,9 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "image": "https://res.cloudinary.com/djmvvsfiu/image/upload/v1690900478/COACH_LINKER_plu40e.gif",
+      "resizeMode": "cover",
+      "backgroundColor": "black"
     },
     "assetBundlePatterns": [
       "**/*"

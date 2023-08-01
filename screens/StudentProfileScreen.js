@@ -3,9 +3,13 @@ import { useState, useRef } from 'react';
 import { Camera, CameraType, FlashMode } from 'expo-camera';
 import { useIsFocused } from "@react-navigation/native";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { useSelector, useDispatch } from 'react-redux';
+import { switchMode } from '../reducers/darkMode';
 import {StyleSheet, KeyboardAvoidingView, Image, TextInput, View, Text, ScrollView, TouchableOpacity} from 'react-native';
 
 export default function StudentProfileScreen() {
+    
+    const isDarkMode = useSelector(state => state.darkMode.value)
   
     const isFocused = useIsFocused();
 
@@ -25,24 +29,27 @@ export default function StudentProfileScreen() {
     if (!hasPermission || !isFocused) {
        
   return (
-<KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-     <Image style={styles.return} source={require('../assets/bouton-retour.png')} />
+<KeyboardAvoidingView style={[styles.container, isDarkMode ? styles.darkBg : styles.lightBg]} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+     <Image style={[styles.return, isDarkMode ? styles.darkReturn : styles.lightReturn]} source={require('../assets/bouton-retour.png')} />
 
     <View style={styles.picture}>
-        <Image style={styles.image} source={require('../assets/utilisateur.png')} />
+        <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={require('../assets/utilisateur.png')} />
         <TouchableOpacity onPress={() => requestCameraPermission()} >
                     <Image style={styles.crayon} source={require('../assets/crayon.png')} />
         </TouchableOpacity>
     </View>
-    <View style={styles.inputs}>
-        <TextInput placeholder="Nom" placeholderTextColor="#F4A100" style={styles.inputNom} />
-        <TextInput placeholder="Prénom" placeholderTextColor="#F4A100" style={styles.inputPrenom} />
-        <TextInput placeholder="Date de naissance" placeholderTextColor="#F4A100" style={styles.inputDate} />
+<ScrollView style={styles.scrollInput} showsVerticalScrollIndicator={false}>
+     <View style={styles.inputs}>
+        <TextInput placeholder="Nom" placeholderTextColor="#7B7B7B" style={[styles.inputNom, isDarkMode ? styles.darkInput : styles.lightInput]} />
+        <TextInput placeholder="Prénom" placeholderTextColor="#7B7B7B" style={[styles.inputPrenom, isDarkMode ? styles.darkInput : styles.lightInput]} />
+        <TextInput placeholder="Date de naissance" placeholderTextColor="#7B7B7B" style={[styles.inputDate, isDarkMode ? styles.darkInput : styles.lightInput]} />
     </View>
     <View style={styles.description}>
-        <TextInput placeholder="A propos de moi" placeholderTextColor="#F4A100" style={styles.inputMoi} />
+        <TextInput placeholder="A propos de moi ..." placeholderTextColor="#7B7B7B" style={[styles.inputMoi, isDarkMode ? styles.darkInput : styles.lightInput]} />
 
     </View>
+</ScrollView>
+   
     <View>
         <Text style={styles.favoris}>Sports favoris :</Text>
     </View>
@@ -50,28 +57,28 @@ export default function StudentProfileScreen() {
     
     <ScrollView  horizontal={true} style={styles.scroll} showsHorizontalScrollIndicator={false}>
         <View style={styles.logos}>
-            <Image style={styles.football} source={require('../assets/sports/football.png')} />
+            <Image style={[styles.football, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/football.png')} />
         </View>
         <View style={styles.logos}>
-            <Image style={styles.boxe} source={require('../assets/sports/gant-de-boxe.png')} />
+            <Image style={[styles.boxe, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/gant-de-boxe.png')} />
         </View>
         <View style={styles.logos}>
-            <Image style={styles.gym} source={require('../assets/sports/gym.png')} />
+            <Image style={[styles.gym, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/gym.png')} />
         </View>
         <View style={styles.logos}>
-            <Image style={styles.basket} source={require('../assets/sports/basket-ball.png')} />
+            <Image style={[styles.basket, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/basket-ball.png')} />
         </View>
         <View style={styles.logos}>
-             <Image style={styles.golf} source={require('../assets/sports/le-golf.png')} />
+             <Image style={[styles.golf, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/le-golf.png')} />
         </View>
         <View style={styles.logos}>
-             <Image style={styles.nage} source={require('../assets/sports/nageur.png')} />
+             <Image style={[styles.nage, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/nageur.png')} />
         </View>
         <View style={styles.logos}>
-            <Image style={styles.tennis} source={require('../assets/sports/tennis.png')} />
+            <Image style={[styles.tennis, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/tennis.png')} />
         </View>
         <View style={styles.logos}>
-            <Image style={styles.badmington} source={require('../assets/sports/volant.png')} />
+            <Image style={[styles.badmington, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/volant.png')} />
         </View>
     </ScrollView>
     
@@ -108,9 +115,46 @@ export default function StudentProfileScreen() {
 
 }
 const styles = StyleSheet.create({
+    darkBg :{
+        backgroundColor: 'black',
+    },
+    lightBg:{
+        backgroundColor: '#E8E8E8',
+    },
+    darkReturn:{
+        backgroundColor:"#2E2E2E",
+    },
+    lightReturn :{
+        backgroundColor: '#fff',
+    },
+    darkPicture:{
+        backgroundColor:"#2E2E2E",
+    },
+    lightPicture:{
+        backgroundColor: '#fff',
+    },
+    darkInput:{
+        backgroundColor: '#2E2E2E',
+        borderColor: "#2E2E2E",
+        
+    },
+    lightInput:{
+        backgroundColor: '#E8E8E8',
+        borderColor: "#E8E8E8",
+        
+    },
+    darkImg:{
+        backgroundColor: '#2E2E2E',
+        borderColor: "#F4A100",
+    },
+    lightImg:{
+        backgroundColor: '#fff',
+        borderColor: "#E8E8E8",
+    },
+   
     container : {
         flex :1 ,
-        backgroundColor: '#ffffff',
+        backgroundColor: '#E8E8E8',
        justifyContent: "space-evenly",
        
     },
@@ -120,18 +164,21 @@ const styles = StyleSheet.create({
         alignItems: "center",
         marginLeft: "3%",
         marginTop: "8%",
+        borderRadius: "50%",
     },
    
     picture : {
         justifyContent: "center",
         flexDirection: 'row',
         marginTop: "8%",
+        
     },
     image :{
         width:100,
         height:100,
-        backgroundColor: "black",
-/*         borderRadius: "50%",  */
+        backgroundColor: "#fff",
+        borderRadius: "50%",
+
     },
     crayon :{
         width:20,
@@ -141,81 +188,90 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         marginTop: "8%",
+        marginLeft: "5%",
+        width: "90%",
+        backgroundColor:"#fff",
      
     },
     inputNom: {
         fontSize : 20,
-        borderColor: "#F4A100",
-        borderLeftColor:"black",
-        borderRightColor:"#F4A100",
-        borderTopColor: "black",
-        borderBottomColor:"#F4A100",
+        borderColor: "#E8E8E8",
         borderWidth: 2,
         width : "80%",
         margin : "4%",
         height: 40,
+        paddingLeft: 5,
+        borderRadius: 5,
+       
     },
     
     inputPrenom :{
         fontSize : 20,
-        borderColor: "#F4A100",
-        borderLeftColor:"black",
-        borderRightColor:"#F4A100",
-        borderTopColor: "black",
-        borderBottomColor:"#F4A100",
+        borderColor: "#E8E8E8",
         borderWidth: 2,
         width : "80%",
         margin : "4%",
         height: 40,
+        paddingLeft: 5,
+        borderRadius: 5,
     },
     inputDate :{
         fontSize : 20,
-        borderLeftColor:"black",
-        borderRightColor:"#F4A100",
-        borderTopColor: "black",
-        borderBottomColor:"#F4A100",
-        borderColor: "#F4A100",
+        borderColor: "#E8E8E8",
         borderWidth: 2,
         width : "80%",
         margin : "4%",
         height: 40,
+        paddingLeft: 5,
+        borderRadius: 5,
     },
     description :{
         alignItems: 'center',
         marginTop: "8%",
+        marginLeft: "5%",
+        width: "90%",
+        backgroundColor:"#fff",
+        
     },
     inputMoi :{
         fontSize : 20,
-        borderColor: "#F4A100",
-        borderLeftColor:"black",
-        borderRightColor:"#F4A100",
-        borderTopColor: "black",
-        borderBottomColor:"#F4A100",
+        alignItems:'flex-start',
+        borderColor: "#E8E8E8",
         borderWidth: 2,
         width : "80%",
         margin : "4%",
-        height: 40,
+        height: 150,
+        paddingLeft: 5,
+        borderRadius: 5,
+        paddingBottom: 100,
     },
     favoris :{
         fontSize:20,
         marginTop: "8%",
+        paddingLeft: 20,
+        color: "#7B7B7B",
+    },
+    scrollInput:{
+        
     },
     scroll:{
         marginLeft: 40,
         marginRight : 40,
-        marginTop: "8%",
+        marginTop: "15%",
     },
     logos :{
       margin: 20,
-      backgroundColor:"black",
       height:70,
-      width : 70,
+      width :90,
       alignItems: 'center',
       justifyContent: 'center',
+      
+      
     },
     football: {
         width:60,
         height:60,
+        
     },
     basket :{
         width:60,

@@ -20,6 +20,9 @@ import StudentMenuScreen from './screens/StudentMenuScreen';
 import StudentProfileScreen from './screens/StudentProfileScreen';
 import VerificationScreen from './screens/VerificationScreen';
 
+// import React, { useEffect } from 'react';
+// import * as Font from 'expo-font';
+
 import { Provider } from 'react-redux';
 import { configureStore, combineReducers } from '@reduxjs/toolkit'; // Update import
 import { persistStore, persistReducer } from 'redux-persist'; // Import Redux Persist
@@ -29,6 +32,9 @@ import darkMode from './reducers/darkMode';
 import { useSelector } from 'react-redux';
 import users from './reducers/users';
 import coachs from './reducers/coachs';
+import people from './reducers/people';
+import student from './reducers/student';
+
 
 // Redux Persist Config
 const persistConfig = {
@@ -39,7 +45,9 @@ const persistConfig = {
 const rootReducer = combineReducers({
   darkMode,
   users,
-  coachs
+  coachs,
+  people,
+  student,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 const store = configureStore({
@@ -96,6 +104,15 @@ const isCoach = false
 
 
 export default function App() {
+    // useEffect(() => {
+    //   // Charger les polices au démarrage de l'application
+    //   Font.loadAsync({
+    //     'Roboto-Regular': require('./assets/fonts/Roboto/'),
+    //     'Roboto-Bold': require('./assets/fonts/Roboto-Bold.ttf'),
+    //     // Ajoutez d'autres variantes de la police Roboto si nécessaire
+    //   });
+    // }, []);
+
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>

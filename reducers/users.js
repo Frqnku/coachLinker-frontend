@@ -6,6 +6,7 @@ const initialState = {
         latitude: 0,
         longitude: 0
       },
+      photo: '../assets/utilisateur.png',
       statusGranted: true
 }
 };
@@ -19,9 +20,12 @@ export const userSlice = createSlice({
     },
     updateStatus: (state, action) => {
         state.value.statusGranted = action.payload
-    }
+    },
+    addPhoto: (state, action) => {
+      state.value.photo = action.payload;
+    },
   },
 });
 
-export const { updateCurrentLocation, updateStatus } = userSlice.actions;
+export const { updateCurrentLocation, updateStatus, addPhoto } = userSlice.actions;
 export default userSlice.reducer;

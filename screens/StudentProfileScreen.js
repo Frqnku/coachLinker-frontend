@@ -38,9 +38,10 @@ export default function StudentProfileScreen() {
     
     const student = useSelector((state) => state.people.value) 
     console.log('test de merde', student)
+   // const realStudent = useSelector((state) => state.student.value)
 
 
-
+console.log(realStudent)
 
 
 const handleValidate =() => {
@@ -71,15 +72,11 @@ const handleValidate =() => {
 
                 navigation.navigate('Menu')
 
-                console.log("profil", dispatch(updateStudent({ name: studentName, 
-                    firstname: studentFirstname,
-                    dateOfBirth: studentDateOfBirth,
-                    myDescription: studentMyDescription,
-                    image: studentImage  })))
             }
         });
 }
 
+console.log
 
 
 
@@ -128,7 +125,7 @@ const handleValidate =() => {
         placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.inputNom, isDarkMode ? styles.darkInput : styles.lightInput]} />
         <TextInput placeholder="Prénom" onChangeText={(value) => setStudentFirstname(value)} value={studentFirstname}
         placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.inputPrenom, isDarkMode ? styles.darkInput : styles.lightInput]} />
-      
+        {/* <Text>{realStudent.name}</Text> */}
         <TextInput placeholder="Date de naissance"  onChangeText={(value) => setStudentDateOfBirth(value)} value={studentDateOfBirth}
         placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.inputDate, isDarkMode ? styles.darkInput : styles.lightInput]} />
     </View>

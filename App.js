@@ -31,6 +31,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'; // Import 
 import darkMode from './reducers/darkMode';
 import { useSelector } from 'react-redux';
 import users from './reducers/users';
+import coachs from './reducers/coachs';
 import people from './reducers/people';
 import student from './reducers/student';
 
@@ -44,6 +45,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   darkMode,
   users,
+  coachs,
   people,
   student,
 });
@@ -96,7 +98,7 @@ const TabNavigator = () => {
 };
 
 // à changer plus tard
-const isLogged = false
+const isLogged = true
 const isValidate = true
 const isCoach = false
 

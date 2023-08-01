@@ -1,10 +1,12 @@
 import { StyleSheet, Text, View } from 'react-native';
+import GoodMorning from '../components/GoodMorning';
 
 export default function CoachMenuScreen() {
 
 
     return (
-        <View>
+        <View style={styles.container}>
+            <GoodMorning/>
             <Text>CoachMenuScreen</Text>
         </View>
     );
@@ -13,8 +15,8 @@ export default function CoachMenuScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white',
-        justifyContent: 'center',
-        alignItems: 'center'
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingTop: 15
     }
 })

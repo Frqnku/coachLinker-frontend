@@ -1,10 +1,12 @@
 import { StyleSheet, Text, View } from 'react-native';
+import GoodMorning from '../components/GoodMorning';
 
 export default function AgendaScreen() {
 
 
     return (
-        <View>
+        <View style={styles.container}>
+            <GoodMorning/>
             <Text>AgendaScreen</Text>
             {/* afficher l'écran de disponibilités modifiables */}
         </View>
@@ -14,8 +16,8 @@ export default function AgendaScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white',
-        justifyContent: 'center',
-        alignItems: 'center'
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingTop: 15
     }
 })

@@ -1,13 +1,22 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+// problème avec value dans initialState à chercher.
+
 const initialState = {
-    value: {
-      currentLocation: {
-        latitude: 0,
-        longitude: 0
-      },
-      statusGranted: true
-}
+  // value: {
+  //   currentLocation: {
+  //       latitude: 0,
+  //       longitude: 0
+  //     },
+  //     statusGranted: true
+  // }
+
+  currentLocation: {
+    latitude: 0,
+    longitude: 0
+  },
+  statusGranted: true
+      
 };
 
 export const userSlice = createSlice({
@@ -15,10 +24,12 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     updateCurrentLocation: (state, action) => {
-        state.value.currentLocation = action.payload;
+        // state.value.currentLocation = action.payload; 
+        state.currentLocation = action.payload;
     },
     updateStatus: (state, action) => {
-        state.value.statusGranted = action.payload
+        // state.value.statusGranted = action.payload
+        state.statusGranted = action.payload;
     }
   },
 });

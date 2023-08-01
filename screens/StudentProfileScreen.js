@@ -5,13 +5,18 @@ import { useIsFocused } from "@react-navigation/native";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useSelector, useDispatch } from 'react-redux';
 import { switchMode } from '../reducers/darkMode';
+import users from '../reducers/users';
+import { addPhoto} from '../reducers/users';
 import {StyleSheet, KeyboardAvoidingView, Image, TextInput, View, Text, ScrollView, TouchableOpacity} from 'react-native';
 
 export default function StudentProfileScreen() {
-    
-    const isDarkMode = useSelector(state => state.darkMode.value)
-  
+    const dispatch = useDispatch()
     const isFocused = useIsFocused();
+    const isDarkMode = useSelector(state => state.darkMode.value)
+    const user = useSelector((state) => state.users.value);
+    
+  
+    
 
     const [hasPermission, setHasPermission] = useState(false);
     const [type, setType] = useState(CameraType.back);
@@ -24,8 +29,25 @@ export default function StudentProfileScreen() {
       setHasPermission(status === 'granted');
     };
     const takePicture = async () => {
-        const photo = await cameraRef.takePictureAsync({ quality: 0.3 });}
-        
+        const photo = await cameraRef.takePictureAsync({ quality: 0.3 });
+        const formData = new FormData();
+   
+    formData.append('photoFromFront',{
+      uri: photo.uri,
+      name: 'photo.jpg',
+      type: 'image/jpeg',
+    });
+   
+    fetch('http://192.168.10.124:3000/upload', {
+      method: 'POST',
+      body: formData,
+    }).then((response) => response.json())
+      .then((data) => { 
+        data.result && dispatch(addPhoto(data.url));
+      });
+   }
+     
+
     if (!hasPermission || !isFocused) {
        
   return (
@@ -33,19 +55,20 @@ export default function StudentProfileScreen() {
      <Image style={[styles.return, isDarkMode ? styles.darkReturn : styles.lightReturn]} source={require('../assets/bouton-retour.png')} />
 
     <View style={styles.picture}>
-        <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={require('../assets/utilisateur.png')} />
+       
+        <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={{uri : user.photo}} />
         <TouchableOpacity onPress={() => requestCameraPermission()} >
-                    <Image style={styles.crayon} source={require('../assets/crayon.png')} />
+                    <Image  style={styles.crayon} source={require('../assets/crayon.png')} />
         </TouchableOpacity>
     </View>
 <ScrollView style={styles.scrollInput} showsVerticalScrollIndicator={false}>
-     <View style={styles.inputs}>
-        <TextInput placeholder="Nom" placeholderTextColor="#7B7B7B" style={[styles.inputNom, isDarkMode ? styles.darkInput : styles.lightInput]} />
-        <TextInput placeholder="Prénom" placeholderTextColor="#7B7B7B" style={[styles.inputPrenom, isDarkMode ? styles.darkInput : styles.lightInput]} />
-        <TextInput placeholder="Date de naissance" placeholderTextColor="#7B7B7B" style={[styles.inputDate, isDarkMode ? styles.darkInput : styles.lightInput]} />
+     <View style={[styles.inputs, isDarkMode ? styles.darkIn : styles.lightIn]}>
+        <TextInput placeholder="Nom" placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.inputNom, isDarkMode ? styles.darkInput : styles.lightInput]} />
+        <TextInput placeholder="Prénom" placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.inputPrenom, isDarkMode ? styles.darkInput : styles.lightInput]} />
+        <TextInput placeholder="Date de naissance" placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.inputDate, isDarkMode ? styles.darkInput : styles.lightInput]} />
     </View>
-    <View style={styles.description}>
-        <TextInput placeholder="A propos de moi ..." placeholderTextColor="#7B7B7B" style={[styles.inputMoi, isDarkMode ? styles.darkInput : styles.lightInput]} />
+    <View style={[styles.description, isDarkMode ? styles.darkIn : styles.lightIn]}>
+        <TextInput placeholder="A propos de moi ..." placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.inputMoi, isDarkMode ? styles.darkInput : styles.lightInput]} />
 
     </View>
 </ScrollView>
@@ -134,8 +157,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     darkInput:{
-        backgroundColor: '#2E2E2E',
-        borderColor: "#2E2E2E",
+        backgroundColor: '#505050',
+        borderColor: "#505050",
         
     },
     lightInput:{
@@ -151,7 +174,12 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderColor: "#E8E8E8",
     },
-   
+    darkIn:{
+     backgroundColor: '#2E2E2E',
+    },
+    lightIn:{
+    backgroundColor: '#fff',
+    },
     container : {
         flex :1 ,
         backgroundColor: '#E8E8E8',
@@ -164,20 +192,20 @@ const styles = StyleSheet.create({
         alignItems: "center",
         marginLeft: "3%",
         marginTop: "8%",
-        borderRadius: "50%",
+        borderRadius: 50,
     },
    
     picture : {
         justifyContent: "center",
         flexDirection: 'row',
-        marginTop: "8%",
+        marginTop: "2%",
         
     },
     image :{
         width:100,
         height:100,
         backgroundColor: "#fff",
-        borderRadius: "50%",
+        borderRadius: 50,
 
     },
     crayon :{
@@ -191,6 +219,7 @@ const styles = StyleSheet.create({
         marginLeft: "5%",
         width: "90%",
         backgroundColor:"#fff",
+        borderRadius: 5,
      
     },
     inputNom: {
@@ -231,6 +260,7 @@ const styles = StyleSheet.create({
         marginLeft: "5%",
         width: "90%",
         backgroundColor:"#fff",
+        borderRadius: 5,
         
     },
     inputMoi :{
@@ -251,9 +281,7 @@ const styles = StyleSheet.create({
         paddingLeft: 20,
         color: "#7B7B7B",
     },
-    scrollInput:{
-        
-    },
+   
     scroll:{
         marginLeft: 40,
         marginRight : 40,
@@ -265,7 +293,7 @@ const styles = StyleSheet.create({
       width :90,
       alignItems: 'center',
       justifyContent: 'center',
-      
+      paddingBottom: 50,
       
     },
     football: {

@@ -13,7 +13,7 @@ export default function ConnexionScreen({ navigation }) {
     const [modalVisible, setModalVisible] = useState(false)
 
     const handleSignup = () => {
-        fetch('http://192.168.10.176:3000/users/signup', {
+        fetch('https://coach-linker-backend.vercel.app/users/signup', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ email: signUpEmail, password: signUpPassword }),
@@ -34,7 +34,7 @@ export default function ConnexionScreen({ navigation }) {
     }
 
     const handleSignin = () => {
-        fetch('http://192.168.10.176:3000/users/signin', {
+        fetch('https://coach-linker-backend.vercel.app/users/signin', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ email: signInEmail, password: signInPassword }),

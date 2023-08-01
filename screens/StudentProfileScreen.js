@@ -38,7 +38,7 @@ export default function StudentProfileScreen() {
       type: 'image/jpeg',
     });
    
-    fetch('http://192.168.10.124:3000/upload', {
+    fetch('https://coach-linker-backend.vercel.app/upload', {
       method: 'POST',
       body: formData,
     }).then((response) => response.json())

@@ -31,7 +31,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage'; // Import 
 import darkMode from './reducers/darkMode';
 import { useSelector } from 'react-redux';
 import users from './reducers/users';
-import people from './reducers/people'
+import people from './reducers/people';
+import student from './reducers/student';
+
 
 // Redux Persist Config
 const persistConfig = {
@@ -42,7 +44,8 @@ const persistConfig = {
 const rootReducer = combineReducers({
   darkMode,
   users,
-  people
+  people,
+  student,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 const store = configureStore({

@@ -1,5 +1,7 @@
 import React from 'react'
 import { StyleSheet, Text, View, Pressable} from 'react-native'
+import GoodMorning from '../components/GoodMorning';
+
 
 export default function AddInfoStudentScreen({navigation}) {
   
@@ -10,6 +12,7 @@ export default function AddInfoStudentScreen({navigation}) {
 
   return (
     <View style={styles.container}>
+        <GoodMorning/>
         <Text>AddInfoStudentScreen</Text>
         <Pressable onPress={handleSubmit}>
             <Text>Valider</Text>

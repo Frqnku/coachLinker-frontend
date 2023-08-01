@@ -7,19 +7,82 @@ import { useSelector, useDispatch } from 'react-redux';
 import { switchMode } from '../reducers/darkMode';
 import users from '../reducers/users';
 import { addPhoto} from '../reducers/users';
+import { updateStudent} from '../reducers/student';
+
 import {StyleSheet, KeyboardAvoidingView, Image, TextInput, View, Text, ScrollView, TouchableOpacity} from 'react-native';
+import { nanoid } from '@reduxjs/toolkit';
+
 
 export default function StudentProfileScreen() {
     const dispatch = useDispatch()
     const isFocused = useIsFocused();
     const isDarkMode = useSelector(state => state.darkMode.value)
     const user = useSelector((state) => state.users.value);
+    // const recupImage = user.photo
+    // console.log('fuck', user)
+        
+    const [studentName, setStudentName] = useState('')
+    const [studentFirstname, setStudentFirstname] = useState('')
+    const [studentDateOfBirth, setStudentDateOfBirth] = useState('')
+
     
+    const [studentMyDescription, setStudentMyDescription] = useState('')
+    const [studentImage, setStudentImage] = useState('')
+ 
+
     const [hasPermission, setHasPermission] = useState(false);
     const [type, setType] = useState(CameraType.back);
     const [flashMode, setFlashMode] = useState(FlashMode.off);
   
     let cameraRef = useRef(null);
+    
+    const student = useSelector((state) => state.people.value) 
+    console.log('test de merde', student)
+
+
+
+
+
+const handleValidate =() => {
+    
+// faire un useselector du usedispatch de connexionscreen et récpérer l'id
+
+    fetch('http://192.168.10.154:3000/students/profil', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+            name: studentName, 
+            firstname: studentFirstname,
+            dateOfBirth: studentDateOfBirth,
+            myDescription: studentMyDescription,
+            image: studentImage,
+            token: student.token,
+    
+     }),
+    }).then(response => response.json())
+        .then(data => {console.log('test', data)
+            if (data.result) {
+                dispatch(updateStudent({ 
+                    name: studentName, 
+                    firstname: studentFirstname,
+                    dateOfBirth: studentDateOfBirth,
+                    myDescription: studentMyDescription,
+                    image: studentImage }));
+
+                navigation.navigate('Menu')
+
+                console.log("profil", dispatch(updateStudent({ name: studentName, 
+                    firstname: studentFirstname,
+                    dateOfBirth: studentDateOfBirth,
+                    myDescription: studentMyDescription,
+                    image: studentImage  })))
+            }
+        });
+}
+
+
+
+
 
     const requestCameraPermission = async () => { 
       const { status } = await Camera.requestCameraPermissionsAsync();
@@ -44,9 +107,10 @@ export default function StudentProfileScreen() {
       });
    }
      
-
     if (!hasPermission || !isFocused) {
-       
+        
+
+
   return (
 <KeyboardAvoidingView style={[styles.container, isDarkMode ? styles.darkBg : styles.lightBg]} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
      <Image style={[styles.return, isDarkMode ? styles.darkReturn : styles.lightReturn]} source={require('../assets/bouton-retour.png')} />
@@ -60,12 +124,19 @@ export default function StudentProfileScreen() {
     </View>
 <ScrollView style={styles.scrollInput} showsVerticalScrollIndicator={false}>
      <View style={[styles.inputs, isDarkMode ? styles.darkIn : styles.lightIn]}>
-        <TextInput placeholder="Nom" placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.inputNom, isDarkMode ? styles.darkInput : styles.lightInput]} />
-        <TextInput placeholder="Prénom" placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.inputPrenom, isDarkMode ? styles.darkInput : styles.lightInput]} />
-        <TextInput placeholder="Date de naissance" placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.inputDate, isDarkMode ? styles.darkInput : styles.lightInput]} />
+        <TextInput placeholder="Nom" onChangeText={(value) => setStudentName(value)} value={studentName}
+        placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.inputNom, isDarkMode ? styles.darkInput : styles.lightInput]} />
+        <TextInput placeholder="Prénom" onChangeText={(value) => setStudentFirstname(value)} value={studentFirstname}
+        placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.inputPrenom, isDarkMode ? styles.darkInput : styles.lightInput]} />
+      
+        <TextInput placeholder="Date de naissance"  onChangeText={(value) => setStudentDateOfBirth(value)} value={studentDateOfBirth}
+        placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.inputDate, isDarkMode ? styles.darkInput : styles.lightInput]} />
     </View>
+
+
     <View style={[styles.description, isDarkMode ? styles.darkIn : styles.lightIn]}>
-        <TextInput placeholder="A propos de moi ..." placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.inputMoi, isDarkMode ? styles.darkInput : styles.lightInput]} />
+        <TextInput placeholder="A propos de moi ..." onChangeText={(value) => setStudentMyDescription(value)} value={studentMyDescription}
+        placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.inputMoi, isDarkMode ? styles.darkInput : styles.lightInput]} />
 
     </View>
 </ScrollView>
@@ -102,6 +173,9 @@ export default function StudentProfileScreen() {
         </View>
     </ScrollView>
     
+    <TouchableOpacity onPress={() => handleValidate()} style={styles.button2} activeOpacity={0.8}>
+                            <Text style={styles.textButton}>Valider</Text>
+    </TouchableOpacity>
 
       
 </KeyboardAvoidingView>
@@ -352,5 +426,23 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         paddingBottom: 25,
       },
+      input2: {
+        fontSize : 20,
+        backgroundColor: "#F2F2F2",
+        width : 200,
+        margin : "4%",
+        height: 40,
+        borderRadius: 5,
+        paddingLeft: 5
+      },
+      button2: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 150,
+        height: 50,
+        backgroundColor: '#F4A100',
+        borderRadius: 5,
+        marginTop: 15
+      }
 });
 

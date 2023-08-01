@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, Text, View, Pressable, SafeAreaView} from 'react-native'
 import { useSelector, useDispatch } from 'react-redux';
-import { updateCurrentLocation, updateStatus } from '../reducers/users';
+import { updateCurrentLocation, updateSearchLocation, updateStatus } from '../reducers/users';
 import * as Location from 'expo-location';
 
 export default function ActivateLocationScreen({ navigation }) {
@@ -14,6 +14,7 @@ export default function ActivateLocationScreen({ navigation }) {
     if(status === 'granted') {
       Location.watchPositionAsync({ distanceInterval: 10 }, (location) => {
             dispatch(updateCurrentLocation({latitude: location.coords.latitude, longitude: location.coords.longitude}));
+            dispatch(updateSearchLocation({name: 'Autour de moi', latitude: location.coords.latitude, longitude: location.coords.longitude}));
             navigation.navigate('ChooseRole')
       })
     } else {

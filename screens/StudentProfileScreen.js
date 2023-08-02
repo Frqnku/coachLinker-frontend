@@ -79,11 +79,9 @@ export default function StudentProfileScreen({navigation}) {
             dispatch(addPhoto(data.student.image));
             setHasPermission(false);
           })
-       })
-         
+       }) 
     }
-   
-      }
+}
 
   
 
@@ -177,8 +175,7 @@ const handleImageSelect = (image, imageName) => {
         dispatch(addPhoto(data.student.image));
         setHasPermission(false);
       })
-   })
-     
+   })  
 }
 // {/* <Text>{realStudent.name}</Text> */}
     if (!hasPermission || !isFocused) {
@@ -376,7 +373,6 @@ const styles = StyleSheet.create({
         height:100,
         backgroundColor: "#fff",
         borderRadius: 50,
-
     },
     crayon :{
         width:20,

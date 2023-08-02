@@ -41,7 +41,7 @@ export default function StudentProfileScreen() {
    // const realStudent = useSelector((state) => state.student.value)
 
 
-console.log(realStudent)
+/* console.log(realStudent) */
 
 
 const handleValidate =() => {
@@ -76,7 +76,7 @@ const handleValidate =() => {
         });
 }
 
-console.log
+
 
 
 

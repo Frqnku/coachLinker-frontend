@@ -77,9 +77,24 @@ export default function StudentMenuScreen() {
       setVisibleCoachIndices([...visibleCoachIndices, index]);
     }
   };
+
+
   
   const allCoachs = coachsAround.map((data, i) => {
     const planningVisible = visibleCoachIndices.includes(i);
+
+       // Average evaluation
+    const stars = [];
+    for (let i = 0; i < 5; i++) {
+      let style = {};
+      if (i < Math.floor(data.notes.reduce((acc, cur) => acc + cur, 0) / data.notes.length ) - 1) {
+        style = { 'color': '#F4A100' };
+      } else {
+        style = { 'color': '#AAAAAA' };
+      }
+      stars.push(<FontAwesome key={i} name='star' style={style} />);
+    }
+
     return (
       <View key={i}>
         <Pressable style={[styles.card, isDarkMode ? styles.darkCard : styles.lightCard, !planningVisible && styles.borderRadiusBottom]} onPress={() => togglePlanningVisibility(i)}>
@@ -89,7 +104,7 @@ export default function StudentMenuScreen() {
               <Text style={[isDarkMode ? styles.darkText : styles.lightText]}>{data.teachSport[0]}</Text>
           </View>
           <View style={styles.rightCoach}>
-              <Text style={[styles.star, isDarkMode ? styles.darkText : styles.lightText]}>{data.notes.length === 0 ? 'Pas de note' : data.notes.reduce((acc, cur) => acc + cur, 0) / data.notes.length}</Text>
+              <Text style={[styles.star, isDarkMode ? styles.darkText : styles.lightText]}>{data.notes.length === 0 ? 'Pas de note' : `(${data.notes.length})`} {data.notes.length !== 0 && stars}</Text>
               <Text style={[styles.text, isDarkMode ? styles.darkText : styles.lightText]}>{data.price}€ / h</Text>
           </View>
         </Pressable>
@@ -290,7 +305,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginBottom: 5
     },
-
     darkBg: {
         backgroundColor: '#000'
     },
@@ -310,7 +324,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff'
     },
     lightText: {
-        color: '#000'
+        color: 'red'
     },
 
 })

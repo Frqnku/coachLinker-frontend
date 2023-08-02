@@ -38,11 +38,11 @@ export default function StudentProfileScreen() {
     
     const student = useSelector((state) => state.people.value) 
     console.log('test de merde', student)
-   // const realStudent = useSelector((state) => state.student.value)
+
+//    const realStudent = useSelector((state) => state.student.value)
 
 
-console.log(realStudent)
-
+// console.log(realStudent)
 
 const handleValidate =() => {
     
@@ -106,7 +106,7 @@ console.log
      
     if (!hasPermission || !isFocused) {
         
-
+        // {/* <Text>{realStudent.name}</Text> */}
 
   return (
 <KeyboardAvoidingView style={[styles.container, isDarkMode ? styles.darkBg : styles.lightBg]} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
@@ -125,7 +125,7 @@ console.log
         placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.inputNom, isDarkMode ? styles.darkInput : styles.lightInput]} />
         <TextInput placeholder="Prénom" onChangeText={(value) => setStudentFirstname(value)} value={studentFirstname}
         placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.inputPrenom, isDarkMode ? styles.darkInput : styles.lightInput]} />
-        {/* <Text>{realStudent.name}</Text> */}
+
         <TextInput placeholder="Date de naissance"  onChangeText={(value) => setStudentDateOfBirth(value)} value={studentDateOfBirth}
         placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.inputDate, isDarkMode ? styles.darkInput : styles.lightInput]} />
     </View>

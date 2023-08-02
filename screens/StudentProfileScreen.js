@@ -59,13 +59,13 @@ export default function StudentProfileScreen({navigation}) {
           type: 'image/jpeg',
         });
        
-        fetch('http://192.168.10.124:3000/upload', {
+        fetch('https://coach-linker-backend.vercel.app/upload', {
           method: 'POST',
           body: formData,
         }).then((response) => response.json())
           .then((data) => { 
             console.log(data)
-            data.result && fetch('http://192.168.10.124:3000/students/profil', {
+            data.result && fetch('https://coach-linker-backend.vercel.app/students/profil', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 

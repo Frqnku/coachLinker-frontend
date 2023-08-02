@@ -36,13 +36,10 @@ export default function StudentProfileScreen() {
   
     let cameraRef = useRef(null);
     
-    const student = useSelector((state) => state.people.value) 
-    console.log('test de merde', student)
-
-//    const realStudent = useSelector((state) => state.student.value)
+    const student = useSelector((state) => state.student.value) 
+    console.log('test de m...', student)
 
 
-// console.log(realStudent)
 
 const handleValidate =() => {
     
@@ -69,6 +66,7 @@ const handleValidate =() => {
                     dateOfBirth: studentDateOfBirth,
                     myDescription: studentMyDescription,
                     image: studentImage }));
+                    
 
                 navigation.navigate('Menu')
 

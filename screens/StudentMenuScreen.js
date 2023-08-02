@@ -68,12 +68,21 @@ export default function StudentMenuScreen() {
     }
   };
 
+  const [visibleCoachIndices, setVisibleCoachIndices] = useState([]);
+
+  const togglePlanningVisibility = (index) => {
+    if (visibleCoachIndices.includes(index)) {
+      setVisibleCoachIndices(visibleCoachIndices.filter((i) => i !== index));
+    } else {
+      setVisibleCoachIndices([...visibleCoachIndices, index]);
+    }
+  };
   
   const allCoachs = coachsAround.map((data, i) => {
-    const [planningVisible, setPlanningVisible] = useState(false);
+    const planningVisible = visibleCoachIndices.includes(i);
     return (
       <View key={i}>
-        <Pressable style={[styles.card, isDarkMode ? styles.darkCard : styles.lightCard, !planningVisible && styles.borderRadiusBottom]} onPress={() => setPlanningVisible(!planningVisible)}>
+        <Pressable style={[styles.card, isDarkMode ? styles.darkCard : styles.lightCard, !planningVisible && styles.borderRadiusBottom]} onPress={() => togglePlanningVisibility(i)}>
           <Image style={styles.leftCoach} source={{uri : data.image}}/>
           <View style={styles.midCoach}>
               <Text style={[styles.coachName, isDarkMode ? styles.darkText : styles.lightText]}>{data.firstname}</Text>
@@ -87,6 +96,7 @@ export default function StudentMenuScreen() {
         {planningVisible && <View style={[styles.planning, isDarkMode ? styles.darkCard : styles.lightCard]}>
           <Text style={[isDarkMode ? styles.darkText : styles.lightText]}>Prochaines disponibilités</Text>
           <View style={styles.displayCoaching}>
+            <Text style={[styles.book, isDarkMode ? styles.darkText : styles.lightText]}>Jeu 03</Text>
             <Text style={[styles.book, isDarkMode ? styles.darkText : styles.lightText]}>Jeu 03</Text>
             <Text style={[styles.book, isDarkMode ? styles.darkText : styles.lightText]}>Jeu 03</Text>
             <Text style={[styles.book, isDarkMode ? styles.darkText : styles.lightText]}>Jeu 03</Text>

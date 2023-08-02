@@ -8,12 +8,13 @@ import { switchMode } from '../reducers/darkMode';
 import users from '../reducers/users';
 import { addPhoto} from '../reducers/users';
 import { updateStudent} from '../reducers/student';
+import * as ImagePicker from 'expo-image-picker';
 
 import {StyleSheet, KeyboardAvoidingView, Image, TextInput, View, Text, ScrollView, TouchableOpacity} from 'react-native';
 import { nanoid } from '@reduxjs/toolkit';
 
 
-export default function StudentProfileScreen() {
+export default function StudentProfileScreen({navigation}) {
     const dispatch = useDispatch()
     const isFocused = useIsFocused();
     const isDarkMode = useSelector(state => state.darkMode.value)
@@ -24,7 +25,7 @@ export default function StudentProfileScreen() {
     const [studentName, setStudentName] = useState('')
     const [studentFirstname, setStudentFirstname] = useState('')
     const [studentDateOfBirth, setStudentDateOfBirth] = useState('')
-
+    const [selectedImages, setSelectedImages] = useState([]);
     
     const [studentMyDescription, setStudentMyDescription] = useState('')
     const [studentImage, setStudentImage] = useState('')
@@ -33,15 +34,32 @@ export default function StudentProfileScreen() {
     const [hasPermission, setHasPermission] = useState(false);
     const [type, setType] = useState(CameraType.back);
     const [flashMode, setFlashMode] = useState(FlashMode.off);
+    const [image, setImage] = useState(null);
   
     let cameraRef = useRef(null);
     
     const student = useSelector((state) => state.people.value) 
     console.log('test de merde', student)
-   // const realStudent = useSelector((state) => state.student.value)
+    console.log(image)
+    const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+  
+  
+      if (!result.canceled) {
+        setImage(result.assets[0].uri);
+        console.log("okokokoko",result.assets[0].uri)
+        setHasPermission(false);
+      }
+    };
+  
 
+//    const realStudent = useSelector((state) => state.student.value)
 
-/* console.log(realStudent) */
 
 
 const handleValidate =() => {
@@ -61,7 +79,8 @@ const handleValidate =() => {
     
      }),
     }).then(response => response.json())
-        .then(data => {console.log('test', data)
+        .then(data => {
+            console.log('test', data)
             if (data.result) {
                 dispatch(updateStudent({ 
                     name: studentName, 
@@ -69,6 +88,7 @@ const handleValidate =() => {
                     dateOfBirth: studentDateOfBirth,
                     myDescription: studentMyDescription,
                     image: studentImage }));
+                    
 
                 navigation.navigate('Menu')
 
@@ -78,7 +98,19 @@ const handleValidate =() => {
 
 
 
+const handleImageSelect = (image, imageName) => {
+    if (selectedImages.length < 3 && !selectedImages.some((item) => item.image === image)) {
+      setSelectedImages((prevImages) => [...prevImages, { image, name: imageName }])
+    }
+  }
 
+  const handleImageRemove = (index) => {
+    setSelectedImages((prevImages) => {
+      const updatedImages = [...prevImages];
+      updatedImages.splice(index, 1);
+      return updatedImages;
+    });
+  };
 
 
     const requestCameraPermission = async () => { 
@@ -95,18 +127,33 @@ const handleValidate =() => {
       type: 'image/jpeg',
     });
    
-    fetch('https://coach-linker-backend.vercel.app/upload', {
+    fetch('http://192.168.10.124:3000/upload', {
       method: 'POST',
       body: formData,
     }).then((response) => response.json())
       .then((data) => { 
-        data.result && dispatch(addPhoto(data.url));
-      });
-   }
+        console.log(data)
+        data.result && fetch('http://192.168.10.124:3000/students/profil', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                image: data.url,
+                token: student.token,
+         })
+         
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        
+        dispatch(addPhoto(data.student.image));
+        setHasPermission(false);
+      })
+   })
      
+}
+// {/* <Text>{realStudent.name}</Text> */}
     if (!hasPermission || !isFocused) {
         
-
 
   return (
 <KeyboardAvoidingView style={[styles.container, isDarkMode ? styles.darkBg : styles.lightBg]} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
@@ -114,8 +161,8 @@ const handleValidate =() => {
 
     <View style={styles.picture}>
        
-        <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={{uri : user.photo}} />
-        <TouchableOpacity onPress={() => requestCameraPermission()} >
+        <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={{uri : user.photo} || {uri : result.assets[0].uri}} />
+        <TouchableOpacity onPress={() => requestCameraPermission() && pickImage()} >
                     <Image  style={styles.crayon} source={require('../assets/crayon.png')} />
         </TouchableOpacity>
     </View>
@@ -125,7 +172,7 @@ const handleValidate =() => {
         placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.inputNom, isDarkMode ? styles.darkInput : styles.lightInput]} />
         <TextInput placeholder="Prénom" onChangeText={(value) => setStudentFirstname(value)} value={studentFirstname}
         placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.inputPrenom, isDarkMode ? styles.darkInput : styles.lightInput]} />
-        {/* <Text>{realStudent.name}</Text> */}
+
         <TextInput placeholder="Date de naissance"  onChangeText={(value) => setStudentDateOfBirth(value)} value={studentDateOfBirth}
         placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.inputDate, isDarkMode ? styles.darkInput : styles.lightInput]} />
     </View>
@@ -144,31 +191,56 @@ const handleValidate =() => {
 
     
     <ScrollView  horizontal={true} style={styles.scroll} showsHorizontalScrollIndicator={false}>
-        <View style={styles.logos}>
-            <Image style={[styles.football, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/football.png')} />
-        </View>
-        <View style={styles.logos}>
-            <Image style={[styles.boxe, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/gant-de-boxe.png')} />
-        </View>
-        <View style={styles.logos}>
-            <Image style={[styles.gym, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/gym.png')} />
-        </View>
-        <View style={styles.logos}>
-            <Image style={[styles.basket, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/basket-ball.png')} />
-        </View>
-        <View style={styles.logos}>
-             <Image style={[styles.golf, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/le-golf.png')} />
-        </View>
-        <View style={styles.logos}>
-             <Image style={[styles.nage, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/nageur.png')} />
-        </View>
-        <View style={styles.logos}>
-            <Image style={[styles.tennis, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/tennis.png')} />
-        </View>
-        <View style={styles.logos}>
-            <Image style={[styles.badmington, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/volant.png')} />
-        </View>
-    </ScrollView>
+        <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/football.png'), 'Football')}>
+          <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/football.png')} />
+          <Text style={styles.sports}>Football</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/gant-de-boxe.png'), 'Boxe')}>
+            <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/gant-de-boxe.png')} />
+            <Text style={styles.sports}>Boxe</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/gym.png'), 'Gym')}>
+            <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/gym.png')} />
+            <Text style={styles.sports}>Gym</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/basket-ball.png'), 'Basket ball')}>
+            <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/basket-ball.png')} />
+            <Text style={styles.sports}>Basket ball</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/le-golf.png'), 'Golf')}>
+            <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/le-golf.png')} />
+            <Text style={styles.sports}>Golf</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/nageur.png'), 'Natation')}>
+            <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/nageur.png')} />
+            <Text style={styles.sports}>Natation</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/tennis.png'), 'Tennis')}>
+            <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/tennis.png')} />
+            <Text style={styles.sports}>Tennis</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/volant.png'), 'Course')}>
+            <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/volant.png')} />
+            <Text style={styles.sports}>Course</Text>
+          </TouchableOpacity>
+      </ScrollView>
+      <View style={styles.selectedImagesContainer}>
+        {selectedImages.map((item, index) => (
+          <View key={index} style={styles.selectedImageContainer}>
+            <Text style={styles.itemName}>{item.name}</Text>
+            <TouchableOpacity onPress={() => handleImageRemove(index)}>
+              <Text style={styles.removeButton}>X</Text>
+            </TouchableOpacity>
+          </View>
+          ))}
+      </View>
     
     <TouchableOpacity onPress={() => handleValidate()} style={styles.button2} activeOpacity={0.8}>
                             <Text style={styles.textButton}>Valider</Text>
@@ -177,7 +249,7 @@ const handleValidate =() => {
       
 </KeyboardAvoidingView>
   )
-    }
+    };
   return (
     <Camera type={type} flashMode={flashMode} ref={(ref) => cameraRef = ref} style={styles.camera}>
       <View style={styles.buttonsContainer}>
@@ -205,6 +277,7 @@ const handleValidate =() => {
   );
 
 }
+
 const styles = StyleSheet.create({
     darkBg :{
         backgroundColor: 'black',
@@ -364,39 +437,35 @@ const styles = StyleSheet.create({
       paddingBottom: 50,
       
     },
-    football: {
-        width:60,
-        height:60,
-        
-    },
-    basket :{
+    sportIcon: {
         width:60,
         height:60,
     },
-    boxe :{
-        width:60,
-        height:60,
+    sports: {
+      display: 'none'
     },
-    gym :{
-        width:60,
-        height:60,
-    },
-    golf :{
-        width:60,
-        height:60,
-    },
-    nage :{
-        width:60,
-        height:60,
-    },
-    tennis :{
-        width:60,
-        height:60,
-    },
-    badmington :{
-        width:60,
-        height:60,
-    },
+    selectedImageContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginVertical: 5,
+      },
+      selectedImagesContainer: {
+        marginVertical: 10,
+        alignItems: 'center',
+        backgroundColor: '#FFFFFF',
+        width: "90%",
+        marginLeft: "5%",
+      },
+      itemName: {
+        fontWeight: 'bold',
+        marginRight: 100,
+      },
+      removeButton: {
+        color: 'black',
+        fontWeight: 'bold',
+        marginLeft: 10,
+        fontSize: 16,
+      },
     camera: {
         flex: 1,
       },
@@ -440,6 +509,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#F4A100',
         borderRadius: 5,
         marginTop: 15
-      }
+      },
 });
 

@@ -8,8 +8,8 @@
     "userInterfaceStyle": "light",
     "splash": {
       "image": "https://res.cloudinary.com/djmvvsfiu/image/upload/v1690900478/COACH_LINKER_plu40e.gif",
-      "resizeMode": "1000*1500",
-      "backgroundColor": "black"
+      "resizeMode": "cover",
+      "backgroundColor": ""
     },
     "assetBundlePatterns": [
       "**/*"

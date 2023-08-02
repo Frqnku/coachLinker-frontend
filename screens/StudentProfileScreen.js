@@ -96,7 +96,7 @@ const handleValidate =() => {
         });
 }
 
-console.log
+
 
 const handleImageSelect = (image, imageName) => {
     if (selectedImages.length < 3 && !selectedImages.some((item) => item.image === image)) {

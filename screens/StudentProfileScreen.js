@@ -61,7 +61,6 @@ export default function StudentProfileScreen({navigation}) {
 //    const realStudent = useSelector((state) => state.student.value)
 
 
-// console.log(realStudent)
 
 const handleValidate =() => {
     
@@ -89,6 +88,7 @@ const handleValidate =() => {
                     dateOfBirth: studentDateOfBirth,
                     myDescription: studentMyDescription,
                     image: studentImage }));
+                    
 
                 navigation.navigate('Menu')
 
@@ -96,7 +96,7 @@ const handleValidate =() => {
         });
 }
 
-console.log
+
 
 const handleImageSelect = (image, imageName) => {
     if (selectedImages.length < 3 && !selectedImages.some((item) => item.image === image)) {

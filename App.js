@@ -40,7 +40,7 @@ import student from './reducers/student';
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  // blacklist: ['darkMode'] Mettre tous les reducers à l'exception de ceux qu'on veut rendre persistant
+  blacklist: ['darkMode','users','student','people','coachs'] 
 };
 const rootReducer = combineReducers({
   darkMode,
@@ -52,6 +52,7 @@ const rootReducer = combineReducers({
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 const store = configureStore({
   reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }),
 });
 const persistor = persistStore(store);
 
@@ -98,7 +99,7 @@ const TabNavigator = () => {
 };
 
 // à changer plus tard
-const isLogged = false
+const isLogged = true
 const isValidate = true
 const isCoach = false
 

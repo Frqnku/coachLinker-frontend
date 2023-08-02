@@ -17,16 +17,8 @@ export const studentSlice = createSlice({
   initialState,
   reducers: {
     updateStudent: (state, action) => {
-        const { name, firstname, image, dateOfBirth, myDescritpion, favoriteSport, Id_user } = action.payload;
-        state.value = {
-          name,
-          firstname,
-          image,
-          dateOfBirth,
-          myDescritpion,
-          favoriteSport: [...state.value.favoriteSport, ...favoriteSport], // Ajoute les sports favoris sans écraser ceux déjà présents
-          Id_user,
-        };
+      console.log('recu',action.payload)
+        state.value =  action.payload;
       },
     },
   });

@@ -12,7 +12,7 @@ const initialState = {
         longitude: 2.3036914
       },
       photo: '../assets/utilisateur.png',
-      statusGranted: true
+      statusGranted: null
     }
 };
 

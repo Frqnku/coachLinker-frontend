@@ -5,6 +5,8 @@ import { useSelector } from 'react-redux';
 export default function ChooseRoleScreen({ navigation }) {
   const isDarkMode = useSelector(state => state.darkMode.value)
 
+  // fonction à créer : si je clique sur Je suis coach, je passe dans User : isCoach à true.
+
   return (
         <SafeAreaView style={[styles.container, isDarkMode ? styles.darkBg : styles.lightBg]}>
         <View style={[styles.cards, isDarkMode ? styles.darkCard : styles.lightCard]}>

@@ -98,7 +98,7 @@ const TabNavigator = () => {
 };
 
 // à changer plus tard
-const isLogged = false
+const isLogged = true
 const isValidate = true
 const isCoach = false
 

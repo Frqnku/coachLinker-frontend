@@ -50,7 +50,7 @@ export default function StudentMenuScreen() {
           return degrees * (Math.PI / 180);
         }
 
-        if (haversineDistance(searchLocation.latitude, searchLocation.longitude, newPlace.latitude, newPlace.longitude) < 5) {
+        if (haversineDistance(searchLocation.latitude, searchLocation.longitude, newPlace.latitude, newPlace.longitude) < 15) {
           return { ...coach, location: newPlace };
         }
 
@@ -68,18 +68,42 @@ export default function StudentMenuScreen() {
     }
   };
 
+  const [visibleCoachIndices, setVisibleCoachIndices] = useState([]);
+
+  const togglePlanningVisibility = (index) => {
+    if (visibleCoachIndices.includes(index)) {
+      setVisibleCoachIndices(visibleCoachIndices.filter((i) => i !== index));
+    } else {
+      setVisibleCoachIndices([...visibleCoachIndices, index]);
+    }
+  };
+  
   const allCoachs = coachsAround.map((data, i) => {
+    const planningVisible = visibleCoachIndices.includes(i);
     return (
-      <View key={i} style={[styles.card, isDarkMode ? styles.darkCard : styles.lightCard]}>
-        <Image style={styles.leftCoach} source={{uri : data.image}}/>
-        <View style={styles.midCoach}>
-            <Text style={[styles.coachName, isDarkMode ? styles.darkText : styles.lightText]}>{data.firstname}</Text>
-            <Text style={[isDarkMode ? styles.darkText : styles.lightText]}>{data.teachSport[0]}</Text>
-        </View>
-        <View style={styles.rightCoach}>
-            <Text style={[styles.star, isDarkMode ? styles.darkText : styles.lightText]}>{data.notes.length === 0 ? 'Pas de note' : data.notes.reduce((acc, cur) => acc + cur, 0) / data.notes.length}</Text>
-            <Text style={[styles.text, isDarkMode ? styles.darkText : styles.lightText]}>{data.price}€ / h</Text>
-        </View>
+      <View key={i}>
+        <Pressable style={[styles.card, isDarkMode ? styles.darkCard : styles.lightCard, !planningVisible && styles.borderRadiusBottom]} onPress={() => togglePlanningVisibility(i)}>
+          <Image style={styles.leftCoach} source={{uri : data.image}}/>
+          <View style={styles.midCoach}>
+              <Text style={[styles.coachName, isDarkMode ? styles.darkText : styles.lightText]}>{data.firstname}</Text>
+              <Text style={[isDarkMode ? styles.darkText : styles.lightText]}>{data.teachSport[0]}</Text>
+          </View>
+          <View style={styles.rightCoach}>
+              <Text style={[styles.star, isDarkMode ? styles.darkText : styles.lightText]}>{data.notes.length === 0 ? 'Pas de note' : data.notes.reduce((acc, cur) => acc + cur, 0) / data.notes.length}</Text>
+              <Text style={[styles.text, isDarkMode ? styles.darkText : styles.lightText]}>{data.price}€ / h</Text>
+          </View>
+        </Pressable>
+        {planningVisible && <View style={[styles.planning, isDarkMode ? styles.darkCard : styles.lightCard]}>
+          <Text style={[isDarkMode ? styles.darkText : styles.lightText]}>Prochaines disponibilités</Text>
+          <View style={styles.displayCoaching}>
+            <Text style={[styles.book, isDarkMode ? styles.darkText : styles.lightText]}>Jeu 03</Text>
+            <Text style={[styles.book, isDarkMode ? styles.darkText : styles.lightText]}>Jeu 03</Text>
+            <Text style={[styles.book, isDarkMode ? styles.darkText : styles.lightText]}>Jeu 03</Text>
+            <Text style={[styles.book, isDarkMode ? styles.darkText : styles.lightText]}>Jeu 03</Text>
+            <Text style={[styles.book, isDarkMode ? styles.darkText : styles.lightText]}>Jeu 03</Text>
+            <Text style={[styles.book, isDarkMode ? styles.darkText : styles.lightText]}>Jeu 03</Text>
+          </View>
+        </View>}
       </View>
     );
   });
@@ -158,7 +182,7 @@ export default function StudentMenuScreen() {
           <FontAwesome name='sort' size={24} color={'#AAAAAA'} onPress={() => console.log('sorted')} />
         </View>
 
-        {isLoading && coachsAround.length === 0 ? <ActivityIndicator size="large" color="#AAAAAA" /> : <ScrollView>
+        {isLoading && coachsAround.length === 0 ? <ActivityIndicator size="large" color="#AAAAAA" /> : <ScrollView showsVerticalScrollIndicator={false}>
           {allCoachs}
         </ScrollView>}
 
@@ -175,21 +199,41 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingTop: 15
     },
+    book: {
+        fontSize: 13,
+        width: 70,
+        height: 30,
+        textAlign: 'center',
+        textAlignVertical: 'center',
+        backgroundColor: '#FFDFA3',
+        marginHorizontal: 5,
+        marginVertical: 10,
+        borderRadius: 15
+    },
+    borderRadiusBottom: {
+        borderRadius: 5,
+    },
     bottomScreen: {
         width: '80%'
     },
     card: {
         width: '100%',
-        borderRadius: 5,
+        borderTopEndRadius: 5,
+        borderTopStartRadius: 5,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        backgroundColor: 'crimson',
         padding: 10,
         marginTop: 15
     },
     coachName: {
         fontSize: 22
+    },
+    displayCoaching: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        flexWrap: 'wrap',
     },
     input: {
         height: 35,
@@ -209,6 +253,16 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
         height: 80,
         paddingLeft: 10,
+    },
+    planning: {
+        width: '100%',
+        borderBottomEndRadius: 5,
+        borderBottomStartRadius: 5,
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: 10,
+        borderTopColor: '#AAAAAA',
+        borderTopWidth: 1
     },
     rightCoach: {
         justifyContent: 'space-between',

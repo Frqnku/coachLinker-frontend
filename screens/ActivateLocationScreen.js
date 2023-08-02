@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { StyleSheet, Text, View, Pressable, SafeAreaView} from 'react-native'
 import { useSelector, useDispatch } from 'react-redux';
 import { updateCurrentLocation, updateSearchLocation, updateStatus } from '../reducers/users';
@@ -7,6 +7,12 @@ import * as Location from 'expo-location';
 export default function ActivateLocationScreen({ navigation }) {
   const dispatch = useDispatch()
   const isDarkMode = useSelector(state => state.darkMode.value)
+/*   const isGranted = useSelector(state => state.users.value.statusGranted)
+    console.log(isGranted)
+
+  useEffect(() => {
+    isGranted === true || isGranted === false && navigation.navigate('ChooseRole')
+  }, []) */
 
   const acceptPermission =  async () => {
     const { status } = await Location.requestForegroundPermissionsAsync();
@@ -15,6 +21,7 @@ export default function ActivateLocationScreen({ navigation }) {
       Location.watchPositionAsync({ distanceInterval: 10 }, (location) => {
             dispatch(updateCurrentLocation({latitude: location.coords.latitude, longitude: location.coords.longitude}));
             dispatch(updateSearchLocation({name: 'Autour de moi', latitude: location.coords.latitude, longitude: location.coords.longitude}));
+            dispatch(updateStatus(true))
             navigation.navigate('ChooseRole')
       })
     } else {

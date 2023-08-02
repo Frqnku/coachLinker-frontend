@@ -34,7 +34,6 @@ export default function StudentProfileScreen({navigation}) {
     const [hasPermission, setHasPermission] = useState(false);
     const [type, setType] = useState(CameraType.back);
     const [flashMode, setFlashMode] = useState(FlashMode.off);
-    const [image, setImage] = useState(null);
   
     let cameraRef = useRef(null);
     
@@ -80,11 +79,9 @@ export default function StudentProfileScreen({navigation}) {
             dispatch(addPhoto(data.student.image));
             setHasPermission(false);
           })
-       })
-         
+       }) 
     }
-   
-      }
+}
 
   
 
@@ -178,8 +175,7 @@ const handleImageSelect = (image, imageName) => {
         dispatch(addPhoto(data.student.image));
         setHasPermission(false);
       })
-   })
-     
+   })  
 }
 // {/* <Text>{realStudent.name}</Text> */}
     if (!hasPermission || !isFocused) {
@@ -377,7 +373,6 @@ const styles = StyleSheet.create({
         height:100,
         backgroundColor: "#fff",
         borderRadius: 50,
-
     },
     crayon :{
         width:20,

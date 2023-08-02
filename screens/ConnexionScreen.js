@@ -42,10 +42,19 @@ export default function ConnexionScreen({ navigation }) {
 			.then(data => {
 				if (data.result) {
 					dispatch(login({ email: signInEmail, token: data.token }));
-					setSignInEmail('');
+			        
+          // dispatch(updateStudent({ 
+          //   name: studentName, 
+          //   firstname: studentFirstname,
+          //   dateOfBirth: studentDateOfBirth,
+          //   myDescription: studentMyDescription,
+          //   image: studentImage 
+          // }));     
+
+          setSignInEmail('');
 					setSignInPassword('');
-                    navigation.navigate('Localisation')
-                    console.log("signin", dispatch(login({ email: signInEmail, token: data.token })))
+                  
+                  navigation.navigate('TabNavigator')
 				}
 			});
     }

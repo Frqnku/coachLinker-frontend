@@ -5,6 +5,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import { useSelector, useDispatch } from 'react-redux';
 import { switchMode } from '../reducers/darkMode';
 import { updateCurrentLocation, updateSearchLocation, updateStatus } from '../reducers/users';
+import { logout } from '../reducers/people'
 
 import * as Location from 'expo-location';
 
@@ -14,7 +15,7 @@ export default function OptionScreen({ navigation }) {
     const isGranted = useSelector(state => state.users.value.statusGranted)
 
     const disconnect = () => {
-        /* dispatch(disconnect()) */
+        dispatch(logout())
         navigation.navigate('Home')
     }
     const activateLocation = async () => {

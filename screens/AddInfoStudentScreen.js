@@ -2,12 +2,11 @@ import React from 'react'
 import { StyleSheet, Text, View, Pressable} from 'react-native'
 import GoodMorning from '../components/GoodMorning';
 
-
 export default function AddInfoStudentScreen({navigation}) {
-  
+
   const handleSubmit = () => {
 
-    navigation.navigate('TabNavigator')
+navigation.navigate('TabNavigator')
   }
 
   return (

@@ -127,13 +127,13 @@ const handleImageSelect = (image, imageName) => {
       type: 'image/jpeg',
     });
    
-    fetch('http://192.168.10.124:3000/upload', {
+    fetch('http://192.168.10.160:3000/upload', {
       method: 'POST',
       body: formData,
     }).then((response) => response.json())
       .then((data) => { 
         console.log(data)
-        data.result && fetch('http://192.168.10.124:3000/students/profil', {
+        data.result && fetch('http://192.168.10.160:3000/students/profil', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 

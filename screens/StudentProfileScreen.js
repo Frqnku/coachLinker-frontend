@@ -34,7 +34,6 @@ export default function StudentProfileScreen({navigation}) {
     const [hasPermission, setHasPermission] = useState(false);
     const [type, setType] = useState(CameraType.back);
     const [flashMode, setFlashMode] = useState(FlashMode.off);
-    const [image, setImage] = useState(null);
   
     let cameraRef = useRef(null);
     
@@ -59,13 +58,13 @@ export default function StudentProfileScreen({navigation}) {
           type: 'image/jpeg',
         });
        
-        fetch('http://192.168.10.124:3000/upload', {
+        fetch('https://coach-linker-backend.vercel.app/upload', {
           method: 'POST',
           body: formData,
         }).then((response) => response.json())
           .then((data) => { 
             console.log(data)
-            data.result && fetch('http://192.168.10.124:3000/students/profil', {
+            data.result && fetch('https://coach-linker-backend.vercel.app/students/profil', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 
@@ -96,7 +95,7 @@ const handleValidate =() => {
     
 // faire un useselector du usedispatch de connexionscreen et récpérer l'id
 
-    fetch('http://192.168.10.154:3000/students/profil', {
+    fetch('http://192.168.10.124:3000/students/profil', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 

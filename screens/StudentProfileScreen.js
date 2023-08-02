@@ -40,9 +40,9 @@ export default function StudentProfileScreen({navigation}) {
     
     const student = useSelector((state) => state.people.value) 
     console.log('test de merde', student)
-    console.log(image)
+    
     const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
+    const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         allowsEditing: true,
         aspect: [4, 3],
@@ -51,11 +51,41 @@ export default function StudentProfileScreen({navigation}) {
   
   
       if (!result.canceled) {
-        setImage(result.assets[0].uri);
-        console.log("okokokoko",result.assets[0].uri)
-        setHasPermission(false);
+        const formData = new FormData();
+   
+        formData.append('photoFromFront',{
+          uri: result.assets[0].uri,
+          name: 'photo.jpg',
+          type: 'image/jpeg',
+        });
+       
+        fetch('http://192.168.10.124:3000/upload', {
+          method: 'POST',
+          body: formData,
+        }).then((response) => response.json())
+          .then((data) => { 
+            console.log(data)
+            data.result && fetch('http://192.168.10.124:3000/students/profil', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    image: data.url,
+                    token: student.token,
+             })
+             
+          })
+          .then((response) => response.json())
+          .then((data) => {
+            
+            dispatch(addPhoto(data.student.image));
+            setHasPermission(false);
+          })
+       })
+         
+    }
+   
       }
-    };
+
   
 
 //    const realStudent = useSelector((state) => state.student.value)
@@ -127,13 +157,13 @@ const handleImageSelect = (image, imageName) => {
       type: 'image/jpeg',
     });
    
-    fetch('http://192.168.10.124:3000/upload', {
+    fetch('https://coach-linker-backend.vercel.app/upload', {
       method: 'POST',
       body: formData,
     }).then((response) => response.json())
       .then((data) => { 
         console.log(data)
-        data.result && fetch('http://192.168.10.124:3000/students/profil', {
+        data.result && fetch('https://coach-linker-backend.vercel.app/students/profil', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
@@ -161,7 +191,7 @@ const handleImageSelect = (image, imageName) => {
 
     <View style={styles.picture}>
        
-        <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={{uri : user.photo} || {uri : result.assets[0].uri}} />
+        <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={{uri : user.photo}} />
         <TouchableOpacity onPress={() => requestCameraPermission() && pickImage()} >
                     <Image  style={styles.crayon} source={require('../assets/crayon.png')} />
         </TouchableOpacity>

@@ -21,7 +21,6 @@ const initialState = {
         firstname: '', 
         image: '', 
         myDescription: '',
-        token:null, 
         // infos coach
         teachedSport: [], 
         proCard: '', 
@@ -34,7 +33,7 @@ const initialState = {
         coachingPlaces: [],
         // infos student
         dateOfBirth: '',
-        favoriteSports: []
+        favoriteSport: []
       }
     }
 };
@@ -63,7 +62,7 @@ export const userSlice = createSlice({
         ...state.value.signUp, // Copie toutes les propriétés actuelles
         ...action.payload, // Remplace les propriétés avec celles de l'action
       };
-      console.log(state.value.signUp)
+      console.log('signUp', state.value.signUp)
       },
     addToken: (state, action) => {
         state.value.email = action.payload.email;

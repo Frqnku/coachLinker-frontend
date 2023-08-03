@@ -46,11 +46,13 @@ export default function ConnexionScreen({ navigation }) {
 
     // Lors de l'inscription, email et password sont envoyés dans le store.
     const handleSignup = () => {
+      if(signUpPassword===signUpPassword2){
       dispatch(Signup({ email: signUpEmail, password: signUpPassword }));
       setSignUpEmail('');
       setSignUpPassword('');
+      setSignUpPassword2('');
       navigation.navigate('Localisation');
-    };
+    };}
 
     const handleModal = () => {
         setModalVisible(true)

@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     darkInput:{
         backgroundColor: '#505050',
         borderColor: "#505050",
-        marginTop: 20,
+        marginTop: 15,
         fontSize : 15,
         backgroundColor: '#2E2E2E',
         width : "80%",

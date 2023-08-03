@@ -22,14 +22,10 @@ export default function StudentProfileScreen({navigation}) {
     const user = useSelector((state) => state.users.value);
 
         
-    const [studentName, setStudentName] = useState('')
-    const [studentFirstname, setStudentFirstname] = useState('')
-    const [studentDateOfBirth, setStudentDateOfBirth] = useState('')
     const [selectedImages, setSelectedImages] = useState([]);
-    
     const [studentMyDescription, setStudentMyDescription] = useState('')
     const [studentImage, setStudentImage] = useState('')
- 
+    const [studentSports, setStudentSports] = useState([])
 
     const [hasPermission, setHasPermission] = useState(false);
     const [type, setType] = useState(CameraType.back);

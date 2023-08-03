@@ -103,24 +103,20 @@ const styles = StyleSheet.create({
         margin : "4%",
         height: 40,
         borderRadius: 5,
-        paddingLeft: 5
+        paddingLeft: 5,
       },
       button: {
         justifyContent: 'center',
         alignItems: 'center',
         width: '50%',
         height: 50,
-        backgroundColor: '#FFF',
-        borderRadius: 30,
+        backgroundColor: '#F4A100',
+        borderRadius: 10,
         marginTop: 15,
-        elevation: 15,
-        shadowColor: '#FF6100',
-        shadowOffset: { width: 10, height: 2 },
-        shadowOpacity: 0.3,
       },
       textButton: {
         fontSize : 20,
-        color: '#FF6100',
+        color: '#FFFFFF',
       },
       signin: {
         fontSize : 20,

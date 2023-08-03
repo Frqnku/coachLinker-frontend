@@ -62,6 +62,7 @@ export const userSlice = createSlice({
         ...state.value.signUp, // Copie toutes les propriétés actuelles
         ...action.payload, // Remplace les propriétés avec celles de l'action
       };
+      console.log(state.value.signUp)
       }
   },
 });

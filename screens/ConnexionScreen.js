@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { login, logout } from '../reducers/people';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Signin, Signup} from '../reducers/users';
+import { signUp} from '../reducers/users';
 import users from '../reducers/users';
 
 export default function ConnexionScreen({ navigation }) {
@@ -47,7 +47,7 @@ export default function ConnexionScreen({ navigation }) {
     // Lors de l'inscription, email et password sont envoyés dans le store.
     const handleSignup = () => {
       if(signUpPassword===signUpPassword2){
-      dispatch(Signup({ email: signUpEmail, password: signUpPassword }));
+      dispatch(signUp({ email: signUpEmail, password: signUpPassword }));
       setSignUpEmail('');
       setSignUpPassword('');
       setSignUpPassword2('');

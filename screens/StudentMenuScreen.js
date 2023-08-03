@@ -24,7 +24,7 @@ export default function StudentMenuScreen() {
       const coachsData = await response.json();
 
       const fetchPromises = coachsData.data.map(async (coach) => {
-        if (coach.localisation[0].length < 3) {
+        if (coach.city.length < 3) {
           return null;
         }
         const response = await fetch(`https://api-adresse.data.gouv.fr/search/?q=${coach.localisation}`);
@@ -81,9 +81,8 @@ export default function StudentMenuScreen() {
 
   
   const allCoachs = coachsAround.map((data, i) => {
+    console.log(data._id)
     const planningVisible = visibleCoachIndices.includes(i);
-
-       // Average evaluation
     const stars = [];
     for (let i = 0; i < 5; i++) {
       let style = {};
@@ -324,7 +323,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff'
     },
     lightText: {
-        color: 'red'
+        color: '#000'
     },
 
 })

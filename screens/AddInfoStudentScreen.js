@@ -151,7 +151,7 @@ export default function AddInfoStudentScreen({navigation}) {
         
             <View style={styles.picture}>
                 <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={{uri : user.photo}} />
-                <TouchableOpacity onPress={() => requestCameraPermission()} >
+                <TouchableOpacity onPress={() => requestCameraPermission() && takePicture()} >
                             <Image  style={styles.crayon} source={require('../assets/crayon.png')} />
                 </TouchableOpacity>
             </View>

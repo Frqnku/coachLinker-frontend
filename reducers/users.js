@@ -12,7 +12,10 @@ const initialState = {
         longitude: 2.3036914
       },
       photo: '../assets/utilisateur.png',
-      statusGranted: null
+      statusGranted: null,
+
+      email : '',
+      password : '',
     }
 };
 
@@ -35,8 +38,13 @@ export const userSlice = createSlice({
     addPhoto: (state, action) => {
       state.value.photo = action.payload;
     },
+    Signup: (state, action) => {
+      console.log('addUserRecu',action.payload)
+      state.value.email = action.payload.email;
+      state.value.password = action.payload.password;
+    },
   },
 });
 
-export const { updateCurrentLocation, updateSearchLocation, updateStatus, addPhoto } = userSlice.actions;
+export const { updateCurrentLocation, updateSearchLocation, updateStatus, addPhoto, Signup, Signin } = userSlice.actions;
 export default userSlice.reducer;

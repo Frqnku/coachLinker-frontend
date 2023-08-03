@@ -4,8 +4,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
 import { useSelector, useDispatch } from 'react-redux';
 import { switchMode } from '../reducers/darkMode';
-import { updateCurrentLocation, updateSearchLocation, updateStatus } from '../reducers/users';
-import { logout } from '../reducers/people'
+import { updateCurrentLocation, updateSearchLocation, updateStatus,logout } from '../reducers/users';
 
 import * as Location from 'expo-location';
 

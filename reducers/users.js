@@ -20,7 +20,7 @@ const initialState = {
         name: '',
         firstname: '', 
         image: '', 
-        myDescription: '', 
+        myDescription: '',
         // infos coach
         teachedSport: [], 
         proCard: '', 
@@ -33,7 +33,7 @@ const initialState = {
         coachingPlaces: [],
         // infos student
         dateOfBirth: '',
-        favoriteSports: []
+        favoriteSport: []
       }
     }
 };
@@ -62,10 +62,18 @@ export const userSlice = createSlice({
         ...state.value.signUp, // Copie toutes les propriétés actuelles
         ...action.payload, // Remplace les propriétés avec celles de l'action
       };
-      console.log(state.value.signUp)
-      }
+      console.log('signUp', state.value.signUp)
+      },
+    addToken: (state, action) => {
+        state.value.email = action.payload.email;
+        state.value.token = action.payload.token;
+      },
+     logout: (state) => {
+        state.value.token = null;
+        state.value.email = null;
+      },
   },
 });
 
-export const { updateCurrentLocation, updateSearchLocation, updateStatus, addPhoto, signUp } = userSlice.actions;
+export const { updateCurrentLocation, updateSearchLocation, updateStatus, addPhoto, signUp, addToken,logout } = userSlice.actions;
 export default userSlice.reducer;

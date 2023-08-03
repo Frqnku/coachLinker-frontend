@@ -37,7 +37,7 @@ export default function StudentProfileScreen({navigation}) {
   
     let cameraRef = useRef(null);
     
-    const student = useSelector((state) => state.people.value) 
+    const student = useSelector((state) => state.user.value) 
     console.log('test de merde', student)
     
     const pickImage = async () => {

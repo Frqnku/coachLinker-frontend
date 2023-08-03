@@ -1,16 +1,14 @@
 import React from 'react'
-import {StyleSheet, Pressable, KeyboardAvoidingView, Image, TextInput, View, Text, ScrollView, TouchableOpacity} from 'react-native';
+import {StyleSheet, KeyboardAvoidingView, Image, TextInput, View, Text, ScrollView, TouchableOpacity} from 'react-native';
 import GoodMorning from '../components/GoodMorning';
-import { nanoid } from '@reduxjs/toolkit';
 import { useState, useRef } from 'react';
 import { Camera, CameraType, FlashMode } from 'expo-camera';
 import { useIsFocused } from "@react-navigation/native";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useSelector, useDispatch } from 'react-redux';
-import { switchMode } from '../reducers/darkMode';
-import users from '../reducers/users';
 import { addPhoto} from '../reducers/users';
 import { updateStudent,updateSport} from '../reducers/student';
+import { signUp } from '../reducers/users'
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -30,7 +28,7 @@ export default function AddInfoStudentScreen({navigation}) {
   const [studentDateOfBirth, setStudentDateOfBirth] = useState('')
   const [studentMyDescription, setStudentMyDescription] = useState('')
 //   const [studentImage, setStudentImage] = useState('')
-  const [studentSports, setStudentSports] = useState('')
+  const [studentSports, setStudentSports] = useState([])
 
   const [selectedImages, setSelectedImages] = useState([]);
 
@@ -38,13 +36,11 @@ export default function AddInfoStudentScreen({navigation}) {
   const [hasPermission, setHasPermission] = useState(false);
   const [type, setType] = useState(CameraType.back);
   const [flashMode, setFlashMode] = useState(FlashMode.off);
-  const [image, setImage] = useState(null);
-  
+
   let cameraRef = useRef(null);
   
   const student = useSelector((state) => state.users.value) 
-  console.log('test student', student)
-  console.log(image)
+
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -54,62 +50,101 @@ export default function AddInfoStudentScreen({navigation}) {
       });
   
       if (!result.canceled) {
-        setImage(result.assets[0].uri);
-        console.log("okokokoko",result.assets[0].uri)
-        setHasPermission(false);
+        const formData = new FormData();
+       
+        formData.append('photoFromFront',{
+          uri: result.assets[0].uri,
+          name: 'photo.jpg',
+          type: 'image/jpeg',
+        });
+       
+        fetch('https://coach-linker-backend.vercel.app/upload', {
+          method: 'POST',
+          body: formData,
+        }).then((response) => response.json())
+          .then((data) => { 
+            if (data.result) {
+              dispatch(signUp({image: data.url}))
+              dispatch(addPhoto(data.url));
+              setHasPermission(false);
+            } 
+          })
       }
     };
 
-  const handleValidate =() => {
-        fetch('https://coach-linker-backend.vercel.app/students/new', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                name: studentName, 
-                firstname: studentFirstname,
-                dateOfBirth: studentDateOfBirth,
-                myDescription: studentMyDescription,
-                image: user.photo,
-                // favoriteSport: user.signUp.favoriteSport,
-                password : user.signUp.password,
-                email: user.signUp.email,        
-         }),
-
-        }).then(response => response.json())
-            .then(data => { console.log('dataresult', data)
-                if (data.result) { 
-                    // dispatch(updateStudent({ 
-                    //     name: studentName, 
-                    //     firstname: studentFirstname,
-                    //     dateOfBirth: studentDateOfBirth,
-                    //     myDescription: studentMyDescription,
-                    //     favoriteSport: user.signUp.favoriteSport,
-                    //     image: user.photo, 
-                    //     token: data.token,
-                    //     isCoach : false,
-                    //     password :user.signUp.password,
-                    //     email:user.signUp.email,
-                    // })); 
-                   console.log("salut")
-                    navigation.navigate("TabNavigator",{screen : "Menu"})
-               }
-            });
+    const handleValidate = async () => {
+      try {
+        await dispatch(signUp({
+          name: studentName, 
+          firstname: studentFirstname,
+          dateOfBirth: studentDateOfBirth,
+          myDescription: studentMyDescription,
+          image: user.photo,
+          favoriteSport: studentSports,
+        }));
+    
+        const signUpData = {
+          email: student.signUp.email,
+          password: student.signUp.password,
+          name: student.signUp.name,
+          firstname: student.signUp.firstname,
+          image: student.signUp.image,
+          dateOfBirth: student.signUp.dateOfBirth,
+          myDescription: student.signUp.myDescription,
+          favoriteSport: student.signUp.favoriteSport,
+        };
+        
+        const response = await fetch('https://coach-linker-backend.vercel.app/students/new', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(signUpData),
+        });
+    
+        const responseBody = await response.text();
+        console.log('Response from server:', responseBody);
+    
+        const data = JSON.parse(responseBody);
+        console.log('dataresult', data);
+    
+        if (data.result) { 
+          // dispatch(updateStudent({ 
+          //     name: studentName, 
+          //     firstname: studentFirstname,
+          //     dateOfBirth: studentDateOfBirth,
+          //     myDescription: studentMyDescription,
+          //     favoriteSport: user.signUp.favoriteSport,
+          //     image: user.photo, 
+          //     token: data.token,
+          //     isCoach : false,
+          //     password :user.signUp.password,
+          //     email:user.signUp.email,
+          // })); 
+          console.log("salut");
+          navigation.navigate("TabNavigator", { screen: "Menu" });
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        // Gérer les erreurs
+      }
     }
+    
+        
 
     // sélection des sports
     const handleImageSelect = (image, imageName) => {
         if (selectedImages.length < 3 && !selectedImages.some((item) => item.image === image)) {
           setSelectedImages((prevImages) => [...prevImages, { image, name: imageName }])
+          setStudentSports(selectedImages.map(item => item.name))
         }
       }
     
       const handleImageRemove = (index) => {
         setSelectedImages((prevImages) => {
           const updatedImages = [...prevImages];
-          updatedImages.splice(index, 1);
+          const removedImage = updatedImages.splice(index, 1)[0];
+          setStudentSports(prevSports => prevSports.filter(sport => sport !== removedImage.name)); // Retire le sport de la liste
           return updatedImages;
         });
-        dispatch(updateSport({ sport: selectedImages.imageName })); // à terminer
       };
     
     
@@ -132,24 +167,12 @@ export default function AddInfoStudentScreen({navigation}) {
           body: formData,
         }).then((response) => response.json())
           .then((data) => { 
-            console.log(data)
-            data.result && fetch('https://coach-linker-backend.vercel.app/students/profil', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    image: data.url,
-                    token: student.token,
-             })
-             
+            if (data.result) {
+              dispatch(signUp({image: data.url}))
+              dispatch(addPhoto(data.url));
+              setHasPermission(false);
+            } 
           })
-          .then((response) => response.json())
-          .then((data) => {
-            
-            dispatch(addPhoto(data.student.image));
-            setHasPermission(false);
-          })
-       })
-         
     }
     
     const DARK_COLORS = ["black", "#FF6100"];
@@ -174,7 +197,7 @@ export default function AddInfoStudentScreen({navigation}) {
         
             <View style={styles.picture}>
                 <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={{uri : user.photo}} />
-                <TouchableOpacity onPress={() => requestCameraPermission()} >
+                <TouchableOpacity onPress={() => requestCameraPermission() && pickImage()} >
                             <Image  style={styles.crayon} source={require('../assets/crayon.png')} />
                 </TouchableOpacity>
             </View>

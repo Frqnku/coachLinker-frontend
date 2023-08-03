@@ -20,8 +20,7 @@ export default function StudentProfileScreen({navigation}) {
     const isFocused = useIsFocused();
     const isDarkMode = useSelector(state => state.darkMode.value)
     const user = useSelector((state) => state.users.value);
-    // const recupImage = user.photo
-    // console.log('fuck', user)
+
         
     const [studentName, setStudentName] = useState('')
     const [studentFirstname, setStudentFirstname] = useState('')

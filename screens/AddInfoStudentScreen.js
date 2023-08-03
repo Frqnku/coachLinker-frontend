@@ -25,7 +25,7 @@ export default function AddInfoStudentScreen({navigation}) {
   const [studentFirstname, setStudentFirstname] = useState('')
   const [studentDateOfBirth, setStudentDateOfBirth] = useState('')
   const [studentMyDescription, setStudentMyDescription] = useState('')
-  const [studentImage, setStudentImage] = useState('')
+//   const [studentImage, setStudentImage] = useState('')
   const [studentSports, setStudentSports] = useState('')
 
   const [selectedImages, setSelectedImages] = useState([]);
@@ -65,7 +65,7 @@ export default function AddInfoStudentScreen({navigation}) {
                 firstname: studentFirstname,
                 dateOfBirth: studentDateOfBirth,
                 myDescription: studentMyDescription,
-                image: studentImage,
+                // image: user.photo,
                 favoriteSport: studentSports,
                 token: student.token,
         
@@ -80,7 +80,7 @@ export default function AddInfoStudentScreen({navigation}) {
                         dateOfBirth: studentDateOfBirth,
                         myDescription: studentMyDescription,
                         favoriteSport: studentSports,
-                        image: studentImage 
+                        // image: user.photo 
                     })); 
                     navigation.navigate("TabNavigator",{screen : "Menu"})
                }
@@ -117,13 +117,13 @@ export default function AddInfoStudentScreen({navigation}) {
           type: 'image/jpeg',
         });
        
-        fetch('http://192.168.10.136:3000/upload', {
+        fetch('https://coach-linker-backend.vercel.app/upload', {
           method: 'POST',
           body: formData,
         }).then((response) => response.json())
           .then((data) => { 
             console.log(data)
-            data.result && fetch('http://192.168.10.136:3000/students/profil', {
+            data.result && fetch('https://coach-linker-backend.vercel.app/students/profil', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 

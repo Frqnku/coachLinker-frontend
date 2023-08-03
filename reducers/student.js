@@ -6,7 +6,7 @@ const initialState = {
       firstname: null,
       image: null,
       dateOfBirth: null,
-      myDescritpion: null,
+      myDescription: null,
       favoriteSport: [],
       Id_user: null
     },

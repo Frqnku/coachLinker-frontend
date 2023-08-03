@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 export default function AddInfoCoachScreen({ navigation }) {
 
   const isDarkMode = useSelector(state => state.darkMode.value)
-
+  const user = useSelector((state) => state.users.value);
   const isFocused = useIsFocused();
 
   // les useStates
@@ -28,13 +28,48 @@ export default function AddInfoCoachScreen({ navigation }) {
   // camera tel
   let cameraRef = useRef(null);
 
-  const requestCameraPermission = async () => { 
-    const { status } = await Camera.requestCameraPermissionsAsync();
-    setHasPermission(status === 'granted');
-  };
-
-  const takePicture = async () => {
-      const photo = await cameraRef.takePictureAsync({ quality: 0.3 });}
+      const pickImage = async () => {
+        const result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+          });
+      
+      
+          if (!result.canceled) {
+            const formData = new FormData();
+       
+            formData.append('photoFromFront',{
+              uri: result.assets[0].uri,
+              name: 'photo.jpg',
+              type: 'image/jpeg',
+            });
+           
+            fetch('http://192.168.10.124:3000/upload', {
+              method: 'POST',
+              body: formData,
+            }).then((response) => response.json())
+              .then((data) => { 
+                console.log(data)
+                data.result && fetch('http://192.168.10.124:3000/students/profil', { /* a modifier */
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        image: data.url,
+                        token: student.token, /* a modifier */
+                 })
+                 
+              })
+              .then((response) => response.json())
+              .then((data) => {
+                
+                dispatch(addPhoto(data.student.image)); /* a modifier */
+                setHasPermission(false);
+              })
+           })
+        }
+      }
 
   // HandleClicks
   const handleImageSelect = (image, imageName) => {
@@ -61,6 +96,45 @@ export default function AddInfoCoachScreen({ navigation }) {
     navigation.navigate('ChooseRole')
   }
 
+  const requestCameraPermission = async () => { 
+    const { status } = await Camera.requestCameraPermissionsAsync();
+    setHasPermission(status === 'granted');
+  };
+  const takePicture = async () => {
+      const photo = await cameraRef.takePictureAsync({ quality: 0.3 });
+      const formData = new FormData();
+ 
+  formData.append('photoFromFront',{
+    uri: photo.uri,
+    name: 'photo.jpg',
+    type: 'image/jpeg',
+  });
+ 
+  fetch('https://coach-linker-backend.vercel.app/upload', {
+    method: 'POST',
+    body: formData,
+  }).then((response) => response.json())
+    .then((data) => { 
+      console.log(data)
+      data.result && fetch('https://coach-linker-backend.vercel.app/students/profil', { /* a modifier */
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+              image: data.url,
+              token: student.token, /* a modifier */
+       })
+       
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      
+      dispatch(addPhoto(data.student.image)); /* a modifier  */
+      setHasPermission(false);
+    })
+ })
+   
+}
+
 
   if (!hasPermission || !isFocused) {
 
@@ -69,6 +143,7 @@ export default function AddInfoCoachScreen({ navigation }) {
 
       <View style={styles.btnBack}>
         <Image style={[styles.return, isDarkMode ? styles.darkReturn : styles.lightReturn]} source={require('../assets/bouton-retour.png')} onPress={handleBack}/>
+        <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={{uri : user.photo}} />
       </View>
 
       <View style={styles.inputView}>
@@ -139,7 +214,7 @@ export default function AddInfoCoachScreen({ navigation }) {
       </View>
 
       <View style={styles.btns}>
-        <Pressable style={styles.btnPhoto} onPress={() => requestCameraPermission()} >
+        <Pressable style={styles.btnPhoto} onPress={() => requestCameraPermission() && pickImage()} >
           <Text>Photo</Text>
         </Pressable>
 
@@ -216,7 +291,7 @@ const styles = StyleSheet.create({
     btnBack: {
       width: '80%',
       flexDirection: 'row',
-      justifyContent:'flex-start',
+      justifyContent:'space-between', /* a enlever */
       margin: 10
     },
     btnDoc: {
@@ -273,6 +348,13 @@ const styles = StyleSheet.create({
     camera: {
       flex: 1
     },
+    // a enlever image
+    image :{
+      width:100,
+      height:100,
+      backgroundColor: "#fff",
+      borderRadius: 50,
+  },
     input: {
       height: 50,
       width: 300,
@@ -380,3 +462,4 @@ const styles = StyleSheet.create({
         borderColor: "#E8E8E8",
     },
 })
+

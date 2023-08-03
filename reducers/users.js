@@ -12,7 +12,29 @@ const initialState = {
         longitude: 2.3036914
       },
       photo: '../assets/utilisateur.png',
-      statusGranted: null
+      statusGranted: null,
+      signUp: {
+        // infos communes
+        email: '',
+        password: '',
+        name: '',
+        firstname: '', 
+        image: '', 
+        myDescription: '', 
+        // infos coach
+        teachedSport: [], 
+        proCard: '', 
+        siret: '', 
+        iban: '', 
+        bic: '',
+        price: '', 
+        notes: [], 
+        city: '', 
+        coachingPlaces: [],
+        // infos student
+        dateOfBirth: '',
+        favoriteSports: []
+      }
     }
 };
 
@@ -35,8 +57,15 @@ export const userSlice = createSlice({
     addPhoto: (state, action) => {
       state.value.photo = action.payload;
     },
+    signUp: (state, action) => {
+      state.value.signUp = {
+        ...state.value.signUp, // Copie toutes les propriétés actuelles
+        ...action.payload, // Remplace les propriétés avec celles de l'action
+      };
+      console.log(state.value.signUp)
+      }
   },
 });
 
-export const { updateCurrentLocation, updateSearchLocation, updateStatus, addPhoto } = userSlice.actions;
+export const { updateCurrentLocation, updateSearchLocation, updateStatus, addPhoto, signUp } = userSlice.actions;
 export default userSlice.reducer;

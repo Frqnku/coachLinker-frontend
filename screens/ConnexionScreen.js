@@ -112,12 +112,13 @@ export default function ConnexionScreen({ navigation }) {
         colors={isDarkMode ? DARK_COLORS : LIGHT_COLORS}
         start={isDarkMode ? DarkStart : LightStart}
         end={isDarkMode ? DarkEnd : LightEnd}
-        style={styles.background} >
+        style={styles.background}
+        >
             <View style={styles.boximage}>
-            <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={require('../assets/logodark.png')} />
-        
-            <TextInput placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]}
-             placeholder="Email" onChangeText={(value) => setSignUpEmail(value)} value={signUpEmail}  />
+              <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={isDarkMode ? require('../assets/logodark.png') : require('../assets/logolight2.png')} />
+          
+              <TextInput placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[ isDarkMode ? styles.darkInput : styles.lightInput]}
+              placeholder="Email" onChangeText={(value) => setSignUpEmail(value)} value={signUpEmail}  />
 
             <Text style={[styles.text, isDarkMode ? styles.darkText : styles.lightText]}>Le mot de passe doit contenir 8 caractères minimum, une majuscule, une minuscule, un chiffre et un caractère spécial</Text>
             <TextInput placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]}
@@ -127,30 +128,35 @@ export default function ConnexionScreen({ navigation }) {
             <TextInput placeholderTextColor={isDarkMode ? "#7B7B7B":"#7B7B7B"} style={[styles.inputP2, isDarkMode ? styles.darkInputP2 : styles.lightInputP2]}
               placeholder="Confirmer le mot de passe" onChangeText={(value) => setSignUpPassword2(value)} value={signUpPassword2} secureTextEntry={true}/>
 
-            <TouchableOpacity style={[styles.button, isDarkMode ? styles.darkbutton : styles.lightbutton]}
+              <TouchableOpacity style={[ isDarkMode ? styles.darkbutton : styles.lightbutton]}
 
-            onPress={() => handleSignup()} activeOpacity={0.8}>
-                <Text style={styles.textButton}>S'inscrire</Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
-            onPress={() => handleModal()} activeOpacity={0.8}>
-                <Text style={[styles.signin, isDarkMode ? styles.darksignin : styles.lightsignin]}>T'es déjà inscrit ? Let's go !</Text>
-            </TouchableOpacity>
-            <Modal  animationType="slide" transparent={true} visible={modalVisible} onRequestClose={() => { Alert.alert('Modal has been closed.');
-                    setModalVisible(!modalVisible); }}>
+              onPress={() => handleSignup()} activeOpacity={0.8}>
+                  <Text style={styles.textButton}>S'inscrire</Text>
+              </TouchableOpacity>
+              <TouchableOpacity 
+              onPress={() => handleModal()} activeOpacity={0.8}>
+                  <Text style={[styles.signin, isDarkMode ? styles.darksignin : styles.lightsignin]}>T'es déjà inscrit ? Let's go !</Text>
+              </TouchableOpacity>
+              <Modal  animationType="slide" transparent={true} visible={modalVisible} onRequestClose={() => { Alert.alert('Modal has been closed.');
+                      setModalVisible(!modalVisible); }}>
                 <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <TextInput placeholder="Email" onChangeText={(value) => setSignInEmail(value)} value={signInEmail} style={styles.input2} />
-                        <TextInput placeholder="Mot de passe" onChangeText={(value) => setSignInPassword(value)} value={signInPassword} style={styles.input2} secureTextEntry={true}/>
-                        <TouchableOpacity onPress={() => handleSignin()} style={styles.button2} activeOpacity={0.8}>
-                            <Text style={styles.textButton}>Se connecter</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.button2} activeOpacity={0.8}>
-                            <Text style={styles.textButton}>Fermer</Text>
-                        </TouchableOpacity>
-                    </View>
+                  <LinearGradient
+                    colors={isDarkMode ? DARK_COLORS : LIGHT_COLORS}
+                    start={isDarkMode ? DarkStart : LightStart}
+                    end={isDarkMode ? DarkEnd : LightEnd}>
+                      <View style={styles.modalView}>
+                          <TextInput placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} placeholder="Email" onChangeText={(value) => setSignInEmail(value)} value={signInEmail} style={[ isDarkMode ? styles.darkInput2 : styles.lightInput2]} />
+                          <TextInput placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} placeholder="Mot de passe" onChangeText={(value) => setSignInPassword(value)} value={signInPassword} style={[ isDarkMode ? styles.darkInput2 : styles.lightInput2]} secureTextEntry={true}/>
+                          <TouchableOpacity onPress={() => handleSignin()} style={[ isDarkMode ? styles.darkButton2 : styles.lightButton2]} activeOpacity={0.8}>
+                              <Text style={styles.textButton}>Se connecter</Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.darkButton2} activeOpacity={0.8}>
+                              <Text style={styles.textButton}>Fermer</Text>
+                          </TouchableOpacity>
+                      </View>
+                  </LinearGradient>
                 </View>
-            </Modal>
+              </Modal>
             </View>
            </LinearGradient>
         </KeyboardAvoidingView>
@@ -224,8 +230,7 @@ darkInput:{
   height: 40,
   borderRadius: 13,
   paddingLeft: 15,
-  marginBottom: 10,
-    
+  marginBottom: 10,  
 },
 lightInput:{
   marginTop: 25,
@@ -295,9 +300,9 @@ background:{
         fontWeight: 'bold',
       },
       darksignin: {
-        fontSize : 22,
+        fontSize : 18,
         marginTop: 50,
-        color : 'white',
+        color : '#AAAAAA',
         fontWeight: 'bold',
         // backgroundColor: '#58FD0B',
         textShadowColor: 'rgba(255, 165, 0, 1)',  //'rgba(255, 165, 0, 1)', Couleur de l'ombre (noir avec opacité 0.75)
@@ -311,39 +316,42 @@ background:{
         marginTop: 22,
       },
       modalView: {
-        margin: 20,
-        borderRadius: 20,
+        
         padding: 50,
-        alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: {
-          width: 0,
-          height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5,
-        backgroundColor: '#D9D9D9',
-      },
-      input2: {
-        fontSize : 20,
-        backgroundColor: "#F2F2F2",
-        width : 200,
-        margin : "4%",
-        height: 40,
         borderRadius: 5,
-        paddingLeft: 5
+        borderColor: "black",
+        borderWidth: 2,
+        alignItems: 'center',
+        
       },
-      button2: {
+      darkInput2:{
+        marginTop: 20,
+        fontSize : 15,
+        backgroundColor: '#2E2E2E',
+        width : 200,
+        height: 40,
+        margin : "2%",
+        borderRadius: 13,
+        paddingLeft: 15,
+        marginBottom: 10,  
+      },
+      lightInput2: {
+
+      },
+      darkButton2: {
         justifyContent: 'center',
         alignItems: 'center',
         width: 150,
         height: 50,
-        borderRadius: 5,
-        marginTop: 15,
+        borderRadius: 25,
+        marginTop: 20,
+        elevation: 15,
         backgroundColor: '#BF5000',
-        shadowOffset: {
-          width: 0,
-          height: 5,}
+        shadowColor: '#FF6100',
+        shadowOffset: { width: 50, height: 5,},
+        shadowOpacity: 0.0001,
+      },
+      lightButton2: {
+        
       }
 })

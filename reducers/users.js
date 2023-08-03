@@ -13,9 +13,28 @@ const initialState = {
       },
       photo: '../assets/utilisateur.png',
       statusGranted: null,
-
-      email : '',
-      password : '',
+      signUp: {
+        // infos communes
+        email: '',
+        password: '',
+        name: '',
+        firstname: '', 
+        image: '', 
+        myDescription: '', 
+        // infos coach
+        teachedSport: [], 
+        proCard: '', 
+        siret: '', 
+        iban: '', 
+        bic: '',
+        price: '', 
+        notes: [], 
+        city: '', 
+        coachingPlaces: [],
+        // infos student
+        dateOfBirth: '',
+        favoriteSports: []
+      }
     }
 };
 
@@ -38,13 +57,15 @@ export const userSlice = createSlice({
     addPhoto: (state, action) => {
       state.value.photo = action.payload;
     },
-    Signup: (state, action) => {
-      console.log('addUserRecu',action.payload)
-      state.value.email = action.payload.email;
-      state.value.password = action.payload.password;
-    },
+    signUp: (state, action) => {
+      state.value.signUp = {
+        ...state.value.signUp, // Copie toutes les propriétés actuelles
+        ...action.payload, // Remplace les propriétés avec celles de l'action
+      };
+      console.log(state.value.signUp)
+      }
   },
 });
 
-export const { updateCurrentLocation, updateSearchLocation, updateStatus, addPhoto, Signup, Signin } = userSlice.actions;
+export const { updateCurrentLocation, updateSearchLocation, updateStatus, addPhoto, signUp } = userSlice.actions;
 export default userSlice.reducer;

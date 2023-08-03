@@ -26,6 +26,7 @@ export default function ConnexionScreen({ navigation }) {
     const LightStart = {x : 0.6, y : 0.4};
     const LightEnd = {x : 0.3, y : 0.1};
 
+    const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     // retiré : const handleSignup = () => {
     //   fetch('https://coach-linker-backend.vercel.app/users/signup', {
@@ -46,7 +47,7 @@ export default function ConnexionScreen({ navigation }) {
 
     // Lors de l'inscription, email et password sont envoyés dans le store.
     const handleSignup = () => {
-      if(signUpPassword===signUpPassword2){
+      if (EMAIL_REGEX.test(signUpEmail) &&(signUpPassword===signUpPassword2)){
       dispatch(signUp({ email: signUpEmail, password: signUpPassword }));
       setSignUpEmail('');
       setSignUpPassword('');

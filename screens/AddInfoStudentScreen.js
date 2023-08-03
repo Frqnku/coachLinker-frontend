@@ -10,7 +10,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { switchMode } from '../reducers/darkMode';
 import users from '../reducers/users';
 import { addPhoto} from '../reducers/users';
-import { updateStudent} from '../reducers/student';
+import { updateStudent,updateSport} from '../reducers/student';
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -70,40 +70,27 @@ export default function AddInfoStudentScreen({navigation}) {
                 dateOfBirth: studentDateOfBirth,
                 myDescription: studentMyDescription,
                 image: user.photo,
-                favoriteSport: studentSports,
-                token: user.token,
-                isCoach : false,
-                password : user.email,
-                email: user.email,        
+                // favoriteSport: user.signUp.favoriteSport,
+                password : user.signUp.password,
+                email: user.signUp.email,        
          }),
+
         }).then(response => response.json())
-            .then(data => {
-                if (data.result) { console.log('data',data)
-                    dispatch(updateStudent({ 
-                        name: studentName, 
-                        firstname: studentFirstname,
-                        dateOfBirth: studentDateOfBirth,
-                        myDescription: studentMyDescription,
-                        favoriteSport: studentSports,
-                        image: user.photo, 
-                        token: student.token,
-                        isCoach : false,
-                        password : user.email,
-                        email: user.email, 
-                    })); 
-                    
-                    console.log('dispatch',dispatch(updateStudent({ 
-                      name: studentName, 
-                      firstname: studentFirstname,
-                      dateOfBirth: studentDateOfBirth,
-                      myDescription: studentMyDescription,
-                      favoriteSport: studentSports,
-                      image: user.photo, 
-                      token: student.token,
-                      isCoach : false,
-                      password : user.email,
-                      email: user.email, 
-                  })));
+            .then(data => { console.log('dataresult', data)
+                if (data.result) { 
+                    // dispatch(updateStudent({ 
+                    //     name: studentName, 
+                    //     firstname: studentFirstname,
+                    //     dateOfBirth: studentDateOfBirth,
+                    //     myDescription: studentMyDescription,
+                    //     favoriteSport: user.signUp.favoriteSport,
+                    //     image: user.photo, 
+                    //     token: data.token,
+                    //     isCoach : false,
+                    //     password :user.signUp.password,
+                    //     email:user.signUp.email,
+                    // })); 
+                   console.log("salut")
                     navigation.navigate("TabNavigator",{screen : "Menu"})
                }
             });
@@ -122,6 +109,7 @@ export default function AddInfoStudentScreen({navigation}) {
           updatedImages.splice(index, 1);
           return updatedImages;
         });
+        dispatch(updateSport({ sport: selectedImages.imageName })); // à terminer
       };
     
     

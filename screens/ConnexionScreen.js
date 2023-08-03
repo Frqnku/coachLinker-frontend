@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { login, logout } from '../reducers/people';
 
+
 export default function ConnexionScreen({ navigation }) {
     const dispatch = useDispatch();
     
@@ -109,13 +110,17 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: '50%',
         height: 50,
-        backgroundColor: '#F4A100',
-        borderRadius: 5,
-        marginTop: 15
+        backgroundColor: '#FFF',
+        borderRadius: 30,
+        marginTop: 15,
+        elevation: 15,
+        shadowColor: '#FF6100',
+        shadowOffset: { width: 10, height: 2 },
+        shadowOpacity: 0.3,
       },
       textButton: {
         fontSize : 20,
-        color: '#ffffff',
+        color: '#FF6100',
       },
       signin: {
         fontSize : 20,

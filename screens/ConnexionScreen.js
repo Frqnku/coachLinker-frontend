@@ -1,9 +1,8 @@
 import { StyleSheet, Text, View, Image, Pressable, TextInput, TouchableOpacity, KeyboardAvoidingView, Modal } from 'react-native';
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { LinearGradient } from 'expo-linear-gradient';
 import { signUp,addToken} from '../reducers/users'; 
-import users from '../reducers/users';
 
 export default function ConnexionScreen({ navigation }) {
     const dispatch = useDispatch();
@@ -14,6 +13,8 @@ export default function ConnexionScreen({ navigation }) {
     const [signInEmail, setSignInEmail] = useState('')
     const [signInPassword, setSignInPassword] = useState('')
     const [modalVisible, setModalVisible] = useState(false)
+    const [pwdStrength, setPwdStrength] = useState('')
+    const [pwdColor, setPwdColor] = useState('')
     
     const isDarkMode = useSelector(state => state.darkMode.value)
 
@@ -26,15 +27,61 @@ export default function ConnexionScreen({ navigation }) {
 
     const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
+    useEffect(() => {
+      let pwdCheck = 0;
+      const validateRegex = [
+        /[A-Z]/,                   // Au moins une majuscule
+        /[a-z]/,                   // Au moins une minuscule
+        /[0-9]/,                   // Au moins un chiffre
+        /.{8,}/,                   // Au moins 8 caractères               // Au moins 12 caractères
+        /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/ // Au moins un caractère spécial
+      ];
+  
+      validateRegex.forEach((regex) => {
+        if (new RegExp(regex).test(signUpPassword)) {
+          pwdCheck += 1;
+        }
+      });
+  
+      switch (pwdCheck) {
+        case 0:
+          setPwdStrength('');
+          setPwdColor('');
+          break;
+        case 1:
+          setPwdStrength('Faible');
+          setPwdColor('#DC143C');
+          break;
+        case 2:
+          setPwdStrength('Faible');
+          setPwdColor('#DC143C');
+          break;
+        case 3:
+          setPwdStrength('Moyen');
+          setPwdColor('#FFA500');
+          break;
+        case 4:
+          setPwdStrength('Moyen');
+          setPwdColor('#FFA500');
+          break;
+        case 5:
+          setPwdStrength('Fort');
+          setPwdColor('#9efd38');
+          break;
+        default:
+          break;
+      }
+    }, [signUpPassword]);
+
     // Lors de l'inscription, email et password sont envoyés dans le store.
     const handleSignup = () => {
-      if (EMAIL_REGEX.test(signUpEmail) &&(signUpPassword===signUpPassword2)){
+      if (EMAIL_REGEX.test(signUpEmail) && (signUpPassword === signUpPassword2) && (pwdStrength === 'Fort')){
       dispatch(signUp({ email: signUpEmail, password: signUpPassword }));
       setSignUpEmail('');
       setSignUpPassword('');
       setSignUpPassword2('');
       navigation.navigate('Localisation');
-    };}
+    }}
 
     const handleModal = () => {
         setModalVisible(true)
@@ -72,8 +119,10 @@ export default function ConnexionScreen({ navigation }) {
             <TextInput placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]}
              placeholder="Email" onChangeText={(value) => setSignUpEmail(value)} value={signUpEmail}  />
 
+            <Text style={[styles.text, isDarkMode ? styles.darkText : styles.lightText]}>Le mot de passe doit contenir 8 caractères minimum, une majuscule, une minuscule, un chiffre et un caractère spécial</Text>
             <TextInput placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]}
               placeholder="Mot de passe" onChangeText={(value) => setSignUpPassword(value)} value={signUpPassword} secureTextEntry={true}/>
+            <Text style={[styles.text, {color: pwdColor, textAlign: 'left', fontWeight: 600}]}>{pwdStrength}</Text>
              
             <TextInput placeholderTextColor={isDarkMode ? "#7B7B7B":"#7B7B7B"} style={[styles.inputP2, isDarkMode ? styles.darkInputP2 : styles.lightInputP2]}
               placeholder="Confirmer le mot de passe" onChangeText={(value) => setSignUpPassword2(value)} value={signUpPassword2} secureTextEntry={true}/>
@@ -128,6 +177,12 @@ darkPicture:{
 lightPicture:{
     backgroundColor: '#fff',
 },
+lightText: {
+  color: '#000'
+},
+darkText: {
+  color: '#fff'
+},
 inputP2: {
   
 },
@@ -154,11 +209,14 @@ lightInputP2:{
   borderRadius: 13,
   paddingLeft: 5, 
 },
-
+text: {
+  width: '80%',
+  paddingTop: 10
+},
 input: { 
 },
 darkInput:{
-  marginTop: 20,
+  marginTop: 10,
   fontSize : 15,
   backgroundColor: '#2E2E2E',
   width : "80%",

@@ -58,7 +58,7 @@ export default function AddInfoStudentScreen({navigation}) {
           type: 'image/jpeg',
         });
        
-        fetch('https://coach-linker-backend.vercel.app/upload', {
+        fetch('http://coach-linker-backend.vercel.app/upload', {
           method: 'POST',
           body: formData,
         }).then((response) => response.json())
@@ -73,6 +73,7 @@ export default function AddInfoStudentScreen({navigation}) {
     };
 
     const handleValidate = async () => {
+      console.log(studentSports);
       try {
         await dispatch(signUp({
           name: studentName, 
@@ -86,15 +87,15 @@ export default function AddInfoStudentScreen({navigation}) {
         const signUpData = {
           email: student.signUp.email,
           password: student.signUp.password,
-          name: student.signUp.name,
-          firstname: student.signUp.firstname,
-          image: student.signUp.image,
-          dateOfBirth: student.signUp.dateOfBirth,
-          myDescription: student.signUp.myDescription,
-          favoriteSport: student.signUp.favoriteSport,
+          name: studentName, 
+          firstname: studentFirstname,
+          dateOfBirth: studentDateOfBirth,
+          myDescription: studentMyDescription,
+          image: user.photo,
+          favoriteSport: studentSports,
         };
         
-        const response = await fetch('https://coach-linker-backend.vercel.app/students/new', {
+        const response = await fetch('http://coach-linker-backend.vercel.app/students/new', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(signUpData),
@@ -107,18 +108,6 @@ export default function AddInfoStudentScreen({navigation}) {
         console.log('dataresult', data);
     
         if (data.result) { 
-          // dispatch(updateStudent({ 
-          //     name: studentName, 
-          //     firstname: studentFirstname,
-          //     dateOfBirth: studentDateOfBirth,
-          //     myDescription: studentMyDescription,
-          //     favoriteSport: user.signUp.favoriteSport,
-          //     image: user.photo, 
-          //     token: data.token,
-          //     isCoach : false,
-          //     password :user.signUp.password,
-          //     email:user.signUp.email,
-          // })); 
           console.log("salut");
           navigation.navigate("TabNavigator", { screen: "Menu" });
         }
@@ -162,7 +151,7 @@ export default function AddInfoStudentScreen({navigation}) {
           type: 'image/jpeg',
         });
        
-        fetch('https://coach-linker-backend.vercel.app/upload', {
+        fetch('http://coach-linker-backend.vercel.app/upload', {
           method: 'POST',
           body: formData,
         }).then((response) => response.json())

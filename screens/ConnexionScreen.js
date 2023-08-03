@@ -21,8 +21,8 @@ export default function ConnexionScreen({ navigation }) {
     const LIGHT_COLORS = ["#FFF8EB", "#FF6100"];
     const DarkStart = {x : 0.4, y : 0.4};
     const DarkEnd = {x : -0.3, y : -0.3};
-    const LightStart = {x : 0.6, y : 0.4};
-    const LightEnd = {x : 0.3, y : 0.1};
+    const LightStart = {x : 0.6, y : 0.3};
+    const LightEnd = {x : 0.1, y : 0};
 
     const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -70,19 +70,19 @@ export default function ConnexionScreen({ navigation }) {
             <View style={styles.boximage}>
               <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={isDarkMode ? require('../assets/logodark.png') : require('../assets/logolight2.png')} />
           
-              <TextInput placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[ isDarkMode ? styles.darkInput : styles.lightInput]}
+              <TextInput selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[ isDarkMode ? styles.darkInput : styles.lightInput]}
               placeholder="Email" onChangeText={(value) => setSignUpEmail(value)} value={signUpEmail}  />
 
-              <TextInput placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[ isDarkMode ? styles.darkInput : styles.lightInput]}
+              <TextInput selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[ isDarkMode ? styles.darkInput : styles.lightInput]}
                 placeholder="Mot de passe" onChangeText={(value) => setSignUpPassword(value)} value={signUpPassword} secureTextEntry={true}/>
               
-              <TextInput placeholderTextColor={isDarkMode ? "#7B7B7B":"#7B7B7B"} style={[ isDarkMode ? styles.darkInputP2 : styles.lightInputP2]}
+              <TextInput selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#7B7B7B":"#7B7B7B"} style={[ isDarkMode ? styles.darkInputMdp : styles.lightInputMdp]}
                 placeholder="Confirmer le mot de passe" onChangeText={(value) => setSignUpPassword2(value)} value={signUpPassword2} secureTextEntry={true}/>
 
               <TouchableOpacity style={[ isDarkMode ? styles.darkbutton : styles.lightbutton]}
 
               onPress={() => handleSignup()} activeOpacity={0.8}>
-                  <Text style={styles.textButton}>S'inscrire</Text>
+                  <Text style={[ isDarkMode ? styles.darkTextButton : styles.lightTextButton]}>S'inscrire</Text>
               </TouchableOpacity>
               <TouchableOpacity 
               onPress={() => handleModal()} activeOpacity={0.8}>
@@ -94,19 +94,18 @@ export default function ConnexionScreen({ navigation }) {
                   <LinearGradient
                     colors={isDarkMode ? DARK_COLORS : LIGHT_COLORS}
                     start={isDarkMode ? DarkStart : LightStart}
-                    end={isDarkMode ? DarkEnd : LightEnd}>
-                      <View style={styles.modalView}>
-                          <TextInput placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} placeholder="Email" onChangeText={(value) => setSignInEmail(value)} value={signInEmail} style={[ isDarkMode ? styles.darkInput2 : styles.lightInput2]} />
-                          <TextInput placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} placeholder="Mot de passe" onChangeText={(value) => setSignInPassword(value)} value={signInPassword} style={[ isDarkMode ? styles.darkInput2 : styles.lightInput2]} secureTextEntry={true}/>
+                    end={isDarkMode ? DarkEnd : LightEnd}
+                    style={[ isDarkMode ? styles.darkmodalView : styles.lightmodalView]}>
+                          <TextInput selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} placeholder="Email" onChangeText={(value) => setSignInEmail(value)} value={signInEmail} style={[ isDarkMode ? styles.darkInput2 : styles.lightInput2]} />
+                          <TextInput selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} placeholder="Mot de passe" onChangeText={(value) => setSignInPassword(value)} value={signInPassword} style={[ isDarkMode ? styles.darkInput2 : styles.lightInput2]} secureTextEntry={true}/>
                           <TouchableOpacity onPress={() => handleSignin()} style={[ isDarkMode ? styles.darkButton2 : styles.lightButton2]} activeOpacity={0.8}>
-                              <Text style={styles.textButton}>Se connecter</Text>
+                              <Text style={[ isDarkMode ? styles.darkTextButton : styles.lightTextButton]}>Se connecter</Text>
                           </TouchableOpacity>
-                          <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.darkButton2} activeOpacity={0.8}>
-                              <Text style={styles.textButton}>Fermer</Text>
+                          <TouchableOpacity onPress={() => setModalVisible(false)} style={[ isDarkMode ? styles.darkButton2 : styles.lightButton2]} activeOpacity={0.8}>
+                              <Text style={[ isDarkMode ? styles.darkTextButton : styles.lightTextButton]}>Fermer</Text>
                           </TouchableOpacity>
-                      </View>
                   </LinearGradient>
-                </View>
+                  </View>
               </Modal>
             </View>
            </LinearGradient>
@@ -134,7 +133,7 @@ darkPicture:{
 lightPicture:{
     // backgroundColor: '#fff',
 },
-darkInputP2:{
+darkInputMdp:{
   marginTop: 20,
   fontSize : 15,
   backgroundColor: '#2E2E2E',
@@ -145,17 +144,19 @@ darkInputP2:{
   paddingLeft: 15,
   marginBottom: 10,
   fontStyle: 'italic',
-    
+  color: 'white',
 },
-lightInputP2:{
-  marginTop: 25,
+lightInputMdp:{
+  marginTop: 20,
   fontSize : 15,
   backgroundColor: '#E8E8E8',
   width : "80%",
-  margin : "4%",
+  margin : "3%",
   height: 40,
   borderRadius: 13,
-  paddingLeft: 5, 
+  paddingLeft: 15,
+  fontStyle: 'italic',
+  color: 'black', 
 },
 darkInput:{
   marginTop: 20,
@@ -166,17 +167,20 @@ darkInput:{
   height: 40,
   borderRadius: 13,
   paddingLeft: 15,
-  marginBottom: 10,  
+  marginBottom: 10, 
+  color: 'white',
 },
 lightInput:{
-  marginTop: 25,
+  marginTop: 20,
   fontSize : 15,
   backgroundColor: '#E8E8E8',
   width : "80%",
-  margin : "4%",
+  margin : "3%",
   height: 40,
   borderRadius: 13,
-  paddingLeft: 5, 
+  paddingLeft: 15,
+  marginBottom: 10, 
+  color: 'black', 
 },
 darkImg:{
     backgroundColor: '#2E2E2E',
@@ -215,7 +219,17 @@ background:{
       }, 
 
       lightbutton: {
-        
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '30%',
+        height: 40,
+        backgroundColor: '#FF711A',
+        borderRadius: 25,
+        marginTop: 30,
+        elevation: 15,
+        shadowColor: '#FF6100',
+        shadowOffset: { width: 50, height: 5 },
+        shadowOpacity: 0.0001,
       },
       darkbutton: {
         justifyContent: 'center',
@@ -230,7 +244,12 @@ background:{
         shadowOffset: { width: 50, height: 5 },
         shadowOpacity: 0.0001,
       },
-      textButton: {
+      lightTextButton: {
+        fontSize : 15,
+        color: 'white',
+        fontWeight: 'bold',
+      },
+      darkTextButton: {
         fontSize : 15,
         color: '#2E2E2E',
         fontWeight: 'bold',
@@ -245,20 +264,37 @@ background:{
         textShadowOffset: { width: 0.5, height: 0.5 }, // Décalage de l'ombre (effet relief)
         textShadowRadius: 20, // Rayon de l'ombre (effet relief)
       },
+      lightsignin: {
+        fontSize : 18,
+        marginTop: 50,
+        color : 'black',
+        fontWeight: 'bold',
+        // backgroundColor: '#58FD0B',
+        textShadowColor: 'rgba(255, 100, 0, 0.5)',  //'rgba(255, 165, 0, 1)', Couleur de l'ombre (noir avec opacité 0.75)
+        textShadowOffset: { width: 0.5, height: 0.5 }, // Décalage de l'ombre (effet relief)
+        textShadowRadius: 1, // Rayon de l'ombre (effet relief)
+      },
       centeredView: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 22,
       },
-      modalView: {
-        
+      lightmodalView: {
         padding: 50,
-        borderRadius: 5,
-        borderColor: "black",
-        borderWidth: 2,
         alignItems: 'center',
-        
+        borderColor: "black",
+        borderWidth: 2,        
+        borderRadius: 25,
+        width: 300,
+      },
+      darkmodalView: {
+        padding: 50,
+        alignItems: 'center',
+        borderColor: "white",
+        borderWidth: 1,        
+        borderRadius: 25,
+        width: 300,
       },
       darkInput2:{
         marginTop: 20,
@@ -269,10 +305,20 @@ background:{
         margin : "2%",
         borderRadius: 13,
         paddingLeft: 15,
-        marginBottom: 10,  
+        marginBottom: 10,
+        color: 'white',  
       },
       lightInput2: {
-
+        marginTop: 20,
+        fontSize : 15,
+        backgroundColor: '#E8E8E8',
+        width : 200,
+        height: 40,
+        margin : "2%",
+        borderRadius: 13,
+        paddingLeft: 15,
+        marginBottom: 10,
+        color: 'black',
       },
       darkButton2: {
         justifyContent: 'center',
@@ -288,6 +334,16 @@ background:{
         shadowOpacity: 0.0001,
       },
       lightButton2: {
-        
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 150,
+        height: 50,
+        borderRadius: 25,
+        marginTop: 20,
+        elevation: 15,
+        backgroundColor: '#FF711A',
+        shadowColor: '#FF6100',
+        shadowOffset: { width: 50, height: 5,},
+        shadowOpacity: 0.0001,
       }
 })

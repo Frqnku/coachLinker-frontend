@@ -12,14 +12,18 @@ import users from '../reducers/users';
 import { addPhoto} from '../reducers/users';
 import { updateStudent} from '../reducers/student';
 import * as ImagePicker from 'expo-image-picker';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function AddInfoStudentScreen({navigation}) {
 
 
   const dispatch = useDispatch()
   const isFocused = useIsFocused();
+ 
   const isDarkMode = useSelector(state => state.darkMode.value)
+
   const user = useSelector((state) => state.users.value);
+
 
   const [studentName, setStudentName] = useState('')
   const [studentFirstname, setStudentFirstname] = useState('')
@@ -38,7 +42,7 @@ export default function AddInfoStudentScreen({navigation}) {
   
   let cameraRef = useRef(null);
   
-  const student = useSelector((state) => state.people.value) 
+  const student = useSelector((state) => state.users.value) 
   console.log('test student', student)
   console.log(image)
   const pickImage = async () => {
@@ -57,7 +61,7 @@ export default function AddInfoStudentScreen({navigation}) {
     };
 
   const handleValidate =() => {
-        fetch('https://coach-linker-backend.vercel.app/students/profil', {
+        fetch('https://coach-linker-backend.vercel.app/students/new', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
@@ -65,23 +69,41 @@ export default function AddInfoStudentScreen({navigation}) {
                 firstname: studentFirstname,
                 dateOfBirth: studentDateOfBirth,
                 myDescription: studentMyDescription,
-                // image: user.photo,
+                image: user.photo,
                 favoriteSport: studentSports,
-                token: student.token,
-        
+                token: user.token,
+                isCoach : false,
+                password : user.email,
+                email: user.email,        
          }),
         }).then(response => response.json())
             .then(data => {
-                if (data.result) { 
-
+                if (data.result) { console.log('data',data)
                     dispatch(updateStudent({ 
                         name: studentName, 
                         firstname: studentFirstname,
                         dateOfBirth: studentDateOfBirth,
                         myDescription: studentMyDescription,
                         favoriteSport: studentSports,
-                        // image: user.photo 
+                        image: user.photo, 
+                        token: student.token,
+                        isCoach : false,
+                        password : user.email,
+                        email: user.email, 
                     })); 
+                    
+                    console.log('dispatch',dispatch(updateStudent({ 
+                      name: studentName, 
+                      firstname: studentFirstname,
+                      dateOfBirth: studentDateOfBirth,
+                      myDescription: studentMyDescription,
+                      favoriteSport: studentSports,
+                      image: user.photo, 
+                      token: student.token,
+                      isCoach : false,
+                      password : user.email,
+                      email: user.email, 
+                  })));
                     navigation.navigate("TabNavigator",{screen : "Menu"})
                }
             });
@@ -141,11 +163,24 @@ export default function AddInfoStudentScreen({navigation}) {
        })
          
     }
+    
+    const DARK_COLORS = ["black", "#FF6100"];
+    const LIGHT_COLORS = ["#FFF8EB", "#FF6100"];
+    const DarkStart = {x : 0.4, y : 0.4};
+    const DarkEnd = {x : -0.3, y : -0.3};
+    const LightStart = {x : 0.6, y : 0.4};
+    const LightEnd = {x : 0.3, y : 0.1};
+    
     // {/* <Text>{realStudent.name}</Text> */}
         if (!hasPermission || !isFocused) {
             
     return (
         <KeyboardAvoidingView style={[styles.container, isDarkMode ? styles.darkBg : styles.lightBg]} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+            <LinearGradient
+        colors={isDarkMode ? DARK_COLORS : LIGHT_COLORS}
+        start={isDarkMode ? DarkStart : LightStart}
+        end={isDarkMode ? DarkEnd : LightEnd}
+        style={styles.background} >
             <GoodMorning/>
             <Image style={[styles.return, isDarkMode ? styles.darkReturn : styles.lightReturn]} source={require('../assets/bouton-retour.png')} />
         
@@ -236,7 +271,7 @@ export default function AddInfoStudentScreen({navigation}) {
                                     <Text style={styles.textButton}>Valider</Text>
             </TouchableOpacity>
         
-              
+         </LinearGradient>   
         </KeyboardAvoidingView>
           )
             }
@@ -269,6 +304,15 @@ export default function AddInfoStudentScreen({navigation}) {
             
             }
 const styles = StyleSheet.create({
+  container : {
+    flex :1 ,
+    backgroundColor: '#E8E8E8',
+    justifyContent: "space-evenly",   
+    },  
+  background:{
+      width: "100%",
+      height: "100%",
+    },
     darkBg :{
         backgroundColor: 'black',
     },
@@ -309,13 +353,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#2E2E2E',
     },
     lightIn:{
-    backgroundColor: '#fff',
-    },
-    container : {
-        flex :1 ,
-        backgroundColor: '#E8E8E8',
-        justifyContent: "space-evenly",
-        
+      backgroundColor: '#fff',
     },
     return :{
         width:40,
@@ -435,7 +473,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginRight: 100,
       },
-      removeButton: {
+     removeButton: {
         color: 'black',
         fontWeight: 'bold',
         marginLeft: 10,

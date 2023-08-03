@@ -32,7 +32,6 @@ import darkMode from './reducers/darkMode';
 import { useSelector } from 'react-redux';
 import users from './reducers/users';
 import coachs from './reducers/coachs';
-import people from './reducers/people';
 import student from './reducers/student';
 
 
@@ -40,13 +39,12 @@ import student from './reducers/student';
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  blacklist: ['darkMode','users','student','people','coachs'] 
+  blacklist: ['darkMode','users','student','coachs'] 
 };
 const rootReducer = combineReducers({
   darkMode,
   users,
   coachs,
-  people,
   student,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -20,6 +20,10 @@ export const studentSlice = createSlice({
       console.log('recu',action.payload)
         state.value =  action.payload;
       },
+    updateSport: (state, action) => {
+        console.log('recu sports',action.payload)
+          state.value.favoriteSport.push(action.payload.favoriteSport);
+        },
     },
   });
 

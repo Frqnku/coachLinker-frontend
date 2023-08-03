@@ -37,7 +37,7 @@ export default function StudentProfileScreen({navigation}) {
   
     let cameraRef = useRef(null);
     
-    const student = useSelector((state) => state.people.value) 
+    const student = useSelector((state) => state.user.value) 
     console.log('test de merde', student)
     
     const pickImage = async () => {
@@ -199,6 +199,7 @@ const handleImageSelect = (image, imageName) => {
           end={isDarkMode ? DarkEnd : LightEnd}
         style={styles.background}
         >
+<ScrollView  contentContainerStyle={styles.scrollContainer}showsVerticalScrollIndicator={false}>
      <Image style={[styles.return, isDarkMode ? styles.darkReturn : styles.lightReturn]} source={require('../assets/bouton-retour.png')} />
 
     <View style={styles.picture}>
@@ -208,7 +209,7 @@ const handleImageSelect = (image, imageName) => {
                     <Image  style={styles.crayon} source={require('../assets/crayon.png')} />
         </TouchableOpacity>
     </View>
-<ScrollView style={styles.scrollInput} showsVerticalScrollIndicator={false}>
+
      <View style={[styles.inputs, isDarkMode ? styles.darkIn : styles.lightIn]}>
         <TextInput placeholder="Nom" onChangeText={(value) => setStudentName(value)} value={studentName}
         placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.inputNom, isDarkMode ? styles.darkInput : styles.lightInput]} />
@@ -225,7 +226,7 @@ const handleImageSelect = (image, imageName) => {
         placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.inputMoi, isDarkMode ? styles.darkInput : styles.lightInput]} />
 
     </View>
-</ScrollView>
+
    
     <View>
         <Text style={styles.favoris}>Sports favoris :</Text>
@@ -287,6 +288,7 @@ const handleImageSelect = (image, imageName) => {
     <TouchableOpacity onPress={() => handleValidate()} style={styles.button2} activeOpacity={0.8}>
                             <Text style={styles.textButton}>Valider</Text>
     </TouchableOpacity>
+</ScrollView>
             </LinearGradient>
       
 </KeyboardAvoidingView>
@@ -350,11 +352,11 @@ const styles = StyleSheet.create({
         
     },
     darkImg:{
-        backgroundColor: '#2E2E2E',
+        backgroundColor: 'black',
         borderColor: "#F4A100",
     },
     lightImg:{
-        backgroundColor: '#fff',
+        backgroundColor: '#FFF8EB',
         borderColor: "#E8E8E8",
     },
     darkIn:{
@@ -365,7 +367,6 @@ const styles = StyleSheet.create({
     },
     container : {
         flex :1 ,
-        backgroundColor: '#E8E8E8',
        justifyContent: "space-evenly",
        
     },
@@ -373,12 +374,14 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     },
+    scrollContainer:{
+        alignItems:'center',
+    },
     return :{
         width:40,
         height:40,
-        alignItems: "center",
-        marginLeft: "3%",
-        marginTop: "8%",
+        marginRight: "80%",
+        marginTop: "15%",
         borderRadius: 50,
     },
    

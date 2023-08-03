@@ -1,9 +1,8 @@
 import { StyleSheet, Text, View, Image, Pressable, TextInput, TouchableOpacity, KeyboardAvoidingView, Modal } from 'react-native';
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { login, logout } from '../reducers/people';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Signin, Signup} from '../reducers/users';
+import { signUp,addToken} from '../reducers/users'; 
 import users from '../reducers/users';
 
 export default function ConnexionScreen({ navigation }) {
@@ -18,7 +17,6 @@ export default function ConnexionScreen({ navigation }) {
     
     const isDarkMode = useSelector(state => state.darkMode.value)
 
-
     const DARK_COLORS = ["black", "#FF6100"];
     const LIGHT_COLORS = ["#FFF8EB", "#FF6100"];
     const DarkStart = {x : 0.4, y : 0.4};
@@ -26,72 +24,49 @@ export default function ConnexionScreen({ navigation }) {
     const LightStart = {x : 0.6, y : 0.4};
     const LightEnd = {x : 0.3, y : 0.1};
 
-
-    // retiré : const handleSignup = () => {
-    //   fetch('https://coach-linker-backend.vercel.app/users/signup', {
-		// 	method: 'POST',
-		// 	headers: { 'Content-Type': 'application/json' },
-		// 	body: JSON.stringify({ email: signUpEmail, password: signUpPassword }),
-		// }).then(response => response.json())
-		// 	.then(data => {
-		// 		if (data.result) {
-		// 			dispatch(login({ email: signUpEmail, token: data.token }));
-		// 			setSignUpEmail('');
-		// 			setSignUpPassword('');
-    //                 navigation.navigate('Localisation')
-    //                 console.log(dispatch(login({ email: signUpEmail, token: data.token })))
-		// 		}
-		// 	});
-    // }
+    const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     // Lors de l'inscription, email et password sont envoyés dans le store.
     const handleSignup = () => {
-      dispatch(Signup({ email: signUpEmail, password: signUpPassword }));
+      if (EMAIL_REGEX.test(signUpEmail) &&(signUpPassword===signUpPassword2)){
+      dispatch(signUp({ email: signUpEmail, password: signUpPassword }));
       setSignUpEmail('');
       setSignUpPassword('');
+      setSignUpPassword2('');
       navigation.navigate('Localisation');
-    };
+    };}
 
     const handleModal = () => {
         setModalVisible(true)
     }
 
-
+    // log à partir du mot de passe et email (route users).
   const handleSignin = () => {
-        fetch('https://coach-linker-backend.vercel.app/users/signin', {
+        fetch('https://coach-linker-backend.vercel.app/connect', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ email: signInEmail, password: signInPassword }),
 		}).then(response => response.json())
-			.then(data => {
+			.then(data => { console.log(data)
 				if (data.result) {
-					dispatch(login({ email: signInEmail, token: data.token }));
+					dispatch(addToken({email: signInEmail,token: data.token }));
           setSignInEmail('');
 					setSignInPassword('');
-                  
                   navigation.navigate('TabNavigator')
 				}
 			});
     }
 
 
-    // const handleSignin = () => {
-    //   dispatch(Signin({ email: signInEmail, password: signInPassword }));
-    //   setSignInEmail('');
-    //   setSignInPassword('');
-    //   navigation.navigate('TabNavigator')
-    // };
-
-
-
 
     return (
         <KeyboardAvoidingView style={[styles.container, isDarkMode ? styles.darkBg : styles.lightBg]} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
           <LinearGradient
-            colors={isDarkMode ? DARK_COLORS : LIGHT_COLORS}
-            start={isDarkMode ? DarkStart : LightStart}
-            end={isDarkMode ? DarkEnd : LightEnd}
-            style={styles.background}>
+        colors={isDarkMode ? DARK_COLORS : LIGHT_COLORS}
+        start={isDarkMode ? DarkStart : LightStart}
+        end={isDarkMode ? DarkEnd : LightEnd}
+        style={styles.background}
+        >
             <View style={styles.boximage}>
               <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={isDarkMode ? require('../assets/logodark.png') : require('../assets/logolight2.png')} />
           

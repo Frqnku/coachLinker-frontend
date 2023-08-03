@@ -108,9 +108,7 @@ export default function ConnexionScreen({ navigation }) {
             <TextInput placeholderTextColor={isDarkMode ? "#7B7B7B":"#7B7B7B"} style={[styles.inputP2, isDarkMode ? styles.darkInputP2 : styles.lightInputP2]}
               placeholder="Confirmer le mot de passe" onChangeText={(value) => setSignUpPassword2(value)} value={signUpPassword2} secureTextEntry={true}/>
 
-            <TouchableOpacity style={[styles.button, isDarkMode ? styles.darkbutton : styles.lightbutton]}
-
-            onPress={() => handleSignup()} activeOpacity={0.8}>
+            <TouchableOpacity style={[styles.button, isDarkMode ? styles.darkbutton : styles.lightbutton]} onPress={() => handleSignup()} activeOpacity={0.8}>
                 <Text style={styles.textButton}>S'inscrire</Text>
             </TouchableOpacity>
             <TouchableOpacity 

@@ -5,7 +5,7 @@ import { useState, useRef } from 'react';
 import { Camera, CameraType, FlashMode } from 'expo-camera';
 import { useIsFocused } from "@react-navigation/native";
 import { useSelector } from 'react-redux';
-import LinearGradient from 'react-native-linear-gradient';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function AddInfoCoachScreen({ navigation }) {
 
@@ -136,25 +136,37 @@ export default function AddInfoCoachScreen({ navigation }) {
    
 }
 
+        const DARK_COLORS = ["black", "#FF6100"];
+        const LIGHT_COLORS = ["#FFF8EB", "#FF6100"];
+        const DarkStart = {x : 0.4, y : 0.4};
+        const DarkEnd = {x : -0.3, y : -0.3};
+        const LightStart = {x : 0.6, y : 0.4};
+        const LightEnd = {x : 0.3, y : 0.1};
 
   if (!hasPermission || !isFocused) {
 
   return (
-    
-    <ScrollView contentContainerStyle={styles.container}>
+    <KeyboardAvoidingView style={[styles.container, isDarkMode ? styles.darkBg : styles.lightBg]} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      <LinearGradient
+        colors={isDarkMode ? DARK_COLORS : LIGHT_COLORS}
+        start={isDarkMode ? DarkStart : LightStart}
+        end={isDarkMode ? DarkEnd : LightEnd}
+        style={styles.background}
+        >
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
     
       <View style={styles.btnBack}>
-        <Image style={[styles.return, isDarkMode ? styles.darkReturn : styles.lightReturn]} source={require('../assets/bouton-retour.png')} onPress={handleBack}/>
-        <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={{uri : user.photo}} />
+          <Image style={[styles.return, isDarkMode ? styles.darkReturn : styles.lightReturn]} source={require('../assets/bouton-retour.png')} onPress={handleBack}/>
+          <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={{uri : user.photo}} />
       </View>
 
-      <View style={styles.inputView}>
-        <TextInput style={styles.input} onChangeText={(value) => setCoachLastname(value)} value={coachLastname} placeholder='Nom' placeholderTextColor="#7B7B7B"></TextInput>
-        <TextInput style={styles.input} onChangeText={(value) => setCoachFirstname(value)} value={coachFirstname} placeholder='Prénom' placeholderTextColor="#7B7B7B"></TextInput>
-        <TextInput style={styles.input} onChangeText={(value) => setCoachBirthDate(value)} value={coachBirthDate} placeholder='Date de naissance' placeholderTextColor="#7B7B7B"></TextInput>
+      <View style={[styles.inputView, isDarkMode ? styles.darkIn : styles.lightIn]}>
+        <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachLastname(value)} value={coachLastname} placeholder='Nom' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"}></TextInput>
+        <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachFirstname(value)} value={coachFirstname} placeholder='Prénom' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"}></TextInput>
+        <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachBirthDate(value)} value={coachBirthDate} placeholder='Date de naissance' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"}></TextInput>
       </View>
       
-      <Text style={styles.titre}>Sports enseignés</Text>
+      <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText]}>Sports enseignés</Text>
 
       <ScrollView  horizontal={true} style={styles.scroll} showsHorizontalScrollIndicator={false}>
         <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/football.png'), 'Football')}>
@@ -209,47 +221,50 @@ export default function AddInfoCoachScreen({ navigation }) {
           ))}
       </View>
 
-      <Text>A propos de moi</Text>
+      <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText]}>A propos de moi</Text>
 
       <View style={styles.cardAbout}>
-        <TextInput style={styles.aPropos} onChangeText={(value) => setCoachAbout(value)} value={coachAbout}></TextInput>
+        <TextInput style={[styles.aPropos, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachAbout(value)} value={coachAbout}></TextInput>
       </View>
 
       <View style={styles.btns}>
-        <Pressable style={styles.btnPhoto} onPress={() => requestCameraPermission() && pickImage()} >
+        <TouchableOpacity style={styles.btnPhoto} onPress={() => requestCameraPermission() && pickImage()}>
           <Text style={styles.text}>Photo</Text>
-        </Pressable>
+        </TouchableOpacity>
 
-        <Pressable style={styles.btnDoc}>
+        <TouchableOpacity style={styles.btnDoc}>
           <Text style={styles.text}>Doc</Text>
-        </Pressable>
+        </TouchableOpacity>
       </View>
 
-      <Text>Insérez vos données</Text>
+      <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText]}>Insérez vos données</Text>
 
       <View style={styles.inputView}>
-        <TextInput style={styles.input} onChangeText={(value) => setSiretNumber(value)} value={siretNumber} placeholder='Numéro de Siret' placeholderTextColor="#7B7B7B"></TextInput>
-        <TextInput style={styles.input} placeholder='Insérez votre carte Pro' placeholderTextColor="#7B7B7B"></TextInput>
-        <TextInput style={styles.input} placeholder='Vos diplômes' placeholderTextColor="#7B7B7B"></TextInput>
+        <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setSiretNumber(value)} value={siretNumber} placeholder='Numéro de Siret' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"}></TextInput>
+        <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} placeholder='Insérez votre carte Pro' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"}></TextInput>
+        <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} placeholder='Vos diplômes' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"}></TextInput>
       </View>
 
-      <Text>Information de paiements</Text>
+      <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText]}>Information de paiements</Text>
 
       <View style={styles.inputView}>
-        <TextInput style={styles.input} onChangeText={(value) => setIbanNumber(value)} value={ibanNumber} placeholder='IBAN' placeholderTextColor="#7B7B7B"></TextInput>
-        <TextInput style={styles.input} onChangeText={(value) => setBicNumber(value)} value={bicNumber}placeholder='BIC' placeholderTextColor="#7B7B7B"></TextInput>
+        <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setIbanNumber(value)} value={ibanNumber} placeholder='IBAN' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"}></TextInput>
+        <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setBicNumber(value)} value={bicNumber}placeholder='BIC' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"}></TextInput>
       </View>
 
-      <Pressable style={styles.btnSend}>
-        <Text style={styles.text}>Envoyez un document</Text>
-      </Pressable>
+      <View style={styles.cardBtns}>
+        <TouchableOpacity style={styles.btnSend}>
+          <Text style={styles.text}>Envoyez un document</Text>
+        </TouchableOpacity>
 
-      <Pressable style={styles.btnValidate} onPress={handleSubmit}>
-        <Text style={styles.text}>Valider</Text>
-      </Pressable>
+        <TouchableOpacity style={styles.btnValidate} onPress={handleSubmit}>
+          <Text style={styles.text}>Valider</Text>
+        </TouchableOpacity>
+      </View>
       
     </ScrollView>
-    
+    </LinearGradient>
+    </KeyboardAvoidingView>
   )
 }
 
@@ -282,6 +297,7 @@ return (
 
 const styles = StyleSheet.create({
     container: {
+        flex:1,
         alignItems: 'center',
         paddingTop: 40,
         backgroundColor: '#F2F2F2',
@@ -301,40 +317,42 @@ const styles = StyleSheet.create({
     btnDoc: {
       height: 60,
       width: 100,
-      backgroundColor: "#F4A100",
+      backgroundColor: "#BF5000",
       margin: 10,
       justifyContent:'center',
       alignItems: 'center',
-      borderRadius: 10
+      borderRadius: 25
     },
     btnPhoto: {
       height: 60,
       width: 100,
-      backgroundColor: "#F4A100",
+      backgroundColor: "#BF5000",
       margin: 10,
       justifyContent:'center',
       alignItems: 'center',
-      borderRadius: 10
+      borderRadius: 25,
     },
     btns:{
       flexDirection: 'row',
+      justifyContent: 'space-around',
+      alignItems: 'center'
     },
     btnSend: {
       height: 50,
       width: 300,
-      backgroundColor: '#F4A100',
+      backgroundColor: '#BF5000',
       justifyContent: 'center',
       alignItems: 'center',
       marginBottom: 10,
-      borderRadius: 10
+      borderRadius: 25
     },
     btnValidate: {
       height: 50,
       width: 300,
-      backgroundColor: '#F4A100',
+      backgroundColor: '#BF5000',
       justifyContent: 'center',
       alignItems: 'center',
-      borderRadius: 10
+      borderRadius: 25,
     },
     buttonsContainer: {
       flex: 0.1,
@@ -346,11 +364,13 @@ const styles = StyleSheet.create({
       paddingRight: 20,
     },
     cardAbout: {
-      backgroundColor: '#FFFFFF',
       width: 350,
       height: 250,
       justifyContent: 'center',
       alignItems: 'center',
+      margin: 10
+    },
+    cardBtns: {
       margin: 10
     },
     camera: {
@@ -368,12 +388,12 @@ const styles = StyleSheet.create({
       width: 300,
       backgroundColor: '#F2F2F2',
       margin: 10,
-      padding: 10
+      padding: 10,
+      borderRadius: 13
     },
     inputView: {
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: '#FFFFFF',
       width: 350,
       height: 250,
       margin: 10,
@@ -408,6 +428,9 @@ const styles = StyleSheet.create({
       marginLeft: 40,
       marginRight : 40,
     },
+    scrollContainer: {
+      alignItems: 'center'
+    },
     selectedImageContainer: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -436,7 +459,8 @@ const styles = StyleSheet.create({
       color: '#FFF'
     },
     titre: {
-      margin: 10
+      fontSize: 20,
+      marginTop: 40
     },
 // style du Darkmode
     darkBg :{
@@ -473,5 +497,11 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderColor: "#E8E8E8",
     },
+    darkText: {
+      color: '#FFFFFF'
+    },
+    lightText: {
+      color: 'black'
+    }
 })
 

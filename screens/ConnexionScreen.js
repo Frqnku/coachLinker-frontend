@@ -94,7 +94,7 @@ export default function ConnexionScreen({ navigation }) {
         style={styles.background}
         >
             <View style={styles.boximage}>
-            <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={require('../assets/logoblack.png')} />
+            <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={require('../assets/logodark.png')} />
         
             <TextInput placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]}
              placeholder="Email" onChangeText={(value) => setSignUpEmail(value)} value={signUpEmail}  />
@@ -102,7 +102,7 @@ export default function ConnexionScreen({ navigation }) {
             <TextInput placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]}
               placeholder="Mot de passe" onChangeText={(value) => setSignUpPassword(value)} value={signUpPassword} secureTextEntry={true}/>
              
-            <TextInput placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.inputP2, isDarkMode ? styles.darkInputP2 : styles.lightInputP2]}
+            <TextInput placeholderTextColor={isDarkMode ? "#7B7B7B":"#7B7B7B"} style={[styles.inputP2, isDarkMode ? styles.darkInputP2 : styles.lightInputP2]}
               placeholder="Confirmer le mot de passe" onChangeText={(value) => setSignUpPassword2(value)} value={signUpPassword2} secureTextEntry={true}/>
 
             <TouchableOpacity style={[styles.button, isDarkMode ? styles.darkbutton : styles.lightbutton]}
@@ -150,7 +150,7 @@ lightReturn :{
     backgroundColor: '#fff',
 },
 darkPicture:{
-    backgroundColor:"#2E2E2E",
+    // backgroundColor:"#2E2E2E",
 },
 lightPicture:{
     backgroundColor: '#fff',
@@ -168,6 +168,7 @@ darkInputP2:{
   borderRadius: 13,
   paddingLeft: 15,
   marginBottom: 10,
+  fontStyle: 'italic',
     
 },
 lightInputP2:{
@@ -228,9 +229,9 @@ background:{
 
 
   image:{
-    width: 150,
-    height: 150,
-    marginTop: 45,
+    width: 200,
+    height: 200,
+    marginTop: 40,
     borderRadius: 200,
     marginBottom: 30,
   },
@@ -244,7 +245,6 @@ background:{
       lightbutton: {
         
       },
-
       darkbutton: {
         justifyContent: 'center',
         alignItems: 'center',

@@ -153,6 +153,7 @@ lightInputP2:{
   height: 40,
   borderRadius: 13,
   paddingLeft: 5, 
+  
 },
 
 input: { 

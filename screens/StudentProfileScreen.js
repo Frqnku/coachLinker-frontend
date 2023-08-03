@@ -9,6 +9,7 @@ import users from '../reducers/users';
 import { addPhoto} from '../reducers/users';
 import { updateStudent} from '../reducers/student';
 import * as ImagePicker from 'expo-image-picker';
+import { LinearGradient } from 'expo-linear-gradient';
 
 import {StyleSheet, KeyboardAvoidingView, Image, TextInput, View, Text, ScrollView, TouchableOpacity} from 'react-native';
 import { nanoid } from '@reduxjs/toolkit';
@@ -58,13 +59,13 @@ export default function StudentProfileScreen({navigation}) {
           type: 'image/jpeg',
         });
        
-        fetch('http://192.168.10.124:3000/upload', {
+        fetch('https://coach-linker-backend.vercel.app/upload', {
           method: 'POST',
           body: formData,
         }).then((response) => response.json())
           .then((data) => { 
             console.log(data)
-            data.result && fetch('http://192.168.10.124:3000/students/profil', {
+            data.result && fetch('https://coach-linker-backend.vercel.app/students/profil', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 
@@ -93,7 +94,7 @@ const handleValidate =() => {
     
 // faire un useselector du usedispatch de connexionscreen et récpérer l'id
 
-    fetch('http://192.168.10.154:3000/students/profil', {
+    fetch('http://192.168.10.124:3000/students/profil', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
@@ -177,12 +178,28 @@ const handleImageSelect = (image, imageName) => {
       })
    })  
 }
+
+
+        const DARK_COLORS = ["black", "#FF6100"];
+        const LIGHT_COLORS = ["#FFF8EB", "#FF6100"];
+        const DarkStart = {x : 0.4, y : 0.4};
+        const DarkEnd = {x : -0.3, y : -0.3};
+        const LightStart = {x : 0.6, y : 0.4};
+        const LightEnd = {x : 0.3, y : 0.1};
+ 
+         
 // {/* <Text>{realStudent.name}</Text> */}
     if (!hasPermission || !isFocused) {
         
-
+       
   return (
 <KeyboardAvoidingView style={[styles.container, isDarkMode ? styles.darkBg : styles.lightBg]} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+    <LinearGradient
+        colors={isDarkMode ? DARK_COLORS : LIGHT_COLORS}
+        start={isDarkMode ? DarkStart : LightStart}
+          end={isDarkMode ? DarkEnd : LightEnd}
+        style={styles.background}
+        >
      <Image style={[styles.return, isDarkMode ? styles.darkReturn : styles.lightReturn]} source={require('../assets/bouton-retour.png')} />
 
     <View style={styles.picture}>
@@ -271,7 +288,7 @@ const handleImageSelect = (image, imageName) => {
     <TouchableOpacity onPress={() => handleValidate()} style={styles.button2} activeOpacity={0.8}>
                             <Text style={styles.textButton}>Valider</Text>
     </TouchableOpacity>
-
+            </LinearGradient>
       
 </KeyboardAvoidingView>
   )
@@ -309,7 +326,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'black',
     },
     lightBg:{
-        backgroundColor: '#E8E8E8',
+        // backgroundColor: '#E8E8E8',
     },
     darkReturn:{
         backgroundColor:"#2E2E2E",
@@ -352,6 +369,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#E8E8E8',
        justifyContent: "space-evenly",
        
+    },
+    background:{
+    width: "100%",
+    height: "100%",
     },
     return :{
         width:40,
@@ -467,7 +488,7 @@ const styles = StyleSheet.create({
         height:60,
     },
     sports: {
-      display: 'none'
+      display: 'none',
     },
     selectedImageContainer: {
         flexDirection: 'row',
@@ -531,7 +552,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: 150,
         height: 50,
-        backgroundColor: '#F4A100',
+        backgroundColor: '#FF7C00',
         borderRadius: 5,
         marginTop: 15
       },

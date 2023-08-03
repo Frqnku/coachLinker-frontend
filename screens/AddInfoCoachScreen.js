@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, KeyboardAvoidingView, Text, View, Pressable, TextInput, ScrollView, TouchableOpacity, Image} from 'react-native'
+import { StyleSheet, KeyboardAvoidingView, Text, View, TextInput, ScrollView, TouchableOpacity, Image} from 'react-native'
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useState, useRef } from 'react';
 import { Camera, CameraType, FlashMode } from 'expo-camera';
@@ -88,7 +88,7 @@ export default function AddInfoCoachScreen({ navigation }) {
   };
 
   const handleSubmit = () => {
-
+    
     navigation.navigate('Verification')
   }
 
@@ -128,7 +128,6 @@ export default function AddInfoCoachScreen({ navigation }) {
     })
     .then((response) => response.json())
     .then((data) => {
-      
       dispatch(addPhoto(data.student.image)); /* a modifier  */
       setHasPermission(false);
     })
@@ -161,9 +160,9 @@ export default function AddInfoCoachScreen({ navigation }) {
       </View>
 
       <View style={[styles.inputView, isDarkMode ? styles.darkIn : styles.lightIn]}>
-        <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachLastname(value)} value={coachLastname} placeholder='Nom' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"}></TextInput>
-        <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachFirstname(value)} value={coachFirstname} placeholder='Prénom' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"}></TextInput>
-        <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachBirthDate(value)} value={coachBirthDate} placeholder='Date de naissance' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"}></TextInput>
+        <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachLastname(value)} value={coachLastname} placeholder='Nom' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"} ></TextInput>
+        <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachFirstname(value)} value={coachFirstname} placeholder='Prénom' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
+        <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachBirthDate(value)} value={coachBirthDate} placeholder='Date de naissance' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
       </View>
       
       <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText]}>Sports enseignés</Text>
@@ -210,12 +209,12 @@ export default function AddInfoCoachScreen({ navigation }) {
           </TouchableOpacity>
       </ScrollView>
 
-      <View style={styles.selectedImagesContainer}>
+      <View style={[styles.selectedImagesContainer, isDarkMode ? styles.darkSelectedImagesContainer : styles.lightSelectedImagesContainer]}>
         {selectedImages.map((item, index) => (
           <View key={index} style={styles.selectedImageContainer}>
-            <Text style={styles.itemName}>{item.name}</Text>
+            <Text style={[styles.itemName, isDarkMode ? styles.darkItemName : styles.lightItemName]}>{item.name}</Text>
             <TouchableOpacity onPress={() => handleImageRemove(index)}>
-              <Text style={styles.removeButton}>X</Text>
+              <Text style={[styles.removeButton, isDarkMode ? styles.darkRemoveButton : styles.lightRemoveButton]}>X</Text>
             </TouchableOpacity>
           </View>
           ))}
@@ -224,7 +223,7 @@ export default function AddInfoCoachScreen({ navigation }) {
       <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText]}>A propos de moi</Text>
 
       <View style={styles.cardAbout}>
-        <TextInput style={[styles.aPropos, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachAbout(value)} value={coachAbout}></TextInput>
+        <TextInput style={[styles.aPropos, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachAbout(value)} value={coachAbout} selectionColor={"#FF6100"}></TextInput>
       </View>
 
       <View style={styles.btns}>
@@ -240,16 +239,16 @@ export default function AddInfoCoachScreen({ navigation }) {
       <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText]}>Insérez vos données</Text>
 
       <View style={styles.inputView}>
-        <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setSiretNumber(value)} value={siretNumber} placeholder='Numéro de Siret' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"}></TextInput>
-        <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} placeholder='Insérez votre carte Pro' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"}></TextInput>
-        <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} placeholder='Vos diplômes' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"}></TextInput>
+        <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setSiretNumber(value)} value={siretNumber} placeholder='Numéro de Siret' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
+        <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} placeholder='Insérez votre carte Pro' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
+        <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} placeholder='Vos diplômes' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
       </View>
 
-      <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText]}>Information de paiements</Text>
+      <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText]}>Informations de paiements</Text>
 
       <View style={styles.inputView}>
-        <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setIbanNumber(value)} value={ibanNumber} placeholder='IBAN' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"}></TextInput>
-        <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setBicNumber(value)} value={bicNumber}placeholder='BIC' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"}></TextInput>
+        <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setIbanNumber(value)} value={ibanNumber} placeholder='IBAN' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
+        <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setBicNumber(value)} value={bicNumber}placeholder='BIC' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
       </View>
 
       <View style={styles.cardBtns}>
@@ -306,7 +305,8 @@ const styles = StyleSheet.create({
       height: 200,
       width: 300,
       backgroundColor: '#F2F2F2',
-      margin: 10
+      margin: 10,
+      borderRadius: 13
     },
     btnBack: {
       width: '80%',
@@ -400,6 +400,7 @@ const styles = StyleSheet.create({
       borderRadius: 20,
     },
     itemName: {
+      fontSize: 20,
       fontWeight: 'bold',
       marginRight: 100,
     },
@@ -427,6 +428,7 @@ const styles = StyleSheet.create({
     scroll:{
       marginLeft: 40,
       marginRight : 40,
+      marginTop: 30,
     },
     scrollContainer: {
       alignItems: 'center'
@@ -439,8 +441,7 @@ const styles = StyleSheet.create({
     selectedImagesContainer: {
       marginVertical: 10,
       alignItems: 'center',
-      backgroundColor: '#FFFFFF',
-      width: 350,
+      width: 300,
     },
     snapContainer: {
       flex: 1,
@@ -483,15 +484,14 @@ const styles = StyleSheet.create({
     },
     darkInput:{
         backgroundColor: '#2E2E2E',
-        borderColor: "#2E2E2E",
+        color: "#FFFFFF",
     },
     lightInput:{
         backgroundColor: '#E8E8E8',
         borderColor: "#E8E8E8", 
     },
     darkImg:{
-        backgroundColor: '#2E2E2E',
-        borderColor: "#F4A100",
+        borderColor: "#FF6100",
     },
     lightImg:{
         backgroundColor: '#fff',
@@ -501,6 +501,24 @@ const styles = StyleSheet.create({
       color: '#FFFFFF'
     },
     lightText: {
+      color: 'black'
+    },
+    darkSelectedImagesContainer: {
+      backgroundColor: '#2E2E2E'
+    },
+    lightSelectedImagesContainer: {
+      backgroundColor: '#FFFFFF'
+    },
+    darkItemName: {
+      color: '#FFFFFF'
+    },
+    lightItemName: {
+      color: 'black'
+    },
+    darkRemoveButton: {
+      color: '#FFFFFF'
+    },
+    lightRemoveButton: {
       color: 'black'
     }
 })

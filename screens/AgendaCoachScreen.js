@@ -1,11 +1,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { LinearGradient } from 'expo-linear-gradient';
-import { KeyboardAvoidingView, StyleSheet, Text, View, ScrollView, TextInput } from 'react-native';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import TimePicker from '../components/TimePicker';
 import GoodMorning from '../components/GoodMorning';
-import React from 'react'
 import {StyleSheet, Pressable, KeyboardAvoidingView, Image, TextInput, View, Text, ScrollView, TouchableOpacity} from 'react-native';
 
 export default function AgendaScreen() {

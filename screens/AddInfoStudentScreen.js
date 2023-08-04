@@ -19,6 +19,7 @@ export default function AddInfoStudentScreen({navigation}) {
   const isDarkMode = useSelector(state => state.darkMode.value)
   const user = useSelector((state) => state.users.value);
   const student = useSelector((state) => state.users.value) 
+  
 
   const [studentName, setStudentName] = useState('')
   const [studentFirstname, setStudentFirstname] = useState('')
@@ -50,7 +51,7 @@ export default function AddInfoStudentScreen({navigation}) {
           name: 'photo.jpg',
           type: 'image/jpeg',
         });
-
+       
         fetch('https://coach-linker-backend.vercel.app/upload', {
           method: 'POST',
           body: formData,
@@ -65,17 +66,40 @@ export default function AddInfoStudentScreen({navigation}) {
       }
     };
 
+
+    // sélection des sports
+    const handleImageSelect = (image, imageName) => {
+      if (selectedImages.length < 3 && !selectedImages.some((item) => item.image === image)) {
+        setSelectedImages((prevImages) => [...prevImages, { image, name: imageName }]);
+        setStudentSports((prevSports) => [...prevSports, imageName]); // Met à jour studentSports directement
+      }
+    };
+  
+    const handleImageRemove = (index) => {
+      setSelectedImages((prevImages) => {
+        const updatedImages = [...prevImages];
+        const removedImage = updatedImages.splice(index, 1)[0];
+        return updatedImages;
+      });
+      setStudentSports((prevSports) => {
+        const updatedSports = [...prevSports];
+        updatedSports.splice(index, 1); // Retire le sport de la liste
+        return updatedSports;
+      });
+    };  
+    
+
+
 const handleValidate = async () => {
   console.log(studentSports);
   try { 
-    const favoriteSport = useSelector((state) => state.student.value.favoriteSport);
     await dispatch(signUp({
       name: studentName, 
       firstname: studentFirstname,
       dateOfBirth: studentDateOfBirth,
       myDescription: studentMyDescription,
       image: user.photo,
-      favoriteSport: favoriteSport
+      favoriteSport: studentSports
     }));
 
     const signUpData = {
@@ -86,7 +110,7 @@ const handleValidate = async () => {
       dateOfBirth: studentDateOfBirth,
       myDescription: studentMyDescription,
       image: user.photo,
-      favoriteSport: favoriteSport
+      favoriteSport: studentSports
     };
     
     const response = await fetch('https://coach-linker-backend.vercel.app/students/new', {
@@ -112,108 +136,93 @@ const handleValidate = async () => {
 }
 
     
-
-// sélection des sports
-const handleImageSelect = (image, imageName) => {
-    if (selectedImages.length < 3 && !selectedImages.some((item) => item.image === image)) {
-      setSelectedImages((prevImages) => [...prevImages, { image, name: imageName }])
-      setStudentSports(selectedImages.map(item => item.name))
-    }
-  }
-
-  const handleImageRemove = (index) => {
-    setSelectedImages((prevImages) => {
-      const updatedImages = [...prevImages];
-      const removedImage = updatedImages.splice(index, 1)[0];
-      setStudentSports(prevSports => prevSports.filter(sport => sport !== removedImage.name)); // Retire le sport de la liste
-      return updatedImages;
-    });
-  };
-
-
-
-    const requestCameraPermission = async () => { 
-      const { status } = await Camera.requestCameraPermissionsAsync();
-      setHasPermission(status === 'granted');
-    };
-    const takePicture = async () => {
-        const photo = await cameraRef.takePictureAsync({ quality: 0.3 });
-        const formData = new FormData();
-   
-    formData.append('photoFromFront',{
-      uri: photo.uri,
-      name: 'photo.jpg',
-      type: 'image/jpeg',
-    });
-   
-    fetch('https://coach-linker-backend.vercel.app/upload', {
-      method: 'POST',
-      body: formData,
-    }).then((response) => response.json())
-      .then((data) => { 
-        if (data.result) {
-          dispatch(signUp({image: data.url}))
-          dispatch(addPhoto(data.url));
-          setHasPermission(false);
-        } 
-      })
-}
-
-const DARK_COLORS = ["black", "#FF6100"];
-const LIGHT_COLORS = ["#FFF8EB", "#FF6100"];
-const DarkStart = {x : 0.4, y : 0.4};
-const DarkEnd = {x : -0.3, y : -0.3};
-const LightStart = {x : 0.6, y : 0.4};
-const LightEnd = {x : 0.3, y : 0.1};
-
-// {/* <Text>{realStudent.name}</Text> */}
-    if (!hasPermission || !isFocused) {
-        
-return (
-    <KeyboardAvoidingView style={[styles.container, isDarkMode ? styles.darkBg : styles.lightBg]} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-        <LinearGradient
-            colors={isDarkMode ? DARK_COLORS : LIGHT_COLORS}
-            start={isDarkMode ? DarkStart : LightStart}
-            end={isDarkMode ? DarkEnd : LightEnd}
-            style={styles.background} >
-        <GoodMorning/>
-        <Image style={[styles.return, isDarkMode ? styles.darkReturn : styles.lightReturn]} source={require('../assets/bouton-retour.png')} />
-    
-        <View style={styles.picture}>
-            <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={{uri : user.photo}} />
-            <TouchableOpacity onPress={() => requestCameraPermission() && pickImage()} >
-                        <Image  style={styles.crayon} source={require('../assets/crayon.png')} />
-            </TouchableOpacity>
-        </View>
-    <ScrollView style={styles.scrollInput} showsVerticalScrollIndicator={false}>
-         <View style={[styles.inputs, isDarkMode ? styles.darkIn : styles.lightIn]}>
-            <TextInput placeholder="Nom" onChangeText={(value) => setStudentName(value)} value={studentName}
-            placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.inputNom, isDarkMode ? styles.darkInput : styles.lightInput]} />
-            <TextInput placeholder="Prénom" onChangeText={(value) => setStudentFirstname(value)} value={studentFirstname}
-            placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.inputPrenom, isDarkMode ? styles.darkInput : styles.lightInput]} />
-    
-            <TextInput placeholder="Date de naissance"  onChangeText={(value) => setStudentDateOfBirth(value)} value={studentDateOfBirth}
-            placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.inputDate, isDarkMode ? styles.darkInput : styles.lightInput]} />
-        </View>
     
     
-        <View style={[styles.description, isDarkMode ? styles.darkIn : styles.lightIn]}>
-            <TextInput placeholder="A propos de moi ..." onChangeText={(value) => setStudentMyDescription(value)} value={studentMyDescription}
-            placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.inputMoi, isDarkMode ? styles.darkInput : styles.lightInput]} />
-    
-        </View>
-    </ScrollView>
+        const requestCameraPermission = async () => { 
+          const { status } = await Camera.requestCameraPermissionsAsync();
+          setHasPermission(status === 'granted');
+        };
+        const takePicture = async () => {
+            const photo = await cameraRef.takePictureAsync({ quality: 0.3 });
+            const formData = new FormData();
        
-        <View>
-            <Text style={styles.favoris}>Choisis 3 sports favoris maximum :</Text>
-        </View>
+        formData.append('photoFromFront',{
+          uri: photo.uri,
+          name: 'photo.jpg',
+          type: 'image/jpeg',
+        });
+       
+        console.log('formData', formData)
+
+        fetch('https://coach-linker-backend.vercel.app/upload', {
+          method: 'POST',
+          body: formData,
+        }).then((response) => response.json())
+          .then((data) => { 
+            console.log(data)
+            if (data.result) {
+              dispatch(signUp({image: data.url}))
+              dispatch(addPhoto(data.url));
+              setHasPermission(false);
+            } 
+          })
+    }
     
+    const DARK_COLORS = ["black", "#FF6100"];
+    const LIGHT_COLORS = ["#FFF8EB", "#FF6100"];
+    const DarkStart = {x : 0.4, y : 0.4};
+    const DarkEnd = {x : -0.3, y : -0.3};
+    const LightStart = {x : 0.6, y : 0.4};
+    const LightEnd = {x : 0.3, y : 0.1};
+    
+    // {/* <Text>{realStudent.name}</Text> */}
+        if (!hasPermission || !isFocused) {
+            
+    return (
+        <KeyboardAvoidingView style={[styles.container, isDarkMode ? styles.darkBg : styles.lightBg]} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+            <LinearGradient
+        colors={isDarkMode ? DARK_COLORS : LIGHT_COLORS}
+        start={isDarkMode ? DarkStart : LightStart}
+        end={isDarkMode ? DarkEnd : LightEnd}
+        style={styles.background} >
+            <GoodMorning/>
+            <Image style={[styles.return, isDarkMode ? styles.darkReturn : styles.lightReturn]} source={require('../assets/bouton-retour.png')} />
         
-        <ScrollView  horizontal={true} style={styles.scroll} showsHorizontalScrollIndicator={false}>
-    <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/football.png'), 'Football')}>
-      <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/football.png')} />
-      <Text style={styles.sports}>Football</Text>
-      </TouchableOpacity>
+            <View style={styles.picture}>
+                <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={{uri : user.photo}} />
+                <TouchableOpacity onPress={() => requestCameraPermission() && pickImage()} >
+                            <Image  style={styles.crayon} source={require('../assets/crayon.png')} />
+                </TouchableOpacity>
+            </View>
+        <ScrollView style={styles.scrollInput} showsVerticalScrollIndicator={false}>
+             <View style={[styles.inputs, isDarkMode ? styles.darkIn : styles.lightIn]}>
+                <TextInput placeholder="Nom" onChangeText={(value) => setStudentName(value)} value={studentName}
+                placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.inputNom, isDarkMode ? styles.darkInput : styles.lightInput]} />
+                <TextInput placeholder="Prénom" onChangeText={(value) => setStudentFirstname(value)} value={studentFirstname}
+                placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.inputPrenom, isDarkMode ? styles.darkInput : styles.lightInput]} />
+        
+                <TextInput placeholder="Date de naissance"  onChangeText={(value) => setStudentDateOfBirth(value)} value={studentDateOfBirth}
+                placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.inputDate, isDarkMode ? styles.darkInput : styles.lightInput]} />
+            </View>
+        
+        
+            <View style={[styles.description, isDarkMode ? styles.darkIn : styles.lightIn]}>
+                <TextInput placeholder="A propos de moi ..." onChangeText={(value) => setStudentMyDescription(value)} value={studentMyDescription}
+                placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.inputMoi, isDarkMode ? styles.darkInput : styles.lightInput]} />
+        
+            </View>
+        </ScrollView>
+           
+            <View>
+                <Text style={styles.favoris}>Choisis 3 sports favoris maximum :</Text>
+            </View>
+        
+            
+            <ScrollView  horizontal={true} style={styles.scroll} showsHorizontalScrollIndicator={false}>
+        <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/football.png'), 'Football')}>
+          <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/football.png')} />
+          <Text style={styles.sports}>Football</Text>
+          </TouchableOpacity>
 
       <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/gant-de-boxe.png'), 'Boxe')}>
         <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/gant-de-boxe.png')} />

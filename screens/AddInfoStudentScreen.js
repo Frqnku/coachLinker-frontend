@@ -14,14 +14,12 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 export default function AddInfoStudentScreen({navigation}) {
 
-
   const dispatch = useDispatch()
   const isFocused = useIsFocused();
  
   const isDarkMode = useSelector(state => state.darkMode.value)
 
   const user = useSelector((state) => state.users.value);
-
 
   const [studentName, setStudentName] = useState('')
   const [studentFirstname, setStudentFirstname] = useState('')
@@ -31,14 +29,14 @@ export default function AddInfoStudentScreen({navigation}) {
   const [studentSports, setStudentSports] = useState([])
 
   const [selectedImages, setSelectedImages] = useState([]);
-
+  
   // const camera : 
   const [hasPermission, setHasPermission] = useState(false);
   const [type, setType] = useState(CameraType.back);
   const [flashMode, setFlashMode] = useState(FlashMode.off);
 
   let cameraRef = useRef(null);
-  
+
   const student = useSelector((state) => state.users.value) 
 
   const pickImage = async () => {
@@ -48,10 +46,10 @@ export default function AddInfoStudentScreen({navigation}) {
         aspect: [4, 3],
         quality: 1,
       });
-  
+
       if (!result.canceled) {
         const formData = new FormData();
-       
+
         formData.append('photoFromFront',{
           uri: result.assets[0].uri,
           name: 'photo.jpg',
@@ -72,52 +70,52 @@ export default function AddInfoStudentScreen({navigation}) {
       }
     };
 
-    const handleValidate = async () => {
-      console.log(studentSports);
-      try {
-        await dispatch(signUp({
-          name: studentName, 
-          firstname: studentFirstname,
-          dateOfBirth: studentDateOfBirth,
-          myDescription: studentMyDescription,
-          image: user.photo,
-          favoriteSport: studentSports,
-        }));
+const handleValidate = async () => {
+  console.log(studentSports);
+  try {
+    await dispatch(signUp({
+      name: studentName, 
+      firstname: studentFirstname,
+      dateOfBirth: studentDateOfBirth,
+      myDescription: studentMyDescription,
+      image: user.photo,
+      favoriteSport: studentSports,
+    }));
+
+    const signUpData = {
+      email: student.signUp.email,
+      password: student.signUp.password,
+      name: studentName, 
+      firstname: studentFirstname,
+      dateOfBirth: studentDateOfBirth,
+      myDescription: studentMyDescription,
+      image: user.photo,
+      favoriteSport: studentSports,
+    };
     
-        const signUpData = {
-          email: student.signUp.email,
-          password: student.signUp.password,
-          name: studentName, 
-          firstname: studentFirstname,
-          dateOfBirth: studentDateOfBirth,
-          myDescription: studentMyDescription,
-          image: user.photo,
-          favoriteSport: studentSports,
-        };
-        
-        const response = await fetch('http://coach-linker-backend.vercel.app/students/new', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(signUpData),
-        });
-    
-        const responseBody = await response.text();
-        console.log('Response from server:', responseBody);
-    
-        const data = JSON.parse(responseBody);
-        console.log('dataresult', data);
-    
-        if (data.result) { 
-          console.log("salut");
-          navigation.navigate("TabNavigator", { screen: "Menu" });
-        }
-      } catch (error) {
-        console.error('Error:', error);
-        // Gérer les erreurs
-      }
+    const response = await fetch('http://coach-linker-backend.vercel.app/students/new', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(signUpData),
+    });
+
+    const responseBody = await response.text();
+    console.log('Response from server:', responseBody);
+
+    const data = JSON.parse(responseBody);
+    console.log('dataresult', data);
+
+    if (data.result) { 
+      console.log("salut");
+      navigation.navigate("TabNavigator", { screen: "Menu" });
     }
+  } catch (error) {
+    console.error('Error:', error);
+    // Gérer les erreurs
+  }
+}
+
     
-        
 
     // sélection des sports
     const handleImageSelect = (image, imageName) => {
@@ -223,89 +221,89 @@ export default function AddInfoStudentScreen({navigation}) {
           <Text style={styles.sports}>Football</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/gant-de-boxe.png'), 'Boxe')}>
-            <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/gant-de-boxe.png')} />
-            <Text style={styles.sports}>Boxe</Text>
-          </TouchableOpacity>
+      <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/gant-de-boxe.png'), 'Boxe')}>
+        <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/gant-de-boxe.png')} />
+        <Text style={styles.sports}>Boxe</Text>
+      </TouchableOpacity>
 
-          <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/gym.png'), 'Gym')}>
-            <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/gym.png')} />
-            <Text style={styles.sports}>Gym</Text>
-          </TouchableOpacity>
+      <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/gym.png'), 'Gym')}>
+        <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/gym.png')} />
+        <Text style={styles.sports}>Gym</Text>
+      </TouchableOpacity>
 
-          <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/basket-ball.png'), 'Basket ball')}>
-            <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/basket-ball.png')} />
-            <Text style={styles.sports}>Basket ball</Text>
-          </TouchableOpacity>
+      <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/basket-ball.png'), 'Basket ball')}>
+        <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/basket-ball.png')} />
+        <Text style={styles.sports}>Basket ball</Text>
+      </TouchableOpacity>
 
-          <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/le-golf.png'), 'Golf')}>
-            <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/le-golf.png')} />
-            <Text style={styles.sports}>Golf</Text>
-          </TouchableOpacity>
+      <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/le-golf.png'), 'Golf')}>
+        <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/le-golf.png')} />
+        <Text style={styles.sports}>Golf</Text>
+      </TouchableOpacity>
 
-          <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/nageur.png'), 'Natation')}>
-            <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/nageur.png')} />
-            <Text style={styles.sports}>Natation</Text>
-          </TouchableOpacity>
+      <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/nageur.png'), 'Natation')}>
+        <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/nageur.png')} />
+        <Text style={styles.sports}>Natation</Text>
+      </TouchableOpacity>
 
-          <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/tennis.png'), 'Tennis')}>
-            <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/tennis.png')} />
-            <Text style={styles.sports}>Tennis</Text>
-          </TouchableOpacity>
+      <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/tennis.png'), 'Tennis')}>
+        <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/tennis.png')} />
+        <Text style={styles.sports}>Tennis</Text>
+      </TouchableOpacity>
 
-          <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/volant.png'), 'Course')}>
-            <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/volant.png')} />
-            <Text style={styles.sports}>Course</Text>
-          </TouchableOpacity>
-      </ScrollView>
+      <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/volant.png'), 'Course')}>
+        <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/volant.png')} />
+        <Text style={styles.sports}>Course</Text>
+      </TouchableOpacity>
+  </ScrollView>
 
-      <View style={styles.selectedImagesContainer}>
-        {selectedImages.map((item, index) => (
-          <View key={index} style={styles.selectedImageContainer}>
-            <Text style={styles.itemName}>{item.name}</Text>
-            <TouchableOpacity onPress={() => handleImageRemove(index)}>
-              <Text style={styles.removeButton}>X</Text>
-            </TouchableOpacity>
-          </View>
-          ))}
+  <View style={styles.selectedImagesContainer}>
+    {selectedImages.map((item, index) => (
+      <View key={index} style={styles.selectedImageContainer}>
+        <Text style={styles.itemName}>{item.name}</Text>
+        <TouchableOpacity onPress={() => handleImageRemove(index)}>
+          <Text style={styles.removeButton}>X</Text>
+        </TouchableOpacity>
       </View>
-            
-            <TouchableOpacity onPress={() => handleValidate()} style={styles.button2} activeOpacity={0.8}>
-                                    <Text style={styles.textButton}>Valider</Text>
-            </TouchableOpacity>
+      ))}
+  </View>
         
-         </LinearGradient>   
-        </KeyboardAvoidingView>
-          )
-            }
+        <TouchableOpacity onPress={() => handleValidate()} style={styles.button2} activeOpacity={0.8}>
+                                <Text style={styles.textButton}>Valider</Text>
+        </TouchableOpacity>
+    
+     </LinearGradient>   
+    </KeyboardAvoidingView>
+      )
+        }
 
-            return (
-                <Camera type={type} flashMode={flashMode} ref={(ref) => cameraRef = ref} style={styles.camera}>
-                  <View style={styles.buttonsContainer}>
-                    <TouchableOpacity
-                      onPress={() => setType(type === CameraType.back ? CameraType.front : CameraType.back)}
-                      style={styles.button}
-                    >
-                      <FontAwesome name='rotate-right' size={25} color='#ffffff' />
-                    </TouchableOpacity>
-            
-                    <TouchableOpacity
-                      onPress={() => setFlashMode(flashMode === FlashMode.off ? FlashMode.torch : FlashMode.off)}
-                      style={styles.button}
-                    >
-                      <FontAwesome name='flash' size={25} color={flashMode === FlashMode.off ? '#ffffff' : '#e8be4b'} />
-                    </TouchableOpacity>
-                  </View>
-            
-                  <View style={styles.snapContainer}>
-                    <TouchableOpacity onPress={() => cameraRef && takePicture()}>
-                      <FontAwesome name='circle-thin' size={95} color='#ffffff' />
-                    </TouchableOpacity>
-                  </View>
-                </Camera>
-              );
-            
-            }
+        return (
+            <Camera type={type} flashMode={flashMode} ref={(ref) => cameraRef = ref} style={styles.camera}>
+              <View style={styles.buttonsContainer}>
+                <TouchableOpacity
+                  onPress={() => setType(type === CameraType.back ? CameraType.front : CameraType.back)}
+                  style={styles.button}
+                >
+                  <FontAwesome name='rotate-right' size={25} color='#ffffff' />
+                </TouchableOpacity>
+        
+                <TouchableOpacity
+                  onPress={() => setFlashMode(flashMode === FlashMode.off ? FlashMode.torch : FlashMode.off)}
+                  style={styles.button}
+                >
+                  <FontAwesome name='flash' size={25} color={flashMode === FlashMode.off ? '#ffffff' : '#e8be4b'} />
+                </TouchableOpacity>
+              </View>
+        
+              <View style={styles.snapContainer}>
+                <TouchableOpacity onPress={() => cameraRef && takePicture()}>
+                  <FontAwesome name='circle-thin' size={95} color='#ffffff' />
+                </TouchableOpacity>
+              </View>
+            </Camera>
+          );
+        
+        }
 const styles = StyleSheet.create({
   container : {
     flex :1 ,

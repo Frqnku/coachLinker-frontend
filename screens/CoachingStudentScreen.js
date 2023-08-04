@@ -3,6 +3,7 @@ import { StyleSheet, Text, View} from 'react-native'
 import GoodMorning from '../components/GoodMorning';
 
 export default function CoachingStudentScreen() {
+
   return (
     <View style={styles.container}>
       <GoodMorning/>

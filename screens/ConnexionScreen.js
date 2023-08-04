@@ -192,7 +192,7 @@ inputP2: {
   
 },
 darkInputMdp:{
-  marginTop: 20,
+  marginTop: 10,
   fontSize : 15,
   backgroundColor: '#2E2E2E',
   width : "80%",
@@ -225,6 +225,7 @@ input: {
 text: {
   width: '80%',
   paddingTop: 10
+  
 },
 input: { 
 },

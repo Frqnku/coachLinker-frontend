@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 const TimePicker = (props) => {
   const dispatch = useDispatch()
+  const isDarkMode = useSelector(state => state.darkMode.value)
 
   const [isStartPickerVisible, setStartPickerVisibility] = useState(false);
   const [isEndPickerVisible, setEndPickerVisibility] = useState(false);
@@ -63,8 +64,8 @@ const TimePicker = (props) => {
 
       <Text>{props.name}</Text>
 
-      <TouchableOpacity style={styles.input} onPress={toggleStartPicker}>
-        <Text>{selectedStartHour || 'Choisissez une heure'}</Text>
+      <TouchableOpacity style={[styles.input, isDarkMode ? styles.darkBlock: styles.lightBlock]} onPress={toggleStartPicker}>
+        <Text style={styles.heure} >{selectedStartHour || 'Choisissez une heure'}</Text>
       </TouchableOpacity>
       {isStartPickerVisible && <View style={styles.pickerContainer}>{renderStartHours()}</View>}
       
@@ -74,7 +75,7 @@ const TimePicker = (props) => {
       {isEndPickerVisible && <View style={styles.pickerContainer}>{renderEndHours()}</View>}
 
       <TouchableOpacity style={styles.input} onPress={handleSubmit}>
-
+        <Text>Valider</Text>
       </TouchableOpacity>
     </View>
   );
@@ -86,12 +87,26 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  darkBlock:{
+    backgroundColor: '#505050',
+    borderColor: "#505050",
+    
+},
+lightBlock:{
+    backgroundColor: '#E8E8E8',
+    borderColor: "#E8E8E8",
+    
+},
+  heure :{
+    fontSize:17,
+  },
   input: {
     borderWidth: 1,
     borderColor: 'gray',
     padding: 10,
     width: 200,
     alignItems: 'center',
+    borderRadius: 5,
   },
   pickerContainer: {
     marginTop: 10,

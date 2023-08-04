@@ -107,7 +107,7 @@ export default function ConnexionScreen({ navigation }) {
 
 
     return (
-        <KeyboardAvoidingView style={[styles.container, isDarkMode ? styles.darkBg : styles.lightBg]} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+        <KeyboardAvoidingView style={[styles.container, isDarkMode ? styles.darkBg : styles.lightBg]} behavior={Platform.OS === 'ios' ? 'padding' : 'position'}>
           <LinearGradient
         colors={isDarkMode ? DARK_COLORS : LIGHT_COLORS}
         start={isDarkMode ? DarkStart : LightStart}
@@ -282,7 +282,7 @@ background:{
     marginBottom: 30,
   },
     container: {
-        flex: 1,
+        flex: 1
     },
     boximage:{
       alignItems: 'center',

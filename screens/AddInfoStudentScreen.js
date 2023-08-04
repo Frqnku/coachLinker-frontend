@@ -14,20 +14,18 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 export default function AddInfoStudentScreen({navigation}) {
 
+
   const dispatch = useDispatch()
   const isFocused = useIsFocused();
- 
   const isDarkMode = useSelector(state => state.darkMode.value)
-
   const user = useSelector((state) => state.users.value);
+  const student = useSelector((state) => state.users.value) 
 
   const [studentName, setStudentName] = useState('')
   const [studentFirstname, setStudentFirstname] = useState('')
   const [studentDateOfBirth, setStudentDateOfBirth] = useState('')
   const [studentMyDescription, setStudentMyDescription] = useState('')
-//   const [studentImage, setStudentImage] = useState('')
   const [studentSports, setStudentSports] = useState([])
-
   const [selectedImages, setSelectedImages] = useState([]);
   
   // const camera : 
@@ -36,8 +34,6 @@ export default function AddInfoStudentScreen({navigation}) {
   const [flashMode, setFlashMode] = useState(FlashMode.off);
 
   let cameraRef = useRef(null);
-
-  const student = useSelector((state) => state.users.value) 
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -70,16 +66,40 @@ export default function AddInfoStudentScreen({navigation}) {
       }
     };
 
+
+    // sélection des sports
+    const handleImageSelect = (image, imageName) => {
+      if (selectedImages.length < 3 && !selectedImages.some((item) => item.image === image)) {
+        setSelectedImages((prevImages) => [...prevImages, { image, name: imageName }]);
+        setStudentSports((prevSports) => [...prevSports, imageName]); // Met à jour studentSports directement
+      }
+    };
+  
+    const handleImageRemove = (index) => {
+      setSelectedImages((prevImages) => {
+        const updatedImages = [...prevImages];
+        const removedImage = updatedImages.splice(index, 1)[0];
+        return updatedImages;
+      });
+      setStudentSports((prevSports) => {
+        const updatedSports = [...prevSports];
+        updatedSports.splice(index, 1); // Retire le sport de la liste
+        return updatedSports;
+      });
+    };  
+    
+
+
 const handleValidate = async () => {
   console.log(studentSports);
-  try {
+  try { 
     await dispatch(signUp({
       name: studentName, 
       firstname: studentFirstname,
       dateOfBirth: studentDateOfBirth,
       myDescription: studentMyDescription,
       image: user.photo,
-      favoriteSport: studentSports,
+      favoriteSport: studentSports
     }));
 
     const signUpData = {
@@ -90,10 +110,10 @@ const handleValidate = async () => {
       dateOfBirth: studentDateOfBirth,
       myDescription: studentMyDescription,
       image: user.photo,
-      favoriteSport: studentSports,
+      favoriteSport: studentSports
     };
     
-    const response = await fetch('http://coach-linker-backend.vercel.app/students/new', {
+    const response = await fetch('https://coach-linker-backend.vercel.app/students/new', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(signUpData),
@@ -116,23 +136,6 @@ const handleValidate = async () => {
 }
 
     
-
-    // sélection des sports
-    const handleImageSelect = (image, imageName) => {
-        if (selectedImages.length < 3 && !selectedImages.some((item) => item.image === image)) {
-          setSelectedImages((prevImages) => [...prevImages, { image, name: imageName }])
-          setStudentSports(selectedImages.map(item => item.name))
-        }
-      }
-    
-      const handleImageRemove = (index) => {
-        setSelectedImages((prevImages) => {
-          const updatedImages = [...prevImages];
-          const removedImage = updatedImages.splice(index, 1)[0];
-          setStudentSports(prevSports => prevSports.filter(sport => sport !== removedImage.name)); // Retire le sport de la liste
-          return updatedImages;
-        });
-      };
     
     
         const requestCameraPermission = async () => { 
@@ -182,7 +185,7 @@ const handleValidate = async () => {
         start={isDarkMode ? DarkStart : LightStart}
         end={isDarkMode ? DarkEnd : LightEnd}
         style={styles.background} >
-            <GoodMorning/>
+            <Text style={isDarkMode ? styles.darkText : styles.lightText}>Good morning !</Text>
             <Image style={[styles.return, isDarkMode ? styles.darkReturn : styles.lightReturn]} source={require('../assets/bouton-retour.png')} />
         
             <View style={styles.picture}>
@@ -257,12 +260,12 @@ const handleValidate = async () => {
       </TouchableOpacity>
   </ScrollView>
 
-  <View style={styles.selectedImagesContainer}>
+  <View style={[styles.selectedImagesContainer, isDarkMode ? styles.darkSelectedImagesContainer : styles.lightSelectedImagesContainer]}>
     {selectedImages.map((item, index) => (
       <View key={index} style={styles.selectedImageContainer}>
-        <Text style={styles.itemName}>{item.name}</Text>
+        <Text style={[styles.itemName, isDarkMode ? styles.darkItemName : styles.lightItemName]}>{item.name}</Text>
         <TouchableOpacity onPress={() => handleImageRemove(index)}>
-          <Text style={styles.removeButton}>X</Text>
+          <Text style={[styles.removeButton, isDarkMode ? styles.darkRemoveButton : styles.lightRemoveButton]}>X</Text>
         </TouchableOpacity>
       </View>
       ))}
@@ -305,11 +308,23 @@ const handleValidate = async () => {
         
         }
 const styles = StyleSheet.create({
+  darkRemoveButton: {
+    color: '#FFFFFF'
+  },
+  lightRemoveButton: {
+    color: 'black'
+  },
+  darkItemName: {
+    color: '#FFFFFF'
+  },
+  lightItemName: {
+    color: 'black'
+  },
   container : {
     flex :1 ,
     backgroundColor: '#E8E8E8',
-    justifyContent: "space-evenly",   
-    },  
+    justifyContent: "space-evenly",
+    },
   background:{
       width: "100%",
       height: "100%",
@@ -335,12 +350,12 @@ const styles = StyleSheet.create({
     darkInput:{
         backgroundColor: '#505050',
         borderColor: "#505050",
-        
+
     },
     lightInput:{
         backgroundColor: '#E8E8E8',
         borderColor: "#E8E8E8",
-        
+
     },
     darkImg:{
         backgroundColor: '#2E2E2E',
@@ -364,12 +379,12 @@ const styles = StyleSheet.create({
         marginTop: "8%",
         borderRadius: 50,
     },
-    
+
     picture : {
         justifyContent: "center",
         flexDirection: 'row',
         marginTop: "2%",
-        
+
     },
     image :{
         width:100,
@@ -377,163 +392,162 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
         borderRadius: 50,
 
-    },
-    crayon :{
-        width:20,
-        height:20,
-    },
-    inputs: {
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginTop: "8%",
-        marginLeft: "5%",
-        width: "90%",
-        backgroundColor:"#fff",
-        borderRadius: 5,
-        
-    },
-    inputNom: {
-        fontSize : 20,
-        borderColor: "#E8E8E8",
-        borderWidth: 2,
-        width : "80%",
-        margin : "4%",
-        height: 40,
-        paddingLeft: 5,
-        borderRadius: 5,
-        
-    },
+},
+crayon :{
+    width:20,
+    height:20,
+},
+inputs: {
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: "8%",
+    marginLeft: "5%",
+    width: "90%",
+    backgroundColor:"#fff",
+    borderRadius: 5,
     
-    inputPrenom :{
-        fontSize : 20,
-        borderColor: "#E8E8E8",
-        borderWidth: 2,
-        width : "80%",
-        margin : "4%",
-        height: 40,
-        paddingLeft: 5,
-        borderRadius: 5,
-    },
-    inputDate :{
-        fontSize : 20,
-        borderColor: "#E8E8E8",
-        borderWidth: 2,
-        width : "80%",
-        margin : "4%",
-        height: 40,
-        paddingLeft: 5,
-        borderRadius: 5,
-    },
-    description :{
-        alignItems: 'center',
-        marginTop: "8%",
-        marginLeft: "5%",
-        width: "90%",
-        backgroundColor:"#fff",
-        borderRadius: 5,
-        
-    },
-    inputMoi :{
-        fontSize : 20,
-        alignItems:'flex-start',
-        borderColor: "#E8E8E8",
-        borderWidth: 2,
-        width : "80%",
-        margin : "4%",
-        height: 150,
-        paddingLeft: 5,
-        borderRadius: 5,
-        paddingBottom: 100,
-    },
-    favoris :{
-        fontSize:20,
-        marginTop: "8%",
-        paddingLeft: 20,
-        color: "#7B7B7B",
-    },
+},
+inputNom: {
+    fontSize : 20,
+    borderColor: "#E8E8E8",
+    borderWidth: 2,
+    width : "80%",
+    margin : "4%",
+    height: 40,
+    paddingLeft: 5,
+    borderRadius: 5,
     
-    scroll:{
-        marginLeft: 40,
-        marginRight : 40,
-      },
-    logos :{
-        margin: 20,
-        height:70,
-        width :90,
-        alignItems: 'center',
-        justifyContent: 'center',
-      },
-      sportIcon: {
-        width:60,
-        height:60,
-    },
-    sports: {
-      display: 'none'
-    },
-    itemName: {
-        fontWeight: 'bold',
-        marginRight: 100,
-      },
-     removeButton: {
-        color: 'black',
-        fontWeight: 'bold',
-        marginLeft: 10,
-        fontSize: 16,
-      },
-      selectedImageContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginVertical: 5,
-      },
-      selectedImagesContainer: {
-        marginVertical: 10,
-        alignItems: 'center',
-        backgroundColor: '#FFFFFF',
-        width: 350,
-      },
-    camera: {
-        flex: 1,
-        },
-        buttonsContainer: {
-        flex: 0.1,
-        flexDirection: 'row',
-        alignItems: 'flex-end',
-        justifyContent: 'space-between',
-        paddingTop: 20,
-        paddingLeft: 20,
-        paddingRight: 20,
-        },
-        button: {
-        width: 44,
-        height: 44,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.2)',
-        borderRadius: 50,
-        },
-        snapContainer: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-        paddingBottom: 25,
-        },
-        input2: {
-        fontSize : 20,
-        backgroundColor: "#F2F2F2",
-        width : 200,
-        margin : "4%",
-        height: 40,
-        borderRadius: 5,
-        paddingLeft: 5
-        },
-        button2: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: 150,
-        height: 50,
-        backgroundColor: '#F4A100',
-        borderRadius: 5,
-        marginTop: 15
-        }
-});
+},
 
+inputPrenom :{
+    fontSize : 20,
+    borderColor: "#E8E8E8",
+    borderWidth: 2,
+    width : "80%",
+    margin : "4%",
+    height: 40,
+    paddingLeft: 5,
+    borderRadius: 5,
+},
+inputDate :{
+    fontSize : 20,
+    borderColor: "#E8E8E8",
+    borderWidth: 2,
+    width : "80%",
+    margin : "4%",
+    height: 40,
+    paddingLeft: 5,
+    borderRadius: 5,
+},
+description :{
+    alignItems: 'center',
+    marginTop: "8%",
+    marginLeft: "5%",
+    width: "90%",
+    backgroundColor:"#fff",
+    borderRadius: 5,
+    
+},
+inputMoi :{
+    fontSize : 20,
+    alignItems:'flex-start',
+    borderColor: "#E8E8E8",
+    borderWidth: 2,
+    width : "80%",
+    margin : "4%",
+    height: 150,
+    paddingLeft: 5,
+    borderRadius: 5,
+    paddingBottom: 100,
+},
+favoris :{
+    fontSize:20,
+    marginTop: "8%",
+    paddingLeft: 20,
+    color: "#7B7B7B",
+},
+
+scroll:{
+    marginLeft: 40,
+    marginRight : 40,
+  },
+logos :{
+    margin: 20,
+    height:70,
+    width :90,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  sportIcon: {
+    width:60,
+    height:60,
+},
+sports: {
+  display: 'none'
+},
+itemName: {
+    fontWeight: 'bold',
+    marginRight: 100,
+  },
+ removeButton: {
+    color: 'black',
+    fontWeight: 'bold',
+    marginLeft: 10,
+    fontSize: 16,
+  },
+  selectedImageContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 5,
+  },
+  selectedImagesContainer: {
+    marginVertical: 10,
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    width: 350,
+  },
+camera: {
+    flex: 1,
+    },
+    buttonsContainer: {
+    flex: 0.1,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+    paddingTop: 20,
+    paddingLeft: 20,
+    paddingRight: 20,
+    },
+    button: {
+    width: 44,
+    height: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    borderRadius: 50,
+    },
+    snapContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    paddingBottom: 25,
+    },
+    input2: {
+    fontSize : 20,
+    backgroundColor: "#F2F2F2",
+    width : 200,
+    margin : "4%",
+    height: 40,
+    borderRadius: 5,
+    paddingLeft: 5
+    },
+    button2: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 150,
+    height: 50,
+    backgroundColor: '#F4A100',
+    borderRadius: 5,
+    marginTop: 15
+    }
+});

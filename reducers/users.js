@@ -34,7 +34,9 @@ const initialState = {
         // infos student
         dateOfBirth: '',
         favoriteSport: []
-      }
+      },
+
+      token: null
     }
 };
 
@@ -57,6 +59,9 @@ export const userSlice = createSlice({
     addPhoto: (state, action) => {
       state.value.photo = action.payload;
     },
+    addProcard: (state, action) => {
+      state.value.signUp.proCard = action.payload;
+    },
     signUp: (state, action) => {
       state.value.signUp = {
         ...state.value.signUp, // Copie toutes les propriétés actuelles
@@ -65,8 +70,7 @@ export const userSlice = createSlice({
       console.log('signUp', state.value.signUp)
       },
     addToken: (state, action) => {
-        state.value.email = action.payload.email;
-        state.value.token = action.payload.token;
+        state.value.token = action.payload
       },
      logout: (state) => {
         state.value.token = null;
@@ -75,5 +79,5 @@ export const userSlice = createSlice({
   },
 });
 
-export const { updateCurrentLocation, updateSearchLocation, updateStatus, addPhoto, signUp, addToken,logout } = userSlice.actions;
+export const { updateCurrentLocation, updateSearchLocation, updateStatus, addPhoto, signUp, addToken,logout,addProcard } = userSlice.actions;
 export default userSlice.reducer;

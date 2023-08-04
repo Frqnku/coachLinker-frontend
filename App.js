@@ -33,19 +33,21 @@ import { useSelector } from 'react-redux';
 import users from './reducers/users';
 import coachs from './reducers/coachs';
 import student from './reducers/student';
+import bookingStudent from './reducers/bookingStudent';
 
 
 // Redux Persist Config
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  blacklist: ['darkMode','users','student','coachs'] 
+  blacklist: ['darkMode','users','student','coachs', 'bookingStudent'] 
 };
 const rootReducer = combineReducers({
   darkMode,
   users,
   coachs,
   student,
+  bookingStudent
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 const store = configureStore({
@@ -97,7 +99,7 @@ const TabNavigator = () => {
 };
 
 // à changer plus tard
-const isLogged = true
+const isLogged = false
 const isValidate = true
 const isCoach = true
 

@@ -180,7 +180,7 @@ darkPicture:{
     // backgroundColor:"#2E2E2E",
 },
 lightPicture:{
-    backgroundColor: '#fff',
+    // backgroundColor: '#fff',
 },
 lightText: {
   color: '#000'

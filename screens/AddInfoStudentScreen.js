@@ -14,12 +14,12 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 export default function AddInfoStudentScreen({navigation}) {
 
+
   const dispatch = useDispatch()
   const isFocused = useIsFocused();
   const isDarkMode = useSelector(state => state.darkMode.value)
   const user = useSelector((state) => state.users.value);
   const student = useSelector((state) => state.users.value) 
-  
 
   const [studentName, setStudentName] = useState('')
   const [studentFirstname, setStudentFirstname] = useState('')
@@ -185,7 +185,7 @@ const handleValidate = async () => {
         start={isDarkMode ? DarkStart : LightStart}
         end={isDarkMode ? DarkEnd : LightEnd}
         style={styles.background} >
-            <GoodMorning/>
+            <Text style={isDarkMode ? styles.darkText : styles.lightText}>Good morning !</Text>
             <Image style={[styles.return, isDarkMode ? styles.darkReturn : styles.lightReturn]} source={require('../assets/bouton-retour.png')} />
         
             <View style={styles.picture}>
@@ -260,12 +260,12 @@ const handleValidate = async () => {
       </TouchableOpacity>
   </ScrollView>
 
-  <View style={styles.selectedImagesContainer}>
+  <View style={[styles.selectedImagesContainer, isDarkMode ? styles.darkSelectedImagesContainer : styles.lightSelectedImagesContainer]}>
     {selectedImages.map((item, index) => (
       <View key={index} style={styles.selectedImageContainer}>
-        <Text style={styles.itemName}>{item.name}</Text>
+        <Text style={[styles.itemName, isDarkMode ? styles.darkItemName : styles.lightItemName]}>{item.name}</Text>
         <TouchableOpacity onPress={() => handleImageRemove(index)}>
-          <Text style={styles.removeButton}>X</Text>
+          <Text style={[styles.removeButton, isDarkMode ? styles.darkRemoveButton : styles.lightRemoveButton]}>X</Text>
         </TouchableOpacity>
       </View>
       ))}
@@ -308,6 +308,18 @@ const handleValidate = async () => {
         
         }
 const styles = StyleSheet.create({
+  darkRemoveButton: {
+    color: '#FFFFFF'
+  },
+  lightRemoveButton: {
+    color: 'black'
+  },
+  darkItemName: {
+    color: '#FFFFFF'
+  },
+  lightItemName: {
+    color: 'black'
+  },
   container : {
     flex :1 ,
     backgroundColor: '#E8E8E8',

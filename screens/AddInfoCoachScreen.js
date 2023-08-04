@@ -1,148 +1,271 @@
 import React from 'react'
 import { StyleSheet, KeyboardAvoidingView, Text, View, TextInput, ScrollView, TouchableOpacity, Image} from 'react-native'
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import GoodMorning from '../components/GoodMorning';
 import { useState, useRef } from 'react';
 import { Camera, CameraType, FlashMode } from 'expo-camera';
 import { useIsFocused } from "@react-navigation/native";
-import { useSelector } from 'react-redux';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { useSelector,useDispatch } from 'react-redux';
+import { signUp, addProcard, addPhoto } from '../reducers/users'
+import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
 
 export default function AddInfoCoachScreen({ navigation }) {
 
+  const dispatch = useDispatch()
+  const isFocused = useIsFocused();
   const isDarkMode = useSelector(state => state.darkMode.value)
   const user = useSelector((state) => state.users.value);
-  const isFocused = useIsFocused();
+  const coach = useSelector((state) => state.users.value); 
+  
 
   // les useStates
+  // const camera : 
   const [hasPermission, setHasPermission] = useState(false);
   const [type, setType] = useState(CameraType.back);
   const [flashMode, setFlashMode] = useState(FlashMode.off);
-  const [coachLastname, setCoachLastname] = useState('')
+
+  const [coachName, setCoachName] = useState('')
   const [coachFirstname, setCoachFirstname] = useState('')
   const [coachBirthDate, setCoachBirthDate] = useState('')
   const [coachAbout, setCoachAbout] = useState('')
   const [siretNumber, setSiretNumber] = useState('')
   const [ibanNumber, setIbanNumber] = useState('')
   const [bicNumber, setBicNumber] = useState('')
-  const [selectedImages, setSelectedImages] = useState([]);
+  const [selectedImages, setSelectedImages] = useState([])
+  const [coachPrice, setCoachPrice] = useState('')
+  const [coachCity, setCoachCity] = useState('')
+  const [coachPlace, setCoachPlace] = useState('')
+  const [coachProCard, setCoachProCard] = useState('')
+
+  const [coachSports, setCoachSports] = useState([])
+
 
   // camera tel
   let cameraRef = useRef(null);
 
-      const pickImage = async () => {
-        const result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
-          });
-      
-      
-          if (!result.canceled) {
-            const formData = new FormData();
-       
-            formData.append('photoFromFront',{
-              uri: result.assets[0].uri,
-              name: 'photo.jpg',
-              type: 'image/jpeg',
-            });
-           
-            fetch('http://192.168.10.124:3000/upload', {
-              method: 'POST',
-              body: formData,
-            }).then((response) => response.json())
-              .then((data) => { 
-                console.log(data)
-                data.result && fetch('http://192.168.10.124:3000/students/profil', { /* a modifier */
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        image: data.url,
-                        token: student.token, /* a modifier */
-                 })
-                 
-              })
-              .then((response) => response.json())
-              .then((data) => {
-                
-                dispatch(addPhoto(data.student.image)); /* a modifier */
-                setHasPermission(false);
-              })
-           })
-        }
-      }
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
 
-  // HandleClicks
-  const handleImageSelect = (image, imageName) => {
-    if (selectedImages.length < 3 && !selectedImages.some((item) => item.image === image)) {
-      setSelectedImages((prevImages) => [...prevImages, { image, name: imageName }])
+      if (!result.canceled) {
+        const formData = new FormData();
+
+        formData.append('photoFromFront',{
+          uri: result.assets[0].uri,
+          name: 'photo.jpg',
+          type: 'image/jpeg',
+        });
+       
+        fetch('https://coach-linker-backend.vercel.app/upload', {
+          method: 'POST',
+          body: formData,
+        }).then((response) => response.json())
+          .then((data) => { 
+            if (data.result) {
+              dispatch(signUp({image: data.url}))
+              dispatch(addPhoto(data.url));
+              setHasPermission(false);
+            } 
+          })
+      }
+    };
+
+// const pickProcard = async () => {
+//   let result = await ImagePicker.launchImageLibraryAsync({
+//     mediaTypes: ImagePicker.MediaTypeOptions.All,
+//     allowsEditing: true,
+//     aspect: [4, 3],
+//     quality: 1,
+//   });
+
+//   if (!result.canceled) {
+//     const formData = new FormData();
+
+//     formData.append('photoFromFront',{
+//       uri: result.assets[0].uri,
+//       name: 'procard.jpg',
+//       type: 'image/jpeg',
+//     });
+   
+//     fetch('https://coach-linker-backend.vercel.app/upload', {
+//       method: 'POST',
+//       body: formData,
+//     }).then((response) => response.json())
+//       .then((data) => { 
+//         if (data.result) {
+//           dispatch(signUp({proCard: data.url}))
+//           dispatch(addProcard(data.url));
+//           setHasPermission(false);
+//         } 
+//       })
+//   }
+// };
+    
+
+      
+    // sélection des sports
+    const handleImageSelect = (image, imageName) => {
+      if (selectedImages.length < 3 && !selectedImages.some((item) => item.image === image)) {
+        setSelectedImages((prevImages) => [...prevImages, { image, name: imageName }]);
+        setCoachSports((prevSports) => [...prevSports, imageName]); // Met à jour studentSports directement
+      }
+    };
+  
+    const handleImageRemove = (index) => {
+      setSelectedImages((prevImages) => {
+        const updatedImages = [...prevImages];
+        const removedImage = updatedImages.splice(index, 1)[0];
+        return updatedImages;
+      });
+      setCoachSports((prevSports) => {
+        const updatedSports = [...prevSports];
+        updatedSports.splice(index, 1); // Retire le sport de la liste
+        return updatedSports;
+      });
+    };  
+    
+
+      
+  // sélection de la procard : à compléter
+
+  const handleSubmit = async () => {
+    console.log(coachSports);
+    try { 
+      await dispatch(signUp({
+        name: coachName, 
+        firstname: coachFirstname,
+        dateOfBirth: coachBirthDate,
+        myDescription: coachAbout,
+        image: user.photo,
+        teachedSport: coachSports,
+        proCard : coachProCard,
+        siret : siretNumber, 
+        iban : ibanNumber,
+        bic : bicNumber, 
+        price : coachPrice,
+        city : coachCity,
+        coachingPlaces : coachPlace,
+      }));
+  
+      const signUpData = {
+        email: coach.signUp.email,
+        password: coach.signUp.password,
+        name: coachName, 
+        firstname: coachFirstname,
+        dateOfBirth: coachBirthDate,
+        myDescription: coachAbout,
+        image: user.photo,
+        teachedSport: coachSports,
+        proCard : coachProCard,
+        siret : siretNumber, 
+        iban : ibanNumber,
+        bic : bicNumber, 
+        price : coachPrice,
+        city : coachCity,
+        coachingPlaces : coachPlace,
+      };
+      
+      const response = await fetch('https://coach-linker-backend.vercel.app/coachs/new', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(signUpData),
+      });
+  
+      const responseBody = await response.text();
+      console.log('Response from server:', responseBody);
+  
+      const data = JSON.parse(responseBody);
+      console.log('dataresult', data);
+  
+      if (data.result) { 
+        console.log("salut");
+        navigation.navigate("TabNavigator", { screen: "Menu" });
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      // Gérer les erreurs
     }
   }
 
-  const handleImageRemove = (index) => {
-    setSelectedImages((prevImages) => {
-      const updatedImages = [...prevImages];
-      updatedImages.splice(index, 1);
-      return updatedImages;
-    });
-  };
-
-  const handleSubmit = () => {
-    
-    navigation.navigate('Verification')
-  }
-
+// navigation.navigate('Verification')
   const handleBack = () => {
 
     navigation.navigate('ChooseRole')
   }
 
-  const requestCameraPermission = async () => { 
-    const { status } = await Camera.requestCameraPermissionsAsync();
-    setHasPermission(status === 'granted');
-  };
-  const takePicture = async () => {
-      const photo = await cameraRef.takePictureAsync({ quality: 0.3 });
-      const formData = new FormData();
- 
-  formData.append('photoFromFront',{
-    uri: photo.uri,
-    name: 'photo.jpg',
-    type: 'image/jpeg',
-  });
- 
-  fetch('https://coach-linker-backend.vercel.app/upload', {
-    method: 'POST',
-    body: formData,
-  }).then((response) => response.json())
-    .then((data) => { 
-      console.log(data)
-      data.result && fetch('https://coach-linker-backend.vercel.app/students/profil', { /* a modifier */
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ 
-              image: data.url,
-              token: student.token, /* a modifier */
-       })
-       
-    })
-    .then((response) => response.json())
-    .then((data) => {
-      dispatch(addPhoto(data.student.image)); /* a modifier  */
+const requestCameraPermission = async () => { 
+  const { status } = await Camera.requestCameraPermissionsAsync();
+  setHasPermission(status === 'granted');
+};
+const takePicture = async () => {
+    const photo = await cameraRef.takePictureAsync({ quality: 0.3 });
+    const formData = new FormData();
+
+formData.append('photoFromFront',{
+  uri: photo.uri,
+  name: 'photo.jpg',
+  type: 'image/jpeg',
+});
+
+console.log('formData', formData)
+
+fetch('https://coach-linker-backend.vercel.app/upload', {
+  method: 'POST',
+  body: formData,
+}).then((response) => response.json())
+  .then((data) => { 
+    console.log(data)
+    if (data.result) {
+      dispatch(signUp({image: data.url}))
+      dispatch(addPhoto(data.url));
       setHasPermission(false);
-    })
- })
-   
+    } 
+  })
 }
 
-        const DARK_COLORS = ["black", "#FF6100"];
-        const LIGHT_COLORS = ["#FFF8EB", "#FF6100"];
-        const DarkStart = {x : 0.4, y : 0.4};
-        const DarkEnd = {x : -0.3, y : -0.3};
-        const LightStart = {x : 0.6, y : 0.4};
-        const LightEnd = {x : 0.3, y : 0.1};
+// const takeProCard = async () => {
+//   const procard = await cameraRef.takePictureAsync({ quality: 0.3 });
+//   const formData2 = new FormData();
 
-  if (!hasPermission || !isFocused) {
+// formData2.append('photoFromFront',{
+// uri: procard.uri,
+// name: 'procard.jpg',
+// type: 'image/jpeg',
+// });
+
+// console.log('formData', formData2)
+
+// fetch('https://coach-linker-backend.vercel.app/upload', {
+// method: 'POST',
+// body: formData2,
+// }).then((response) => response.json())
+// .then((data) => { 
+//   console.log(data)
+//   if (data.result) {
+//     dispatch(signUp({proCard: data.url}))
+//     console.log(' pro card',user.signUp.proCard)
+//     dispatch(addProcard(data.url));
+
+//     setHasPermission(false);
+//   } 
+// })
+// }
+
+const DARK_COLORS = ["black", "#FF6100"];
+const LIGHT_COLORS = ["#FFF8EB", "#FF6100"];
+const DarkStart = {x : 0.4, y : 0.4};
+const DarkEnd = {x : -0.3, y : -0.3};
+const LightStart = {x : 0.6, y : 0.4};
+const LightEnd = {x : 0.3, y : 0.1};
+
+
+// {/* <Text>{realStudent.name}</Text> */}
+if (!hasPermission || !isFocused) {
 
   return (
     <KeyboardAvoidingView style={[styles.container, isDarkMode ? styles.darkBg : styles.lightBg]} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
@@ -154,15 +277,28 @@ export default function AddInfoCoachScreen({ navigation }) {
         >
     <ScrollView contentContainerStyle={styles.scrollContainer}>
     
-      <View style={styles.btnBack}>
-          <Image style={[styles.return, isDarkMode ? styles.darkReturn : styles.lightReturn]} source={require('../assets/bouton-retour.png')} onPress={handleBack}/>
-          <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={{uri : user.photo}} />
-      </View>
+    <View style={styles.picture}>
+                <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={{uri : user.photo}} />
+                <TouchableOpacity onPress={() => requestCameraPermission() && pickImage()} >
+                            <Image  style={styles.crayon} source={require('../assets/crayon.png')} />
+                </TouchableOpacity>
+            </View>
+
+            {/* <View style={styles.picture}>
+            <Text style={isDarkMode ? styles.darkText : styles.lightText}>carte pro </Text>
+                <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={{uri : user.signUp.proCard}} />
+                <TouchableOpacity onPress={() => requestCameraPermission() && pickProcard()} >
+                            <Image  style={styles.crayon} source={require('../assets/crayon.png')} />
+                </TouchableOpacity>
+            </View> */}
 
       <View style={[styles.inputView, isDarkMode ? styles.darkIn : styles.lightIn]}>
-        <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachLastname(value)} value={coachLastname} placeholder='Nom' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"} ></TextInput>
+        <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachName(value)} value={coachName} placeholder='Nom' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"} ></TextInput>
         <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachFirstname(value)} value={coachFirstname} placeholder='Prénom' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
         <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachBirthDate(value)} value={coachBirthDate} placeholder='Date de naissance' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
+        <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachProCard(value)} value={coachProCard} placeholder='card' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
+        <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachPrice(value)} value={coachPrice} placeholder='price' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
+       
       </View>
       
       <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText]}>Sports enseignés</Text>
@@ -221,15 +357,15 @@ export default function AddInfoCoachScreen({ navigation }) {
       </View>
 
       <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText]}>A propos de moi</Text>
+      <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachCity(value)} value={coachCity} placeholder='city' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
+        <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachPlace(value)} value={coachPlace} placeholder='coachingPlaces' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
 
       <View style={styles.cardAbout}>
         <TextInput style={[styles.aPropos, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachAbout(value)} value={coachAbout} selectionColor={"#FF6100"}></TextInput>
       </View>
 
       <View style={styles.btns}>
-        <TouchableOpacity style={styles.btnPhoto} onPress={() => requestCameraPermission() && pickImage()}>
-          <Text style={styles.text}>Photo</Text>
-        </TouchableOpacity>
+
 
         <TouchableOpacity style={styles.btnDoc}>
           <Text style={styles.text}>Doc</Text>
@@ -240,9 +376,10 @@ export default function AddInfoCoachScreen({ navigation }) {
 
       <View style={styles.inputView}>
         <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setSiretNumber(value)} value={siretNumber} placeholder='Numéro de Siret' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
-        <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} placeholder='Insérez votre carte Pro' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
-        <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} placeholder='Vos diplômes' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
+        {/* <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} placeholder='Insérez votre carte Pro' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput> */}
+        {/* <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} placeholder='Vos diplômes' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput> */}
       </View>
+
 
       <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText]}>Informations de paiements</Text>
 
@@ -290,6 +427,7 @@ return (
       </TouchableOpacity>
     </View>
 
+    
   </Camera>
 );
 }
@@ -377,12 +515,23 @@ const styles = StyleSheet.create({
       flex: 1
     },
     // a enlever image
-    image :{
-      width:80,
-      height:80,
+    picture : {
+      justifyContent: "center",
+      flexDirection: 'row',
+      marginTop: "2%",
+
+  },
+  image :{
+      width:100,
+      height:100,
       backgroundColor: "#fff",
       borderRadius: 50,
-  },
+
+},
+crayon :{
+  width:20,
+  height:20,
+},
     input: {
       height: 50,
       width: 300,
@@ -444,6 +593,12 @@ const styles = StyleSheet.create({
       width: 300,
     },
     snapContainer: {
+      flex: 1,
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        paddingBottom: 25,
+    },
+    snapContainer2: {
       flex: 1,
         alignItems: 'center',
         justifyContent: 'flex-end',

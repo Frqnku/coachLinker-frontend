@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, Image, Pressable, TextInput, TouchableOpacity, 
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { LinearGradient } from 'expo-linear-gradient';
-import { signUp,addToken} from '../reducers/users'; 
+import { signUp, addToken} from '../reducers/users'; 
 
 export default function ConnexionScreen({ navigation }) {
     const dispatch = useDispatch();
@@ -15,6 +15,7 @@ export default function ConnexionScreen({ navigation }) {
     const [modalVisible, setModalVisible] = useState(false)
     const [pwdStrength, setPwdStrength] = useState('')
     const [pwdColor, setPwdColor] = useState('')
+    const [errorSignup, setErrorSignup] = useState('')
 
     const isDarkMode = useSelector(state => state.darkMode.value)
 
@@ -75,12 +76,28 @@ useEffect(() => {
 
 // Lors de l'inscription, email et password sont envoyés dans le store.
 const handleSignup = () => {
+  console.log('click')
+  fetch('https://coach-linker-backend.vercel.app/isExisting', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: signUpEmail, password: signUpPassword }),
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log(data)
+    if(!data.result) {
+      setErrorSignup(data.error)
+    }
+  })
   if (EMAIL_REGEX.test(signUpEmail) && (signUpPassword === signUpPassword2) && (pwdStrength === 'Fort')){
-  dispatch(signUp({ email: signUpEmail, password: signUpPassword }));
-  setSignUpEmail('');
-  setSignUpPassword('');
-  setSignUpPassword2('');
-  navigation.navigate('Localisation');
+
+      setErrorSignup('')
+      dispatch(signUp({ email: signUpEmail, password: signUpPassword }));
+      setSignUpEmail('');
+      setSignUpPassword('');
+      setSignUpPassword2('');
+      navigation.navigate('Localisation');
+
 }}
 
 const handleModal = () => {
@@ -94,9 +111,10 @@ const handleModal = () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email: signInEmail, password: signInPassword }),
         }).then(response => response.json())
-            .then(data => { console.log(data)
+            .then(data => {
+        console.log(data)
                 if (data.result) {
-                    dispatch(addToken({email: signInEmail,token: data.token }));
+                    dispatch(addToken(data.token));
           setSignInEmail('');
                     setSignInPassword('');
                   navigation.navigate('TabNavigator')
@@ -126,7 +144,7 @@ return (
          
         <TextInput selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#7B7B7B":"#7B7B7B"} style={[styles.inputP2, isDarkMode ? styles.darkInputMdp : styles.lightInputMdp]}
           placeholder="Confirmer le mot de passe" onChangeText={(value) => setSignUpPassword2(value)} value={signUpPassword2} secureTextEntry={true}/>
-
+        {errorSignup && <Text style={{color: "#fff"}}>{errorSignup}</Text>}
           <TouchableOpacity style={[ isDarkMode ? styles.darkbutton : styles.lightbutton]}
 
           onPress={() => handleSignup()} activeOpacity={0.8}>
@@ -192,7 +210,7 @@ inputP2: {
 
 },
 darkInputMdp:{
-  marginTop: 20,
+  marginTop: 10,
   fontSize : 15,
   backgroundColor: '#2E2E2E',
   width : "80%",
@@ -225,6 +243,7 @@ input: {
 text: {
   width: '80%',
   paddingTop: 10
+
 },
 input: { 
 },

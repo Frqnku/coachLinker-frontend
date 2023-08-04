@@ -58,7 +58,7 @@ export default function AddInfoStudentScreen({navigation}) {
           type: 'image/jpeg',
         });
        
-        fetch('http://coach-linker-backend.vercel.app/upload', {
+        fetch('https://coach-linker-backend.vercel.app/upload', {
           method: 'POST',
           body: formData,
         }).then((response) => response.json())
@@ -151,11 +151,14 @@ export default function AddInfoStudentScreen({navigation}) {
           type: 'image/jpeg',
         });
        
-        fetch('http://coach-linker-backend.vercel.app/upload', {
+        console.log('formData', formData)
+
+        fetch('https://coach-linker-backend.vercel.app/upload', {
           method: 'POST',
           body: formData,
         }).then((response) => response.json())
           .then((data) => { 
+            console.log(data)
             if (data.result) {
               dispatch(signUp({image: data.url}))
               dispatch(addPhoto(data.url));

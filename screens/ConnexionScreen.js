@@ -1,8 +1,8 @@
-import { StyleSheet, Text, View, Image, Pressable, TextInput, TouchableOpacity, KeyboardAvoidingView, Modal } from 'react-native';
+import { StyleSheet, Text, View, Image, Pressable, TextInput, TouchableOpacity, KeyboardAvoidingView, Modal, ScrollView } from 'react-native';
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { LinearGradient } from 'expo-linear-gradient';
-import { signUp,addToken} from '../reducers/users'; 
+import { signUp, addToken} from '../reducers/users'; 
 
 export default function ConnexionScreen({ navigation }) {
     const dispatch = useDispatch();
@@ -94,9 +94,10 @@ export default function ConnexionScreen({ navigation }) {
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ email: signInEmail, password: signInPassword }),
 		}).then(response => response.json())
-			.then(data => { console.log(data)
+			.then(data => {
+        console.log(data)
 				if (data.result) {
-					dispatch(addToken({email: signInEmail,token: data.token }));
+					dispatch(addToken(data.token));
           setSignInEmail('');
 					setSignInPassword('');
                   navigation.navigate('TabNavigator')
@@ -114,6 +115,7 @@ export default function ConnexionScreen({ navigation }) {
         end={isDarkMode ? DarkEnd : LightEnd}
         style={styles.background}
         >
+          <ScrollView>
             <View style={styles.boximage}>
               <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={isDarkMode ? require('../assets/logodark.png') : require('../assets/logolight2.png')} />
           
@@ -135,7 +137,7 @@ export default function ConnexionScreen({ navigation }) {
               </TouchableOpacity>
               <TouchableOpacity 
               onPress={() => handleModal()} activeOpacity={0.8}>
-                  <Text style={[styles.signin, isDarkMode ? styles.darksignin : styles.lightsignin]}>T'es déjà inscrit ? Let's go !</Text>
+                  <Text style={[ isDarkMode ? styles.darksignin : styles.lightsignin]}>T'es déjà inscrit ? Let's go !</Text>
               </TouchableOpacity>
               <Modal  animationType="slide" transparent={true} visible={modalVisible} onRequestClose={() => { Alert.alert('Modal has been closed.');
                       setModalVisible(!modalVisible); }}>
@@ -157,6 +159,7 @@ export default function ConnexionScreen({ navigation }) {
                   </View>
               </Modal>
             </View>
+            </ScrollView>
            </LinearGradient>
         </KeyboardAvoidingView>
     );
@@ -174,19 +177,19 @@ darkReturn:{
     backgroundColor:"#2E2E2E",
 },
 lightReturn :{
-    backgroundColor: '#fff',
+    backgroundColor: '#ffffff',
 },
 darkPicture:{
     // backgroundColor:"#2E2E2E",
 },
 lightPicture:{
-    // backgroundColor: '#fff',
+    // backgroundColor: '#ffffff',
 },
 lightText: {
-  color: '#000'
+  color: '#000000'
 },
 darkText: {
-  color: '#fff'
+  color: '#ffffff'
 },
 inputP2: {
   
@@ -257,7 +260,7 @@ darkImg:{
     borderColor: "#F4A100",
 },
 lightImg:{
-    backgroundColor: '#fff',
+    backgroundColor: '#ffffff',
     borderColor: "#E8E8E8",
     
 },
@@ -265,7 +268,7 @@ darkIn:{
  backgroundColor: '#2E2E2E',
 },
 lightIn:{
-backgroundColor: '#fff',
+backgroundColor: '#ffffff',
 },
 
 background:{
@@ -327,6 +330,7 @@ background:{
       darksignin: {
         fontSize : 18,
         marginTop: 50,
+        marginBottom: 50,
         color : '#AAAAAA',
         fontWeight: 'bold',
         // backgroundColor: '#58FD0B',
@@ -337,6 +341,7 @@ background:{
       lightsignin: {
         fontSize : 18,
         marginTop: 50,
+        marginBottom: 50,
         color : 'black',
         fontWeight: 'bold',
         // backgroundColor: '#58FD0B',

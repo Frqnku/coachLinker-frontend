@@ -34,7 +34,9 @@ const initialState = {
         // infos student
         dateOfBirth: '',
         favoriteSport: []
-      }
+      },
+
+      token: null
     }
 };
 
@@ -65,8 +67,7 @@ export const userSlice = createSlice({
       console.log('signUp', state.value.signUp)
       },
     addToken: (state, action) => {
-        state.value.email = action.payload.email;
-        state.value.token = action.payload.token;
+        state.value.token = action.payload
       },
      logout: (state) => {
         state.value.token = null;

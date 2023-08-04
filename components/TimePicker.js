@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { useSelector } from 'react-redux';
 
 const TimePicker = () => {
   const [isPickerVisible, setPickerVisibility] = useState(false);
   const [selectedHour, setSelectedHour] = useState('');
+  const isDarkMode = useSelector(state => state.darkMode.value)
 
   const togglePicker = () => {
     setPickerVisibility(!isPickerVisible);
@@ -29,10 +31,10 @@ const TimePicker = () => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.input} onPress={togglePicker}>
-        <Text>{selectedHour || 'Choisissez une heure'}</Text>
+      <TouchableOpacity style={[styles.input, isDarkMode ? styles.darkBlock: styles.lightBlock]} onPress={togglePicker}>
+        <Text style={styles.heure} >{selectedHour || 'Choisissez une heure'}</Text>
       </TouchableOpacity>
-      {isPickerVisible && <View style={styles.pickerContainer}>{renderHours()}</View>}
+      {isPickerVisible && <View style={[styles.pickerContainer, isDarkMode ? styles.darkBlock: styles.lightBlock]}>{renderHours()}</View>}
     </View>
   );
 };
@@ -43,12 +45,26 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  darkBlock:{
+    backgroundColor: '#505050',
+    borderColor: "#505050",
+    
+},
+lightBlock:{
+    backgroundColor: '#E8E8E8',
+    borderColor: "#E8E8E8",
+    
+},
+  heure :{
+    fontSize:17,
+  },
   input: {
     borderWidth: 1,
     borderColor: 'gray',
     padding: 10,
     width: 200,
     alignItems: 'center',
+    borderRadius: 5,
   },
   pickerContainer: {
     marginTop: 10,

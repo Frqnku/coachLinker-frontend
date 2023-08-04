@@ -1,200 +1,167 @@
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { LinearGradient } from 'expo-linear-gradient';
+import { KeyboardAvoidingView, StyleSheet, Text, View, ScrollView, TextInput } from 'react-native';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import TimePicker from '../components/TimePicker';
 import GoodMorning from '../components/GoodMorning';
 import React from 'react'
 import {StyleSheet, Pressable, KeyboardAvoidingView, Image, TextInput, View, Text, ScrollView, TouchableOpacity} from 'react-native';
 
 export default function AgendaScreen() {
-
     const isDarkMode = useSelector(state => state.darkMode.value)
+
     const DARK_COLORS = ["black", "#FF6100"];
     const LIGHT_COLORS = ["#FFF8EB", "#FF6100"];
     const DarkStart = {x : 0.4, y : 0.4};
     const DarkEnd = {x : -0.3, y : -0.3};
     const LightStart = {x : 0.6, y : 0.4};
     const LightEnd = {x : 0.3, y : 0.1};
-    
-    const [startDay, setstartDay] = useState('')
-    const [dayOfWeek, setDayOfWeek] = useState('')
-    const [endDay, setEndDay] = useState('')
-   
-
-//addPlanning à mettre dans reducers
-      // log à partir du mot de passe et email (route users).
-  const handleValidate = () => {
-    fetch('https://coach-linker-backend.vercel.app/plannings/new', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token:data.token}),
-    }).then(response => response.json())
-        .then(data => { console.log(data)
-            if (data.result) {
-                // Le planning a été créé avec succès, vous pouvez accéder aux détails du planning ici
-                console.log('Planning créé avec succès:', data.data);
-                dispatch(addPlanning({dayOfWeek:setDayOfWeek, startDay:setstartDay, endDay: setEndDay}));
-                navigation.navigate("TabNavigator",{screen : "Menu"})
-            } else {
-                // Une erreur s'est produite lors de la création du planning, vous pouvez afficher le message d'erreur ici.
-                console.log('Erreur lors de la création du planning:', data.error);
-            }
-        })
-        .catch(error => {
-            // En cas d'erreur lors de la requête
-            console.error('Erreur lors de la requête :', error);
-        });
-    };   
-
 
     return (
-    <KeyboardAvoidingView style={[styles.container, isDarkMode ? styles.darkBg : styles.lightBg]} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-        <LinearGradient
-        colors={isDarkMode ? DARK_COLORS : LIGHT_COLORS}
+<KeyboardAvoidingView style={[styles.container, isDarkMode ? styles.darkBg : styles.lightBg]} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+    <LinearGradient colors={isDarkMode ? DARK_COLORS : LIGHT_COLORS}
         start={isDarkMode ? DarkStart : LightStart}
-        end={isDarkMode ? DarkEnd : LightEnd}
-        style={styles.background} >
-            <GoodMorning/>
-            <Text>AgendaScreen</Text> 
-
-            {/* afficher l'écran de disponibilités modifiables */}
-                <ScrollView contentContainerStyle={styles.scroll}>
-                    <TouchableOpacity style={styles.boxdays}>
-                        <Text style={styles.day}>Lundi</Text>
-                        <TextInput selectioncolor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]}
-                        placeholder="horaire de début" onChangeText={(value) => setStartDay(value)} value={startDay} secureTextEntry={true}
-                       />
-                         <TextInput selectioncolor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]}
-                        placeholder="horaire de fin" onChangeText={(value) => setEndDay(value)} value={endDay} secureTextEntry={true}
-                       />
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.boxdays}>
-                        <Text style={styles.day}>Mardi</Text>
-                        <TextInput selectioncolor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]}
-                        placeholder="horaire de début" onChangeText={(value) => setStartDay(value)} value={startDay} secureTextEntry={true}
-                       />
-                         <TextInput selectioncolor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]}
-                        placeholder="horaire de fin" onChangeText={(value) => setEndDay(value)} value={endDay} secureTextEntry={true}
-                       />
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.boxdays}>
-                        <Text style={styles.day}>Mercredi</Text>
-                        <TextInput selectioncolor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]}
-                        placeholder="horaire de début" onChangeText={(value) => setStartDay(value)} value={startDay} secureTextEntry={true}
-                       />
-                         <TextInput selectioncolor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]}
-                        placeholder="horaire de fin" onChangeText={(value) => setEndDay(value)} value={endDay} secureTextEntry={true}
-                       />
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.boxdays}>
-                        <Text style={styles.day}>Jeudi</Text>
-                        <TextInput selectioncolor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]}
-                        placeholder="horaire de début" onChangeText={(value) => setStartDay(value)} value={startDay} secureTextEntry={true}
-                       />
-                         <TextInput selectioncolor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]}
-                        placeholder="horaire de fin" onChangeText={(value) => setEndDay(value)} value={endDay} secureTextEntry={true}
-                       />
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.boxdays}>
-                        <Text style={styles.day}>Vendredi</Text>
-                        <TextInput selectioncolor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]}
-                        placeholder="horaire de début" onChangeText={(value) => setStartDay(value)} value={startDay} secureTextEntry={true}
-                       />
-                         <TextInput selectioncolor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]}
-                        placeholder="horaire de fin" onChangeText={(value) => setEndDay(value)} value={endDay} secureTextEntry={true}
-                       />
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.boxdays}>
-                        <Text style={styles.day}>Samedi</Text>
-                        <TextInput selectioncolor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]}
-                        placeholder="horaire de début" onChangeText={(value) => setStartDay(value)} value={startDay} secureTextEntry={true}
-                       />
-                         <TextInput selectioncolor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]}
-                        placeholder="horaire de fin" onChangeText={(value) => setEndDay(value)} value={endDay} secureTextEntry={true}
-                       />
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.boxdays}>
-                        <Text style={styles.day}>Dimanche</Text>
-                        <TextInput selectioncolor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]}
-                        placeholder="horaire de début" onChangeText={(value) => setStartDay(value)} value={startDay} secureTextEntry={true}
-                       />
-                         <TextInput selectioncolor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]}
-                        placeholder="horaire de fin" onChangeText={(value) => setEndDay(value)} value={endDay} secureTextEntry={true}
-                       />
-                    </TouchableOpacity>
-                 
-                </ScrollView>
-
-                <TouchableOpacity onPress={() => handleValidate()} style={styles.button2} activeOpacity={0.8}>
-                            <Text style={styles.textButton}>Validerr</Text>
-                        </TouchableOpacity>
-       </LinearGradient>   
-    </KeyboardAvoidingView>
-
+          end={isDarkMode ? DarkEnd : LightEnd}
+        style={styles.background}
+        >
+    <ScrollView  contentContainerStyle={styles.scrollContainer}showsVerticalScrollIndicator={false}>
+        
+    <View style={[styles.inputs, isDarkMode ? styles.darkIn : styles.lightIn]}>
+        <Text style={styles.texte}>Lundi</Text>
+            <View style={[styles.inputs, isDarkMode ? styles.darkIn : styles.lightIn]}>
+                <TimePicker/>
+                <Text style={[styles.inputDebut, isDarkMode ? styles.darkInput : styles.lightInput]}>Début :</Text>
+                <TimePicker/>
+                <Text style={[styles.inputFin, isDarkMode ? styles.darkInput : styles.lightInput]}>Fin :</Text>
+            </View>
+       
+    </View>
+    <View style={[styles.inputs, isDarkMode ? styles.darkIn : styles.lightIn]}>
+        <Text style={styles.texte}>Mardi</Text>
+        <View style={[styles.inputs, isDarkMode ? styles.darkIn : styles.lightIn]}>
+                <TimePicker/>
+                <Text style={[styles.inputDebut, isDarkMode ? styles.darkInput : styles.lightInput]}>Début :</Text>
+                <TimePicker/>
+                <Text style={[styles.inputFin, isDarkMode ? styles.darkInput : styles.lightInput]}>Fin :</Text>
+            </View>
+        </View>
+    <View style={[styles.inputs, isDarkMode ? styles.darkIn : styles.lightIn]}>
+        <Text style={styles.texte}>Mercredi</Text>
+        <View style={[styles.inputs, isDarkMode ? styles.darkIn : styles.lightIn]}>
+                <TimePicker/>
+                <Text style={[styles.inputDebut, isDarkMode ? styles.darkInput : styles.lightInput]}>Début :</Text>
+                <TimePicker/>
+                <Text style={[styles.inputFin, isDarkMode ? styles.darkInput : styles.lightInput]}>Fin :</Text>
+            </View>
+        </View>
+    <View style={[styles.inputs, isDarkMode ? styles.darkIn : styles.lightIn]}>
+        <Text style={styles.texte}>Jeudi</Text>
+        <View style={[styles.inputs, isDarkMode ? styles.darkIn : styles.lightIn]}>
+                <TimePicker/>
+                <Text style={[styles.inputDebut, isDarkMode ? styles.darkInput : styles.lightInput]}>Début :</Text>
+                <TimePicker/>
+                <Text style={[styles.inputFin, isDarkMode ? styles.darkInput : styles.lightInput]}>Fin :</Text>
+            </View>
+        </View>
+    <View style={[styles.inputs, isDarkMode ? styles.darkIn : styles.lightIn]}>
+        <Text style={styles.texte}>Vendredi</Text>
+        <View style={[styles.inputs, isDarkMode ? styles.darkIn : styles.lightIn]}>
+                <TimePicker/>
+                <Text style={[styles.inputDebut, isDarkMode ? styles.darkInput : styles.lightInput]}>Début :</Text>
+                <TimePicker/>
+                <Text style={[styles.inputFin, isDarkMode ? styles.darkInput : styles.lightInput]}>Fin :</Text>
+            </View>
+        </View>
+    <View style={[styles.inputs, isDarkMode ? styles.darkIn : styles.lightIn]}>
+        <Text style={styles.texte}>Samedi</Text>
+        <View style={[styles.inputs, isDarkMode ? styles.darkIn : styles.lightIn]}>
+                <TimePicker/>
+                <Text style={[styles.inputDebut, isDarkMode ? styles.darkInput : styles.lightInput]}>Début :</Text>
+                <TimePicker/>
+                <Text style={[styles.inputFin, isDarkMode ? styles.darkInput : styles.lightInput]}>Fin :</Text>
+            </View>
+        </View>
+    <View style={[styles.inputs, isDarkMode ? styles.darkIn : styles.lightIn]}>
+        <Text style={styles.texte}>Dimanche</Text>
+        <View style={[styles.inputs, isDarkMode ? styles.darkIn : styles.lightIn]}>
+                <TimePicker/>
+                <Text style={[styles.inputDebut, isDarkMode ? styles.darkInput : styles.lightInput]}>Début :</Text>
+                <TimePicker/>
+                <Text style={[styles.inputFin, isDarkMode ? styles.darkInput : styles.lightInput]}>Fin :</Text>
+            </View>
+        </View>
+    </ScrollView>
+        </LinearGradient>
+</KeyboardAvoidingView>
+      
     );
 }
 
 const styles = StyleSheet.create({
-    container : {
+    container: {
         flex :1 ,
-        backgroundColor: '#E8E8E8',
-        justifyContent: "space-evenly",   
-        },  
+        justifyContent: "space-evenly",
+    },
     background:{
-          width: "100%",
-          height: "100%",
+        width: "100%",
+        height: "100%",
+        },
+        scrollContainer:{
+            alignItems:'center',
         },
     darkBg :{
         backgroundColor: 'black',
-        },
-    lightBg:{
-        backgroundColor: '#E8E8E8',
-        },
-        darkReturn:{
-            backgroundColor:"#2E2E2E",
-        },
-    lightReturn :{
-        backgroundColor: '#fff',
-        },
-    darkPicture:{
-        backgroundColor:"#2E2E2E",
-        },
-    lightPicture:{
-        backgroundColor: '#fff',
-        },
+    },
     darkInput:{
         backgroundColor: '#505050',
         borderColor: "#505050",
-        marginTop: 15,
-        fontSize : 15,
-        backgroundColor: '#2E2E2E',
-        width : "80%",
-        margin : "3%",
-        height: 40,
-        borderRadius: 13,
-        paddingLeft: 15,
-        marginBottom: 10, 
-        color:"white",  
-        },
+        
+    },
     lightInput:{
         backgroundColor: '#E8E8E8',
         borderColor: "#E8E8E8",
-        },
+        
+    },
     darkIn:{
         backgroundColor: '#2E2E2E',
-        },
-    lightIn:{
-        backgroundColor: '#fff',
-        },
-    scroll :{
-
+       },
+       lightIn:{
+       backgroundColor: '#fff',
+       },
+       inputs: {
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop: "8%",
+        marginLeft: "5%",
+        width: "90%",
+        backgroundColor:"#fff",
+        borderRadius: 5,
+     
     },
-    boxdays:{
-
-        },
-    day :{
-
-        },
+    inputDebut: {
+        fontSize : 20,
+        borderColor: "#E8E8E8",
+        borderWidth: 2,
+        width : "80%",
+        margin : "4%",
+        height: 40,
+        paddingLeft: 5,
+        borderRadius: 5,
+       
+    },
+    
+    inputFin :{
+        fontSize : 20,
+        borderColor: "#E8E8E8",
+        borderWidth: 2,
+        width : "80%",
+        margin : "4%",
+        height: 40,
+        paddingLeft: 5,
+        borderRadius: 5,
+    },
+    texte: {
+        fontSize: 40,
+    },
 })

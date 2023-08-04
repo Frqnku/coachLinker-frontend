@@ -15,6 +15,7 @@ export default function ConnexionScreen({ navigation }) {
     const [modalVisible, setModalVisible] = useState(false)
     const [pwdStrength, setPwdStrength] = useState('')
     const [pwdColor, setPwdColor] = useState('')
+    const [errorSignup, setErrorSignup] = useState('')
     
     const isDarkMode = useSelector(state => state.darkMode.value)
 
@@ -75,12 +76,28 @@ export default function ConnexionScreen({ navigation }) {
 
     // Lors de l'inscription, email et password sont envoyés dans le store.
     const handleSignup = () => {
+      console.log('click')
+      fetch('https://coach-linker-backend.vercel.app/isExisting', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: signUpEmail, password: signUpPassword }),
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data)
+        if(!data.result) {
+          setErrorSignup(data.error)
+        }
+      })
       if (EMAIL_REGEX.test(signUpEmail) && (signUpPassword === signUpPassword2) && (pwdStrength === 'Fort')){
-      dispatch(signUp({ email: signUpEmail, password: signUpPassword }));
-      setSignUpEmail('');
-      setSignUpPassword('');
-      setSignUpPassword2('');
-      navigation.navigate('Localisation');
+
+          setErrorSignup('')
+          dispatch(signUp({ email: signUpEmail, password: signUpPassword }));
+          setSignUpEmail('');
+          setSignUpPassword('');
+          setSignUpPassword2('');
+          navigation.navigate('Localisation');
+
     }}
 
     const handleModal = () => {
@@ -127,7 +144,7 @@ export default function ConnexionScreen({ navigation }) {
              
             <TextInput selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#7B7B7B":"#7B7B7B"} style={[styles.inputP2, isDarkMode ? styles.darkInputMdp : styles.lightInputMdp]}
               placeholder="Confirmer le mot de passe" onChangeText={(value) => setSignUpPassword2(value)} value={signUpPassword2} secureTextEntry={true}/>
-
+            {errorSignup && <Text style={{color: "#fff"}}>{errorSignup}</Text>}
               <TouchableOpacity style={[ isDarkMode ? styles.darkbutton : styles.lightbutton]}
 
               onPress={() => handleSignup()} activeOpacity={0.8}>

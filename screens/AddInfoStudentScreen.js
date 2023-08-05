@@ -19,7 +19,7 @@ export default function AddInfoStudentScreen({navigation}) {
   const isFocused = useIsFocused();
   const isDarkMode = useSelector(state => state.darkMode.value)
   const user = useSelector((state) => state.users.value);
-  const student = useSelector((state) => state.student.value);
+  const student = useSelector((state) => state.users.value);
  
 
   const [studentName, setStudentName] = useState('')

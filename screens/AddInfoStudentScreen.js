@@ -187,7 +187,8 @@ const handleValidate = async () => {
       <Image style={[styles.return, isDarkMode ? styles.darkReturn : styles.lightReturn]} source={require('../assets/bouton-retour.png')} />
            
        <ScrollView contentContainerStyle={styles.scrollContainer}>  
-       <Text style={isDarkMode ? styles.darkText : styles.lightText}>Good morning !</Text>
+       
+       <Text style={[ isDarkMode ? styles.darksignin : styles.lightsignin]}>Bienvenue chez CoachLinker, merci de compléter ton profil pour passer à l'étape suivante </Text>
             <View style={styles.picture}>
                 <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={{uri : user.photo}} />
                 <TouchableOpacity onPress={() => requestCameraPermission() && pickImage()} >
@@ -195,22 +196,38 @@ const handleValidate = async () => {
                 </TouchableOpacity>
             </View>
         <ScrollView style={styles.scrollInput} showsVerticalScrollIndicator={false}>
-             <View style={[styles.inputs, isDarkMode ? styles.darkIn : styles.lightIn]}>
-                <TextInput placeholder="Nom" onChangeText={(value) => setStudentName(value)} value={studentName}
-                placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.inputNom, isDarkMode ? styles.darkInput : styles.lightInput]} />
-                <TextInput placeholder="Prénom" onChangeText={(value) => setStudentFirstname(value)} value={studentFirstname}
-                placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.inputPrenom, isDarkMode ? styles.darkInput : styles.lightInput]} />
-        
-                <TextInput placeholder="Date de naissance"  onChangeText={(value) => setStudentDateOfBirth(value)} value={studentDateOfBirth}
-                placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.inputDate, isDarkMode ? styles.darkInput : styles.lightInput]} />
-            </View>
-        
-        
-            <View style={[styles.description, isDarkMode ? styles.darkIn : styles.lightIn]}>
-                <TextInput placeholder="A propos de moi ..." onChangeText={(value) => setStudentMyDescription(value)} value={studentMyDescription}
-                placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.inputMoi, isDarkMode ? styles.darkInput : styles.lightInput]} />
-        
-            </View>
+            
+        <View style={[styles.inputView, isDarkMode ? styles.darkIn : styles.lightIn]}>
+        <TextInput  
+        placeholder="Nom" onChangeText={(value) => setStudentName(value)} value={studentName} 
+        placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"}
+        selectionColor={'#FF6100'} 
+        style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} 
+        > </TextInput>
+
+        <TextInput 
+        placeholder="Prénom" onChangeText={(value) => setStudentFirstname(value)} value={studentFirstname}
+        style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} 
+        placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"}
+        selectionColor={'#FF6100'} 
+        > </TextInput>
+
+        <TextInput 
+        placeholder="Date de naissance (jj/mm/aaaa)"  onChangeText={(value) => setStudentDateOfBirth(value)} value={studentDateOfBirth}
+        style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} 
+        placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"}
+        selectionColor={'#FF6100'} 
+        ></TextInput>
+      </View>
+
+      <View style={styles.cardAbout}>
+        <TextInput 
+        multiline numberOfLines={4} 
+        placeholder='A propos de moi'onChangeText={(value) => setCoachAbout(value)} value={coachAbout} 
+        selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} 
+        style={[ isDarkMode ? styles.darkInputapropos : styles.lightInputapropos]} ></TextInput>
+      </View>
+      
         </ScrollView>
            
             <View>
@@ -218,11 +235,11 @@ const handleValidate = async () => {
             </View>
         
             
-            <ScrollView  horizontal={true} style={styles.scroll} showsHorizontalScrollIndicator={false}>
-        <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/football.png'), 'Football')}>
-          <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/football.png')} />
-          <Text style={styles.sports}>Football</Text>
-          </TouchableOpacity>
+   <ScrollView  horizontal={true} style={styles.scroll} showsHorizontalScrollIndicator={false}>
+      <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/football.png'), 'Football')}>
+        <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/football.png')} />
+        <Text style={styles.sports}>Football</Text>
+      </TouchableOpacity>
 
       <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/gant-de-boxe.png'), 'Boxe')}>
         <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/gant-de-boxe.png')} />
@@ -308,6 +325,42 @@ const handleValidate = async () => {
         
         }
 const styles = StyleSheet.create({
+  input: {
+  },
+  aPropos: {
+    height: 100,
+    width: 350,
+    backgroundColor: '#F2F2F2',
+    borderRadius: 13
+    },
+  scrollContainer: {
+    alignItems: 'center',
+    marginTop: 5,
+    },
+  darksignin: {
+    width : "80%",
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize : 15,
+    marginTop: 30,
+    color : '#AAAAAA',
+    fontWeight: 'bold',
+    textShadowColor: 'rgba(255, 165, 0, 1)',  //'rgba(255, 165, 0, 1)', Couleur de l'ombre (noir avec opacité 0.75)
+    textShadowOffset: { width: 0.5, height: 0.5 }, // Décalage de l'ombre (effet relief)
+    textShadowRadius: 20, // Rayon de l'ombre (effet relief)
+    },
+  lightsignin: {
+    width : "80%",
+    justifyContent: 'center',
+    fontSize : 15,
+    marginTop: 30,
+    color : 'black',
+    fontWeight: 'bold',
+    // backgroundColor: '#58FD0B',
+    textShadowColor: 'rgba(255, 100, 0, 0.5)',  //'rgba(255, 165, 0, 1)', Couleur de l'ombre (noir avec opacité 0.75)
+    textShadowOffset: { width: 0.5, height: 0.5 }, // Décalage de l'ombre (effet relief)
+    textShadowRadius: 1, // Rayon de l'ombre (effet relief)
+    },
   darkRemoveButton: {
     color: '#FFFFFF'
   },
@@ -322,8 +375,7 @@ const styles = StyleSheet.create({
   },
   container : {
     flex :1 ,
-    backgroundColor: '#E8E8E8',
-    justifyContent: "space-evenly",
+    alignItems: 'center',
     },
   background:{
       width: "100%",
@@ -348,13 +400,29 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     darkInput:{
-        backgroundColor: '#505050',
-        borderColor: "#505050",
+      marginTop: 10,
+      fontSize : 15,
+      backgroundColor: '#2E2E2E',
+      width : "80%",
+      margin : "3%",
+      height: 40,
+      borderRadius: 13,
+      paddingLeft: 15,
+      marginBottom: 10, 
+      color: 'white',
 
     },
     lightInput:{
-        backgroundColor: '#E8E8E8',
-        borderColor: "#E8E8E8",
+      marginTop: 20,
+      fontSize : 15,
+      backgroundColor: '#E8E8E8',
+      width : "80%",
+      margin : "3%",
+      height: 40,
+      borderRadius: 13,
+      paddingLeft: 15,
+      marginBottom: 10, 
+      color: 'black', 
 
     },
     darkImg:{
@@ -391,54 +459,27 @@ const styles = StyleSheet.create({
         height:100,
         backgroundColor: "#fff",
         borderRadius: 50,
-
 },
+cardAbout: {
+  width: 350,
+  height: 150,
+  justifyContent: 'center',
+  alignItems: 'center',
+  margin: 10,
+  },
 crayon :{
     width:20,
     height:20,
 },
-inputs: {
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: "8%",
-    marginLeft: "5%",
-    width: "90%",
-    backgroundColor:"#fff",
-    borderRadius: 5,
-    
-},
-inputNom: {
-    fontSize : 20,
-    borderColor: "#E8E8E8",
-    borderWidth: 2,
-    width : "80%",
-    margin : "4%",
-    height: 40,
-    paddingLeft: 5,
-    borderRadius: 5,
-    
-},
+inputView: {
+  justifyContent: 'center',
+  alignItems: 'center',
+  width : "80%",
+  // height: 250,
+  margin: 10,
+  borderRadius: 20,
+  },
 
-inputPrenom :{
-    fontSize : 20,
-    borderColor: "#E8E8E8",
-    borderWidth: 2,
-    width : "80%",
-    margin : "4%",
-    height: 40,
-    paddingLeft: 5,
-    borderRadius: 5,
-},
-inputDate :{
-    fontSize : 20,
-    borderColor: "#E8E8E8",
-    borderWidth: 2,
-    width : "80%",
-    margin : "4%",
-    height: 40,
-    paddingLeft: 5,
-    borderRadius: 5,
-},
 description :{
     alignItems: 'center',
     marginTop: "8%",
@@ -448,18 +489,30 @@ description :{
     borderRadius: 5,
     
 },
-inputMoi :{
-    fontSize : 20,
-    alignItems:'flex-start',
-    borderColor: "#E8E8E8",
-    borderWidth: 2,
-    width : "80%",
-    margin : "4%",
-    height: 150,
-    paddingLeft: 5,
-    borderRadius: 5,
-    paddingBottom: 100,
+darkInputapropos :{
+  marginTop: 30,
+  fontSize : 15,
+  backgroundColor: '#2E2E2E',
+  width : "85%",
+  margin : "3%",
+  height: 150,
+  borderRadius: 13,
+  paddingLeft: 15,
+  marginBottom: 50, 
+  color: 'white',
 },
+lightInputapropos:{
+  marginTop: 20,
+  fontSize : 15,
+  backgroundColor: '#E8E8E8',
+width : "85%",
+  margin : "3%",
+  height: 200,
+  borderRadius: 13,
+  paddingLeft: 15,
+  marginBottom: 10, 
+  color: 'black', 
+  },
 favoris :{
     fontSize:20,
     marginTop: "8%",
@@ -468,8 +521,9 @@ favoris :{
 },
 
 scroll:{
-    marginLeft: 40,
-    marginRight : 40,
+  marginLeft: 40,
+  marginRight : 40,
+  marginTop: 10,
   },
 logos :{
     margin: 20,

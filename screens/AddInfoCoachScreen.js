@@ -283,9 +283,9 @@ if (!hasPermission || !isFocused) {
           </View>
 
       <View style={[styles.inputView, isDarkMode ? styles.darkIn : styles.lightIn]}>
-        <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachName(value)} value={coachName} placeholder='Nom' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"} ></TextInput>
-        <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachFirstname(value)} value={coachFirstname} placeholder='Prénom' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
-        <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachBirthDate(value)} value={coachBirthDate} placeholder='Date de naissance (jj/mm/aaaa)' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
+        <TextInput selectionColor={"#FF6100"} style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachName(value)} value={coachName} placeholder='Nom' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"} ></TextInput>
+        <TextInput selectionColor={"#FF6100"} style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachFirstname(value)} value={coachFirstname} placeholder='Prénom' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
+        <TextInput selectionColor={"#FF6100"} style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachBirthDate(value)} value={coachBirthDate} placeholder='Date de naissance (jj/mm/aaaa)' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
       </View>
       
       <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText]}>Sports enseignés : </Text>
@@ -343,20 +343,20 @@ if (!hasPermission || !isFocused) {
       </View>
      
       <View style={styles.cardAbout}>
-      <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText]}>A propos de toi : </Text>
+      <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText]}>A propos de moi </Text>
         <TextInput 
-        // multiline numberOfLines={4} 
-        placeholder='Ma description.'onChangeText={(value) => setCoachAbout(value)} value={coachAbout} 
+        multiline numberOfLines={4} 
+        placeholder='Ma description'onChangeText={(value) => setCoachAbout(value)} value={coachAbout} 
         selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} 
         style={[ isDarkMode ? styles.darkInputapropos : styles.lightInputapropos]} ></TextInput>
       </View>
 
-        <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText]}>Adresses :</Text>
+        <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText]}>Adresses</Text>
           <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachCity(value)} value={coachCity} placeholder='Adresse' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
           <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachPlace(value)} value={coachPlace} placeholder='Adresse coachingPlaces' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
        
 
-        <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText]}> Informations professionnelles : </Text>
+        <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText]}> Informations professionnelles </Text>
           <TextInput 
           onChangeText={(value) => setCoachProCard(value)} value={coachProCard} placeholder='Référence carte Pro.'
           selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} 
@@ -572,6 +572,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-end',
     paddingBottom: 25,
+    },
+  background:{
+      width: "100%",
+      height: "100%",
     },
   sportIcon: {
     width:60,

@@ -17,6 +17,7 @@ export default function AddInfoCoachScreen({ navigation }) {
   const isDarkMode = useSelector(state => state.darkMode.value)
   const user = useSelector((state) => state.users.value);
   const coach = useSelector((state) => state.users.value); 
+  const username = useSelector(state => state.users.value.name)
   
 
   // les useStates
@@ -193,10 +194,6 @@ export default function AddInfoCoachScreen({ navigation }) {
   }
 
 // navigation.navigate('Verification')
-  const handleBack = () => {
-
-    navigation.navigate('ChooseRole')
-  }
 
 const requestCameraPermission = async () => { 
   const { status } = await Camera.requestCameraPermissionsAsync();
@@ -275,38 +272,27 @@ if (!hasPermission || !isFocused) {
         end={isDarkMode ? DarkEnd : LightEnd}
         style={styles.background}
         >
-    <ScrollView contentContainerStyle={styles.scrollContainer}>
-    
-    <View style={styles.picture}>
-                <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={{uri : user.photo}} />
-                <TouchableOpacity onPress={() => requestCameraPermission() && pickImage()} >
-                            <Image  style={styles.crayon} source={require('../assets/crayon.png')} />
-                </TouchableOpacity>
-            </View>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>  
 
-            {/* <View style={styles.picture}>
-            <Text style={isDarkMode ? styles.darkText : styles.lightText}>carte pro </Text>
-                <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={{uri : user.signUp.proCard}} />
-                <TouchableOpacity onPress={() => requestCameraPermission() && pickProcard()} >
-                            <Image  style={styles.crayon} source={require('../assets/crayon.png')} />
-                </TouchableOpacity>
-            </View> */}
+      <Text style={[ isDarkMode ? styles.darksignin : styles.lightsignin]}>Bienvenue chez CoachLinker, merci de compléter ton profil pour passer à l'étape suivante </Text>
+          <View style={styles.picture}>
+                  <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={{uri : user.photo}} />
+                  <TouchableOpacity onPress={() => requestCameraPermission() && pickImage()} >
+                      <Image  style={styles.crayon} source={require('../assets/crayon.png')} />
+                  </TouchableOpacity>
+          </View>
 
       <View style={[styles.inputView, isDarkMode ? styles.darkIn : styles.lightIn]}>
         <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachName(value)} value={coachName} placeholder='Nom' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"} ></TextInput>
         <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachFirstname(value)} value={coachFirstname} placeholder='Prénom' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
         <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachBirthDate(value)} value={coachBirthDate} placeholder='Date de naissance' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
-        <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachProCard(value)} value={coachProCard} placeholder='card' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
-        <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachPrice(value)} value={coachPrice} placeholder='price' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
-       
       </View>
       
-      <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText]}>Sports enseignés</Text>
-
+      <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText]}>Sports enseignés : </Text>
       <ScrollView  horizontal={true} style={styles.scroll} showsHorizontalScrollIndicator={false}>
-        <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/football.png'), 'Football')}>
-          <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/football.png')} />
-          <Text style={styles.sports}>Football</Text>
+          <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/football.png'), 'Football')}>
+            <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/football.png')} />
+            <Text style={styles.sports}>Football</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/gant-de-boxe.png'), 'Boxe')}>
@@ -355,48 +341,56 @@ if (!hasPermission || !isFocused) {
           </View>
           ))}
       </View>
-
-      <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText]}>A propos de moi</Text>
-      <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachCity(value)} value={coachCity} placeholder='city' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
-        <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachPlace(value)} value={coachPlace} placeholder='coachingPlaces' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
-
+     
       <View style={styles.cardAbout}>
-        <TextInput style={[styles.aPropos, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachAbout(value)} value={coachAbout} selectionColor={"#FF6100"}></TextInput>
+      <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText]}>A propos de toi : </Text>
+        <TextInput 
+        multiline numberOfLines={4} 
+        placeholder='Ma description.'onChangeText={(value) => setCoachAbout(value)} value={coachAbout} 
+        selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} 
+        style={[ isDarkMode ? styles.darkInputapropos : styles.lightInputapropos]} ></TextInput>
       </View>
 
-      <View style={styles.btns}>
+        <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText]}>Adresses :</Text>
+          <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachCity(value)} value={coachCity} placeholder='Adresse' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
+          <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachPlace(value)} value={coachPlace} placeholder='Adresse coachingPlaces' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
+       
 
+        <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText]}> Informations professionnelles : </Text>
+          <TextInput 
+          onChangeText={(value) => setCoachProCard(value)} value={coachProCard} placeholder='Référence carte Pro.'
+          selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} 
+          style={[ isDarkMode ? styles.darkInput : styles.lightInput]}  >
+         </TextInput>
 
-        <TouchableOpacity style={styles.btnDoc}>
-          <Text style={styles.text}>Doc</Text>
+          <TextInput 
+          onChangeText={(value) => setCoachPrice(value)} value={coachPrice} placeholder='Taux horaire'
+          selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} 
+          style={[ isDarkMode ? styles.darkInput : styles.lightInput]}  >
+          </TextInput>
+
+          <TextInput 
+          placeholder='Numéro de Siret'  onChangeText={(value) => setSiretNumber(value)} value={siretNumber}  
+          selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} 
+          style={[ isDarkMode ? styles.darkInput : styles.lightInput]}>
+          </TextInput>
+    
+        <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText]}>Informations de paiements</Text>
+          <TextInput 
+          placeholder="IBAN" onChangeText={(value) => setIbanNumber(value)} value={ibanNumber}
+          selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} 
+          style={[ isDarkMode ? styles.darkInput : styles.lightInput]}>
+          </TextInput>
+
+          <TextInput 
+          placeholder='BIC' onChangeText={(value) => setBicNumber(value)} value={bicNumber}
+          selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} 
+          style={[ isDarkMode ? styles.darkInput : styles.lightInput]}></TextInput>
+    
+      
+        <TouchableOpacity style={[ isDarkMode ? styles.darkbutton : styles.lightbutton]} onPress={handleSubmit}activeOpacity={0.8}>
+          <Text style={[ isDarkMode ? styles.darkTextButton : styles.lightTextButton]}>Valider</Text>
         </TouchableOpacity>
-      </View>
-
-      <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText]}>Insérez vos données</Text>
-
-      <View style={styles.inputView}>
-        <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setSiretNumber(value)} value={siretNumber} placeholder='Numéro de Siret' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
-        {/* <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} placeholder='Insérez votre carte Pro' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput> */}
-        {/* <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} placeholder='Vos diplômes' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput> */}
-      </View>
-
-
-      <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText]}>Informations de paiements</Text>
-
-      <View style={styles.inputView}>
-        <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setIbanNumber(value)} value={ibanNumber} placeholder='IBAN' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
-        <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setBicNumber(value)} value={bicNumber}placeholder='BIC' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
-      </View>
-
-      <View style={styles.cardBtns}>
-        <TouchableOpacity style={styles.btnSend}>
-          <Text style={styles.text}>Envoyez un document</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.btnValidate} onPress={handleSubmit}>
-          <Text style={styles.text}>Valider</Text>
-        </TouchableOpacity>
-      </View>
       
     </ScrollView>
     </LinearGradient>
@@ -433,248 +427,325 @@ return (
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex:1,
-        alignItems: 'center',
-        paddingTop: 40,
-        backgroundColor: '#F2F2F2',
+  container: {
+    flex:1,
+    alignItems: 'center',
     },
-    aPropos: {
-      height: 200,
-      width: 300,
-      backgroundColor: '#F2F2F2',
-      margin: 10,
-      borderRadius: 13
+  aPropos: {
+    height: 100,
+    width: 350,
+    backgroundColor: '#F2F2F2',
+    borderRadius: 13
     },
-    btnBack: {
-      width: '80%',
-      flexDirection: 'row',
-      justifyContent:'space-between', /* a enlever */
-      margin: 10
+  btnPhoto: {
+    height: 60,
+    width: 100,
+    backgroundColor: "#BF5000",
+    margin: 10,
+    justifyContent:'center',
+    alignItems: 'center',
+    borderRadius: 25,
     },
-    btnDoc: {
-      height: 60,
-      width: 100,
-      backgroundColor: "#BF5000",
-      margin: 10,
-      justifyContent:'center',
-      alignItems: 'center',
-      borderRadius: 25
+  btnValidate: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '30%',
+    height: 40,
+    backgroundColor: '#BF5000',
+    borderRadius: 25,
+    marginTop: 30,
+    elevation: 15,
+    shadowColor: '#FF6100',
+    shadowOffset: { width: 50, height: 5 },
+    shadowOpacity: 0.0001,
     },
-    btnPhoto: {
-      height: 60,
-      width: 100,
-      backgroundColor: "#BF5000",
-      margin: 10,
-      justifyContent:'center',
-      alignItems: 'center',
-      borderRadius: 25,
+  buttonsContainer: {
+    flex: 0.1,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+    paddingTop: 20,
+    paddingLeft: 20,
+    paddingRight: 20,
     },
-    btns:{
-      flexDirection: 'row',
-      justifyContent: 'space-around',
-      alignItems: 'center'
+  cardAbout: {
+    width: 350,
+    height: 150,
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 10,
     },
-    btnSend: {
-      height: 50,
-      width: 300,
-      backgroundColor: '#BF5000',
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginBottom: 10,
-      borderRadius: 25
+  cardLocalisation: {
+    width: 350,
+    height: 250,
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 10
     },
-    btnValidate: {
-      height: 50,
-      width: 300,
-      backgroundColor: '#BF5000',
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderRadius: 25,
+  cardBtns: {
+    margin: 10
     },
-    buttonsContainer: {
-      flex: 0.1,
-      flexDirection: 'row',
-      alignItems: 'flex-end',
-      justifyContent: 'space-between',
-      paddingTop: 20,
-      paddingLeft: 20,
-      paddingRight: 20,
+  camera: {
+    flex: 1
     },
-    cardAbout: {
-      width: 350,
-      height: 250,
-      justifyContent: 'center',
-      alignItems: 'center',
-      margin: 10
+  picture : {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '80%',
+    marginVertical: 10
     },
-    cardBtns: {
-      margin: 10
-    },
-    camera: {
-      flex: 1
-    },
-    // a enlever image
-    picture : {
-      justifyContent: "center",
-      flexDirection: 'row',
-      marginTop: "2%",
-
-  },
   image :{
-      width:100,
-      height:100,
-      backgroundColor: "#fff",
-      borderRadius: 50,
-
-},
-crayon :{
-  width:20,
-  height:20,
-},
-    input: {
-      height: 50,
-      width: 300,
-      backgroundColor: '#F2F2F2',
-      margin: 10,
-      padding: 10,
-      borderRadius: 13
+    width:100,
+    height:100,
+    backgroundColor: "#fff",
+    borderRadius: 50,
     },
-    inputView: {
-      justifyContent: 'center',
-      alignItems: 'center',
-      width: 350,
-      height: 250,
-      margin: 10,
-      borderRadius: 20,
+  crayon :{
+    width:20,
+    height:20,
+    Color: '#BF5000',
     },
-    itemName: {
-      fontSize: 20,
-      fontWeight: 'bold',
-      marginRight: 100,
+  input: {
     },
-    logos :{
-      margin: 20,
-      height:70,
-      width :90,
-      alignItems: 'center',
-      justifyContent: 'center',
+  inputView: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width : "80%",
+    // height: 250,
+    margin: 10,
+    borderRadius: 20,
     },
-    removeButton: {
-      color: 'black',
-      fontWeight: 'bold',
-      marginLeft: 10,
-      fontSize: 16,
+  itemName: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginRight: 100,
     },
-    return : {
-      width:40,
-      height:40,
-      alignItems: "center",
-      marginLeft: "3%",
-      marginTop: "8%",
-      borderRadius: 100,
+  logos :{
+    margin: 20,
+    height:70,
+    width :90,
+    alignItems: 'center',
+    justifyContent: 'center',
     },
-    scroll:{
-      marginLeft: 40,
-      marginRight : 40,
-      marginTop: 30,
+  removeButton: {
+    color: 'black',
+    fontWeight: 'bold',
+    marginLeft: 10,
+    fontSize: 16,
     },
-    scrollContainer: {
-      alignItems: 'center'
+  return : {
+    width:40,
+    height:40,
+    alignItems: "center",
+    marginLeft: "3%",
+    marginTop: "8%",
+    borderRadius: 100,
     },
-    selectedImageContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginVertical: 5,
+  scroll:{
+    marginLeft: 40,
+    marginRight : 40,
+    marginTop: 10,
     },
-    selectedImagesContainer: {
-      marginVertical: 10,
-      alignItems: 'center',
-      width: 300,
+  scrollContainer: {
+    alignItems: 'center',
+    marginTop: 5,
     },
-    snapContainer: {
-      flex: 1,
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-        paddingBottom: 25,
+  selectedImageContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 5,
     },
-    snapContainer2: {
-      flex: 1,
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-        paddingBottom: 25,
+  selectedImagesContainer: {
+    marginVertical: 10,
+    alignItems: 'center',
+    width: 300,
+    marginBottom: 60,
     },
-    sportIcon: {
-        width:60,
-        height:60,
+  snapContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    paddingBottom: 25,
     },
-    sports: {
-      display: 'none'
+  snapContainer2: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    paddingBottom: 25,
     },
-    text: {
-      color: '#FFF'
+  sportIcon: {
+    width:60,
+    height:60,
     },
-    titre: {
-      fontSize: 20,
-      marginTop: 40
+  sports: {
+    display: 'none'
     },
-// style du Darkmode
-    darkBg :{
-      backgroundColor: 'black',
+  text: {
+    color: '#FFF'
     },
-    lightBg:{
-        backgroundColor: '#E8E8E8',
+  titre: {
+    fontSize: 15,
+    marginTop: 20
     },
-    darkReturn:{
-        backgroundColor:"#2E2E2E",
+    // style du Darkmode
+  darkBg :{
+    backgroundColor: 'black',
     },
-    lightReturn :{
-        backgroundColor: '#fff',
+  lightBg:{
+    backgroundColor: '#E8E8E8',
     },
-    darkPicture:{
-        backgroundColor:"#2E2E2E",
+  darkReturn:{
+    backgroundColor:"#2E2E2E",
     },
-    lightPicture:{
-        backgroundColor: '#fff',
+  lightReturn :{
+    backgroundColor: '#fff',
     },
-    darkInput:{
-        backgroundColor: '#2E2E2E',
-        color: "#FFFFFF",
+  darkPicture:{
+    backgroundColor:"#505050",
     },
-    lightInput:{
-        backgroundColor: '#E8E8E8',
-        borderColor: "#E8E8E8", 
+  lightPicture:{
+    backgroundColor: '#fff',
     },
-    darkImg:{
-        borderColor: "#FF6100",
+  darkInput:{
+    marginTop: 10,
+    fontSize : 15,
+    backgroundColor: '#2E2E2E',
+    width : "80%",
+    margin : "3%",
+    height: 40,
+    borderRadius: 13,
+    paddingLeft: 15,
+    marginBottom: 10, 
+    color: 'white',
     },
-    lightImg:{
-        backgroundColor: '#fff',
-        borderColor: "#E8E8E8",
+  lightInput:{
+    marginTop: 20,
+    fontSize : 15,
+    backgroundColor: '#E8E8E8',
+    width : "80%",
+    margin : "3%",
+    height: 40,
+    borderRadius: 13,
+    paddingLeft: 15,
+    marginBottom: 10, 
+    color: 'black', 
     },
-    darkText: {
-      color: '#FFFFFF'
+  darkInputapropos:{
+    marginTop: 30,
+    fontSize : 15,
+    backgroundColor: '#2E2E2E',
+    width : "85%",
+    margin : "3%",
+    height: 150,
+    borderRadius: 13,
+    paddingLeft: 15,
+    marginBottom: 50, 
+    color: 'white',
     },
-    lightText: {
-      color: 'black'
+  lightInputapropos:{
+    marginTop: 20,
+    fontSize : 15,
+    backgroundColor: '#E8E8E8',
+  width : "85%",
+    margin : "3%",
+    height: 200,
+    borderRadius: 13,
+    paddingLeft: 15,
+    marginBottom: 10, 
+    color: 'black', 
     },
-    darkSelectedImagesContainer: {
-      backgroundColor: '#2E2E2E'
+  darkImg:{
+    borderColor: "#FF6100",
     },
-    lightSelectedImagesContainer: {
-      backgroundColor: '#FFFFFF'
+  lightImg:{
+    backgroundColor: '#fff',
+    borderColor: "#E8E8E8",
     },
-    darkItemName: {
-      color: '#FFFFFF'
+  darkText: {
+    color: '#FFFFFF'
     },
-    lightItemName: {
-      color: 'black'
+  lightText: {
+    color: 'black'
     },
-    darkRemoveButton: {
-      color: '#FFFFFF'
+  darkSelectedImagesContainer: {
+    backgroundColor: '#2E2E2E'
+    },
+  lightSelectedImagesContainer: {
+    backgroundColor: '#FFFFFF'
+    },
+  darkItemName: {
+    color: '#FFFFFF'
+    },
+  lightItemName: {
+    color: 'black'
+    },
+  darkRemoveButton: {
+    color: '#FFFFFF'
     },
     lightRemoveButton: {
-      color: 'black'
-    }
+    color: 'black'
+    },
+  darksignin: {
+    width : "80%",
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize : 15,
+    marginTop: 30,
+    color : '#AAAAAA',
+    fontWeight: 'bold',
+    textShadowColor: 'rgba(255, 165, 0, 1)',  //'rgba(255, 165, 0, 1)', Couleur de l'ombre (noir avec opacité 0.75)
+    textShadowOffset: { width: 0.5, height: 0.5 }, // Décalage de l'ombre (effet relief)
+    textShadowRadius: 20, // Rayon de l'ombre (effet relief)
+    },
+  lightsignin: {
+    width : "80%",
+    justifyContent: 'center',
+    fontSize : 15,
+    marginTop: 30,
+    color : 'black',
+    fontWeight: 'bold',
+    // backgroundColor: '#58FD0B',
+    textShadowColor: 'rgba(255, 100, 0, 0.5)',  //'rgba(255, 165, 0, 1)', Couleur de l'ombre (noir avec opacité 0.75)
+    textShadowOffset: { width: 0.5, height: 0.5 }, // Décalage de l'ombre (effet relief)
+    textShadowRadius: 1, // Rayon de l'ombre (effet relief)
+    },
+  lightbutton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '30%',
+    height: 40,
+    backgroundColor: '#FF711A',
+    borderRadius: 25,
+    marginTop: 30,
+    elevation: 15,
+    shadowColor: '#FF6100',
+    shadowOffset: { width: 50, height: 5 },
+    shadowOpacity: 0.0001,
+    },
+  darkbutton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 150,
+    height: 50,
+    borderRadius: 25,
+    marginTop: 20,
+    marginBottom: 40,
+    elevation: 15,
+    backgroundColor: '#BF5000',
+    shadowColor: '#FF6100',
+    shadowOffset: { width: 50, height: 5,},
+    shadowOpacity: 0.0001,
+    },
+  lightTextButton: {
+    fontSize : 15,
+    color: 'white',
+    fontWeight: 'bold',
+    },
+  darkTextButton: {
+    fontSize : 15,
+    color: '#2E2E2E',
+    fontWeight: 'bold',
+    },
 })
 

@@ -19,7 +19,8 @@ export default function AddInfoStudentScreen({navigation}) {
   const isFocused = useIsFocused();
   const isDarkMode = useSelector(state => state.darkMode.value)
   const user = useSelector((state) => state.users.value);
-  const student = useSelector((state) => state.users.value) 
+  const student = useSelector((state) => state.student.value);
+ 
 
   const [studentName, setStudentName] = useState('')
   const [studentFirstname, setStudentFirstname] = useState('')
@@ -28,7 +29,8 @@ export default function AddInfoStudentScreen({navigation}) {
   const [studentSports, setStudentSports] = useState([])
   const [selectedImages, setSelectedImages] = useState([]);
   const [errorNew, setErrorNew] = useState('')
-  
+
+
   // const camera : 
   const [hasPermission, setHasPermission] = useState(false);
   const [type, setType] = useState(CameraType.back);
@@ -100,7 +102,7 @@ const handleValidate = async () => {
       dateOfBirth: studentDateOfBirth,
       myDescription: studentMyDescription,
       image: user.photo,
-      favoriteSport: studentSports
+      favoriteSport: studentSports,
     }));
 
     const signUpData = {
@@ -111,7 +113,7 @@ const handleValidate = async () => {
       dateOfBirth: studentDateOfBirth,
       myDescription: studentMyDescription,
       image: user.photo,
-      favoriteSport: studentSports
+      favoriteSport: studentSports,
     };
     
     const response = await fetch('https://coach-linker-backend.vercel.app/students/new', {
@@ -203,31 +205,14 @@ const handleValidate = async () => {
                 </TouchableOpacity>
             </View>
             
-            <View style={styles.inputView}>
-        <TextInput  
-        placeholder="Nom" onChangeText={(value) => setStudentName(value)} value={studentName} 
-        placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"}
-        selectionColor={'#FF6100'} 
-        style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} 
-        > </TextInput>
-
-        <TextInput 
-        placeholder="Prénom" onChangeText={(value) => setStudentFirstname(value)} value={studentFirstname}
-        style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} 
-        placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"}
-        selectionColor={'#FF6100'} 
-        > </TextInput>
-
-        <TextInput 
-        placeholder="Date de naissance (jj/mm/aaaa)"  onChangeText={(value) => setStudentDateOfBirth(value)} value={studentDateOfBirth}
-        style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} 
-        placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"}
-        selectionColor={'#FF6100'} 
-        ></TextInput>
+        <View style={styles.inputView}>
+        <TextInput selectionColor={"#FF6100"} style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setStudentName(value)} value={studentName} placeholder='Nom' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"}  ></TextInput>
+        <TextInput selectionColor={"#FF6100"} style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setStudentFirstname(value)} value={studentFirstname} placeholder='Prénom' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} ></TextInput>
+        <TextInput selectionColor={"#FF6100"} style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setStudentDateOfBirth(value)} value={studentDateOfBirth} placeholder='Date de naissance (jj/mm/aa)' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} ></TextInput>
       </View>
 
       <View style={styles.cardAbout}>
-        <TextInput 
+      <TextInput 
         multiline numberOfLines={4} 
         placeholder='A propos de moi'onChangeText={(value) => setStudentMyDescription(value)} value={studentMyDescription} 
         selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} 
@@ -236,7 +221,7 @@ const handleValidate = async () => {
       
            
             <View>
-                <Text style={styles.favoris}>Choisis 3 sports favoris maximum :</Text>
+                <Text style={styles.favoris}>Choisis jusqu'à 3 sports favoris :</Text>
             </View>
         
             
@@ -565,36 +550,36 @@ removeButton: {
   fontSize: 16,
   },
 darkbutton: {
-justifyContent: 'center',
-alignItems: 'center',
-width: 150,
-height: 50,
-borderRadius: 25,
-marginTop: 20,
-marginBottom: 40,
-elevation: 15,
-backgroundColor: '#BF5000',
-shadowColor: '#FF6100',
-shadowOffset: { width: 50, height: 5,},
-shadowOpacity: 0.0001,
+  justifyContent: 'center',
+  alignItems: 'center',
+  width: 150,
+  height: 50,
+  borderRadius: 25,
+  marginTop: 20,
+  marginBottom: 40,
+  elevation: 15,
+  backgroundColor: '#BF5000',
+  shadowColor: '#FF6100',
+  shadowOffset: { width: 50, height: 5,},
+  shadowOpacity: 0.0001,
   },
 lightTextButton: {
-fontSize : 15,
-color: 'white',
-fontWeight: 'bold',
+  fontSize : 15,
+  color: 'white',
+  fontWeight: 'bold',
   },
 darkTextButton: {
-fontSize : 15,
-color: '#2E2E2E',
-fontWeight: 'bold',
+  fontSize : 15,
+  color: '#2E2E2E',
+  fontWeight: 'bold',
   },
 darkImg:{
-    backgroundColor: '#2E2E2E',
+    // backgroundColor: '#2E2E2E',
     borderColor: "#F4A100",
   },
 lightImg:{
-    backgroundColor: '#fff',
-    borderColor: "#E8E8E8",
+    // backgroundColor: '#fff',
+    // borderColor: "#E8E8E8",
   },
 image :{
   width:100,

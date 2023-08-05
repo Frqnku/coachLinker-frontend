@@ -175,7 +175,6 @@ const handleValidate = async () => {
     const LightStart = {x : 0.6, y : 0.4};
     const LightEnd = {x : 0.3, y : 0.1};
     
-    // {/* <Text>{realStudent.name}</Text> */}
         if (!hasPermission || !isFocused) {
             
     return (
@@ -185,9 +184,10 @@ const handleValidate = async () => {
         start={isDarkMode ? DarkStart : LightStart}
         end={isDarkMode ? DarkEnd : LightEnd}
         style={styles.background} >
-            <Text style={isDarkMode ? styles.darkText : styles.lightText}>Good morning !</Text>
-            <Image style={[styles.return, isDarkMode ? styles.darkReturn : styles.lightReturn]} source={require('../assets/bouton-retour.png')} />
-        
+      <Image style={[styles.return, isDarkMode ? styles.darkReturn : styles.lightReturn]} source={require('../assets/bouton-retour.png')} />
+           
+       <ScrollView contentContainerStyle={styles.scrollContainer}>  
+       <Text style={isDarkMode ? styles.darkText : styles.lightText}>Good morning !</Text>
             <View style={styles.picture}>
                 <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={{uri : user.photo}} />
                 <TouchableOpacity onPress={() => requestCameraPermission() && pickImage()} >
@@ -274,7 +274,7 @@ const handleValidate = async () => {
         <TouchableOpacity onPress={() => handleValidate()} style={styles.button2} activeOpacity={0.8}>
                                 <Text style={styles.textButton}>Valider</Text>
         </TouchableOpacity>
-    
+        </ScrollView>
      </LinearGradient>   
     </KeyboardAvoidingView>
       )

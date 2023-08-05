@@ -261,7 +261,6 @@ const LightStart = {x : 0.6, y : 0.4};
 const LightEnd = {x : 0.3, y : 0.1};
 
 
-// {/* <Text>{realStudent.name}</Text> */}
 if (!hasPermission || !isFocused) {
 
   return (
@@ -272,8 +271,9 @@ if (!hasPermission || !isFocused) {
         end={isDarkMode ? DarkEnd : LightEnd}
         style={styles.background}
         >
+          <Image style={[styles.return, isDarkMode ? styles.darkReturn : styles.lightReturn]} source={require('../assets/bouton-retour.png')} />
       <ScrollView contentContainerStyle={styles.scrollContainer}>  
-
+      
       <Text style={[ isDarkMode ? styles.darksignin : styles.lightsignin]}>Bienvenue chez CoachLinker, merci de compléter ton profil pour passer à l'étape suivante </Text>
           <View style={styles.picture}>
                   <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={{uri : user.photo}} />
@@ -285,7 +285,7 @@ if (!hasPermission || !isFocused) {
       <View style={[styles.inputView, isDarkMode ? styles.darkIn : styles.lightIn]}>
         <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachName(value)} value={coachName} placeholder='Nom' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"} ></TextInput>
         <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachFirstname(value)} value={coachFirstname} placeholder='Prénom' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
-        <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachBirthDate(value)} value={coachBirthDate} placeholder='Date de naissance' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
+        <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachBirthDate(value)} value={coachBirthDate} placeholder='Date de naissance (jj/mm/aaaa)' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
       </View>
       
       <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText]}>Sports enseignés : </Text>
@@ -345,7 +345,7 @@ if (!hasPermission || !isFocused) {
       <View style={styles.cardAbout}>
       <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText]}>A propos de toi : </Text>
         <TextInput 
-        multiline numberOfLines={4} 
+        // multiline numberOfLines={4} 
         placeholder='Ma description.'onChangeText={(value) => setCoachAbout(value)} value={coachAbout} 
         selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} 
         style={[ isDarkMode ? styles.darkInputapropos : styles.lightInputapropos]} ></TextInput>
@@ -504,7 +504,6 @@ const styles = StyleSheet.create({
   crayon :{
     width:20,
     height:20,
-    Color: '#BF5000',
     },
   input: {
     },

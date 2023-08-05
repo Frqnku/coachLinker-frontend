@@ -19,7 +19,7 @@ export default function ConnexionScreen({ navigation }) {
 
     const isDarkMode = useSelector(state => state.darkMode.value)
 
-const DARK_COLORS = ["black", "#FF6100"];
+const DARK_COLORS = ["black","#FF6100"];
 const LIGHT_COLORS = ["#FFF8EB", "#FF6100"];
 const DarkStart = {x : 0.4, y : 0.4};
 const DarkEnd = {x : -0.3, y : -0.3};

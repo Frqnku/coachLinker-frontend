@@ -271,7 +271,10 @@ if (!hasPermission || !isFocused) {
         end={isDarkMode ? DarkEnd : LightEnd}
         style={styles.background}
         >
-          <Image style={[styles.return, isDarkMode ? styles.darkReturn : styles.lightReturn]} source={require('../assets/bouton-retour.png')} />
+          <TouchableOpacity  onPress={() => navigation.navigate('Localisation')} >
+          <Image style={[styles.return, isDarkMode ? styles.darkReturn : styles.lightReturn]} source={require('../assets/bouton-retour.png')}/>
+          </TouchableOpacity>
+
       <ScrollView contentContainerStyle={styles.scrollContainer}>  
       
       <Text style={[ isDarkMode ? styles.darksignin : styles.lightsignin]}>Bienvenue chez CoachLinker, merci de compléter ton profil pour passer à l'étape suivante </Text>
@@ -282,7 +285,7 @@ if (!hasPermission || !isFocused) {
                   </TouchableOpacity>
           </View>
 
-      <View style={[styles.inputView, isDarkMode ? styles.darkIn : styles.lightIn]}>
+      <View style={styles.inputView}>
         <TextInput selectionColor={"#FF6100"} style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachName(value)} value={coachName} placeholder='Nom' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"} ></TextInput>
         <TextInput selectionColor={"#FF6100"} style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachFirstname(value)} value={coachFirstname} placeholder='Prénom' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
         <TextInput selectionColor={"#FF6100"} style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachBirthDate(value)} value={coachBirthDate} placeholder='Date de naissance (jj/mm/aaaa)' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
@@ -431,6 +434,39 @@ const styles = StyleSheet.create({
     flex:1,
     alignItems: 'center',
     },
+  background:{
+    width: "100%",
+    height: "100%",
+    },
+  darkBg :{
+    backgroundColor: 'black',
+    },
+  lightBg:{
+    backgroundColor: '#E8E8E8',
+    },
+  return : {
+    width:40,
+    height:40,
+    alignItems: "center",
+    marginLeft: "3%",
+    marginTop: "8%",
+    borderRadius: 100,
+    },
+  darkReturn:{
+    backgroundColor:"#2E2E2E",
+    },
+  lightReturn :{
+    backgroundColor: '#fff',
+    },
+  scroll:{
+    marginLeft: 40,
+    marginRight : 40,
+    marginTop: 10,
+    },
+  scrollContainer: {
+    alignItems: 'center',
+    marginTop: 5,
+    },
   aPropos: {
     height: 100,
     width: 350,
@@ -475,16 +511,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     margin: 10,
     },
-  cardLocalisation: {
-    width: 350,
-    height: 250,
-    justifyContent: 'center',
-    alignItems: 'center',
-    margin: 10
-    },
-  cardBtns: {
-    margin: 10
-    },
   camera: {
     flex: 1
     },
@@ -500,6 +526,7 @@ const styles = StyleSheet.create({
     height:100,
     backgroundColor: "#fff",
     borderRadius: 50,
+    marginLeft : 20,
     },
   crayon :{
     width:20,
@@ -510,8 +537,7 @@ const styles = StyleSheet.create({
   inputView: {
     justifyContent: 'center',
     alignItems: 'center',
-    width : "80%",
-    // height: 250,
+    width : "100%",
     margin: 10,
     borderRadius: 20,
     },
@@ -532,23 +558,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginLeft: 10,
     fontSize: 16,
-    },
-  return : {
-    width:40,
-    height:40,
-    alignItems: "center",
-    marginLeft: "3%",
-    marginTop: "8%",
-    borderRadius: 100,
-    },
-  scroll:{
-    marginLeft: 40,
-    marginRight : 40,
-    marginTop: 10,
-    },
-  scrollContainer: {
-    alignItems: 'center',
-    marginTop: 5,
     },
   selectedImageContainer: {
     flexDirection: 'row',
@@ -573,10 +582,6 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     paddingBottom: 25,
     },
-  background:{
-      width: "100%",
-      height: "100%",
-    },
   sportIcon: {
     width:60,
     height:60,
@@ -597,12 +602,6 @@ const styles = StyleSheet.create({
     },
   lightBg:{
     backgroundColor: '#E8E8E8',
-    },
-  darkReturn:{
-    backgroundColor:"#2E2E2E",
-    },
-  lightReturn :{
-    backgroundColor: '#fff',
     },
   darkPicture:{
     backgroundColor:"#505050",
@@ -638,7 +637,7 @@ const styles = StyleSheet.create({
     marginTop: 30,
     fontSize : 15,
     backgroundColor: '#2E2E2E',
-    width : "85%",
+    width : "80%",
     margin : "3%",
     height: 150,
     borderRadius: 13,
@@ -650,7 +649,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     fontSize : 15,
     backgroundColor: '#E8E8E8',
-  width : "85%",
+    width : "80%",
     margin : "3%",
     height: 200,
     borderRadius: 13,
@@ -672,21 +671,24 @@ const styles = StyleSheet.create({
     color: 'black'
     },
   darkSelectedImagesContainer: {
-    backgroundColor: '#2E2E2E'
+    // backgroundColor: '#2E2E2E'
     },
   lightSelectedImagesContainer: {
-    backgroundColor: '#FFFFFF'
+    // backgroundColor: '#FFFFFF'
     },
   darkItemName: {
-    color: '#FFFFFF'
+    color: '#FF6100'
     },
   lightItemName: {
     color: 'black'
     },
   darkRemoveButton: {
-    color: '#FFFFFF'
+    color: '#FF6100',
+    textShadowColor: 'white',  //'rgba(255, 165, 0, 1)', Couleur de l'ombre (noir avec opacité 0.75)
+    textShadowOffset: { width: 0.5, height: 1 }, // Décalage de l'ombre (effet relief)
+    textShadowRadius: 20,
     },
-    lightRemoveButton: {
+  lightRemoveButton: {
     color: 'black'
     },
   darksignin: {

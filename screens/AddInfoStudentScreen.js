@@ -184,7 +184,10 @@ const handleValidate = async () => {
         start={isDarkMode ? DarkStart : LightStart}
         end={isDarkMode ? DarkEnd : LightEnd}
         style={styles.background} >
-      <Image style={[styles.return, isDarkMode ? styles.darkReturn : styles.lightReturn]} source={require('../assets/bouton-retour.png')} />
+       
+       <TouchableOpacity  onPress={() => navigation.navigate('Localisation')} >
+          <Image style={[styles.return, isDarkMode ? styles.darkReturn : styles.lightReturn]} source={require('../assets/bouton-retour.png')}/>
+          </TouchableOpacity>
            
        <ScrollView contentContainerStyle={styles.scrollContainer}>  
        
@@ -195,9 +198,8 @@ const handleValidate = async () => {
                             <Image  style={styles.crayon} source={require('../assets/crayon.png')} />
                 </TouchableOpacity>
             </View>
-        <ScrollView style={styles.scrollInput} showsVerticalScrollIndicator={false}>
             
-        <View style={[styles.inputView, isDarkMode ? styles.darkIn : styles.lightIn]}>
+            <View style={styles.inputView}>
         <TextInput  
         placeholder="Nom" onChangeText={(value) => setStudentName(value)} value={studentName} 
         placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"}
@@ -223,12 +225,11 @@ const handleValidate = async () => {
       <View style={styles.cardAbout}>
         <TextInput 
         multiline numberOfLines={4} 
-        placeholder='A propos de moi'onChangeText={(value) => setCoachAbout(value)} value={coachAbout} 
+        placeholder='A propos de moi'onChangeText={(value) => setStudentMyDescription(value)} value={studentMyDescription} 
         selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} 
         style={[ isDarkMode ? styles.darkInputapropos : styles.lightInputapropos]} ></TextInput>
       </View>
       
-        </ScrollView>
            
             <View>
                 <Text style={styles.favoris}>Choisis 3 sports favoris maximum :</Text>
@@ -287,9 +288,8 @@ const handleValidate = async () => {
       </View>
       ))}
   </View>
-        
-        <TouchableOpacity onPress={() => handleValidate()} style={styles.button2} activeOpacity={0.8}>
-                                <Text style={styles.textButton}>Valider</Text>
+        <TouchableOpacity onPress={() => handleValidate()} style={[ isDarkMode ? styles.darkbutton : styles.lightbutton]} activeOpacity={0.8}>
+          <Text style={[ isDarkMode ? styles.darkTextButton : styles.lightTextButton]}>Valider</Text>
         </TouchableOpacity>
         </ScrollView>
      </LinearGradient>   
@@ -325,55 +325,35 @@ const handleValidate = async () => {
         
         }
 const styles = StyleSheet.create({
-  input: {
+  // Caméra
+camera: {
+  flex: 1,
   },
-  aPropos: {
-    height: 100,
-    width: 350,
-    backgroundColor: '#F2F2F2',
-    borderRadius: 13
-    },
-  scrollContainer: {
-    alignItems: 'center',
-    marginTop: 5,
-    },
-  darksignin: {
-    width : "80%",
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontSize : 15,
-    marginTop: 30,
-    color : '#AAAAAA',
-    fontWeight: 'bold',
-    textShadowColor: 'rgba(255, 165, 0, 1)',  //'rgba(255, 165, 0, 1)', Couleur de l'ombre (noir avec opacité 0.75)
-    textShadowOffset: { width: 0.5, height: 0.5 }, // Décalage de l'ombre (effet relief)
-    textShadowRadius: 20, // Rayon de l'ombre (effet relief)
-    },
-  lightsignin: {
-    width : "80%",
-    justifyContent: 'center',
-    fontSize : 15,
-    marginTop: 30,
-    color : 'black',
-    fontWeight: 'bold',
-    // backgroundColor: '#58FD0B',
-    textShadowColor: 'rgba(255, 100, 0, 0.5)',  //'rgba(255, 165, 0, 1)', Couleur de l'ombre (noir avec opacité 0.75)
-    textShadowOffset: { width: 0.5, height: 0.5 }, // Décalage de l'ombre (effet relief)
-    textShadowRadius: 1, // Rayon de l'ombre (effet relief)
-    },
-  darkRemoveButton: {
-    color: '#FFFFFF'
+buttonsContainer: {
+  flex: 0.1,
+  flexDirection: 'row',
+  alignItems: 'flex-end',
+  justifyContent: 'space-between',
+  paddingTop: 20,
+  paddingLeft: 20,
+  paddingRight: 20,
   },
-  lightRemoveButton: {
-    color: 'black'
+button: {
+  width: 44,
+  height: 44,
+  alignItems: 'center',
+  justifyContent: 'center',
+  backgroundColor: 'rgba(0, 0, 0, 0.2)',
+  borderRadius: 50,
   },
-  darkItemName: {
-    color: '#FFFFFF'
+snapContainer: {
+flex: 1,
+alignItems: 'center',
+justifyContent: 'flex-end',
+paddingBottom: 25,
   },
-  lightItemName: {
-    color: 'black'
-  },
-  container : {
+
+ container : {
     flex :1 ,
     alignItems: 'center',
     },
@@ -381,84 +361,109 @@ const styles = StyleSheet.create({
       width: "100%",
       height: "100%",
     },
-    darkBg :{
-        backgroundColor: 'black',
-    },
-    lightBg:{
-        backgroundColor: '#E8E8E8',
-    },
-    darkReturn:{
-        backgroundColor:"#2E2E2E",
-    },
-    lightReturn :{
-        backgroundColor: '#fff',
-    },
-    darkPicture:{
-        backgroundColor:"#2E2E2E",
-    },
-    lightPicture:{
-        backgroundColor: '#fff',
-    },
-    darkInput:{
-      marginTop: 10,
-      fontSize : 15,
-      backgroundColor: '#2E2E2E',
-      width : "80%",
-      margin : "3%",
-      height: 40,
-      borderRadius: 13,
-      paddingLeft: 15,
-      marginBottom: 10, 
-      color: 'white',
-
-    },
-    lightInput:{
-      marginTop: 20,
-      fontSize : 15,
+  darkBg :{
+      backgroundColor: 'black',
+  },
+  lightBg:{
       backgroundColor: '#E8E8E8',
-      width : "80%",
-      margin : "3%",
-      height: 40,
-      borderRadius: 13,
-      paddingLeft: 15,
-      marginBottom: 10, 
-      color: 'black', 
+  },
+return : {
+  width:40,
+  height:40,
+  alignItems: "center",
+  marginLeft: "3%",
+  marginTop: "8%",
+  borderRadius: 100,
+  },
+darkReturn:{
+  backgroundColor:"#2E2E2E",
+  },
+lightReturn :{
+  backgroundColor: '#fff',
+  },
+scrollContainer: {
+  alignItems: 'center',
+  marginTop: 5,
+  },
+scroll:{
+  marginLeft: 40,
+  marginRight : 40,
+  marginTop: 10,
+  },
+darksignin: {
+  width : "80%",
+  alignItems: 'center',
+  justifyContent: 'center',
+  fontSize : 15,
+  marginTop: 30,
+  color : '#AAAAAA',
+  fontWeight: 'bold',
+  textShadowColor: 'rgba(255, 165, 0, 1)',  //'rgba(255, 165, 0, 1)', Couleur de l'ombre (noir avec opacité 0.75)
+  textShadowOffset: { width: 0.5, height: 0.5 }, // Décalage de l'ombre (effet relief)
+  textShadowRadius: 20, // Rayon de l'ombre (effet relief)
+  },
+lightsignin: {
+  width : "80%",
+  justifyContent: 'center',
+  fontSize : 15,
+  marginTop: 30,
+  color : 'black',
+  fontWeight: 'bold',
+  // backgroundColor: '#58FD0B',
+  textShadowColor: 'rgba(255, 100, 0, 0.5)',  //'rgba(255, 165, 0, 1)', Couleur de l'ombre (noir avec opacité 0.75)
+  textShadowOffset: { width: 0.5, height: 0.5 }, // Décalage de l'ombre (effet relief)
+  textShadowRadius: 1, // Rayon de l'ombre (effet relief)
+  },
+darkPicture:{
+  backgroundColor:"#505050",
+  },
+lightPicture:{
+  backgroundColor: '#fff',
+  },
+picture : {
+  flexDirection: 'row',
+  justifyContent: 'center',
+  alignItems: 'center',
+  width: '80%',
+  marginVertical: 10
+  },
+crayon :{
+  width:20,
+  height:20,
+  },
+inputView: {
+  justifyContent: 'center',
+  alignItems: 'center',
+  width : "80%",
+  margin: 10,
+  borderRadius: 20,
+  },
+input: {
+  },
+darkInput:{
+  marginTop: 10,
+  fontSize : 15,
+  backgroundColor: '#2E2E2E',
+  width : "80%",
+  margin : "3%",
+  height: 40,
+  borderRadius: 13,
+  paddingLeft: 15,
+  marginBottom: 10, 
+  color: 'white',
 
-    },
-    darkImg:{
-        backgroundColor: '#2E2E2E',
-        borderColor: "#F4A100",
-    },
-    lightImg:{
-        backgroundColor: '#fff',
-        borderColor: "#E8E8E8",
-    },
-    darkIn:{
-        backgroundColor: '#2E2E2E',
-    },
-    lightIn:{
-      backgroundColor: '#fff',
-    },
-    return :{
-        width:40,
-        height:40,
-        alignItems: "center",
-        marginLeft: "3%",
-        marginTop: "8%",
-        borderRadius: 50,
-    },
-
-    picture : {
-        justifyContent: "center",
-        flexDirection: 'row',
-        marginTop: "2%",
-
-    },
-    image :{
-        width:100,
-        height:100,
-        backgroundColor: "#fff",
-        borderRadius: 50,
+},
+lightInput:{
+  marginTop: 20,
+  fontSize : 15,
+  backgroundColor: '#E8E8E8',
+  width : "80%",
+  margin : "3%",
+  height: 40,
+  borderRadius: 13,
+  paddingLeft: 15,
+  marginBottom: 10, 
+  color: 'black', 
 },
 cardAbout: {
   width: 350,
@@ -467,28 +472,6 @@ cardAbout: {
   alignItems: 'center',
   margin: 10,
   },
-crayon :{
-    width:20,
-    height:20,
-},
-inputView: {
-  justifyContent: 'center',
-  alignItems: 'center',
-  width : "80%",
-  // height: 250,
-  margin: 10,
-  borderRadius: 20,
-  },
-
-description :{
-    alignItems: 'center',
-    marginTop: "8%",
-    marginLeft: "5%",
-    width: "90%",
-    backgroundColor:"#fff",
-    borderRadius: 5,
-    
-},
 darkInputapropos :{
   marginTop: 30,
   fontSize : 15,
@@ -514,94 +497,105 @@ width : "85%",
   color: 'black', 
   },
 favoris :{
-    fontSize:20,
-    marginTop: "8%",
-    paddingLeft: 20,
-    color: "#7B7B7B",
-},
-
-scroll:{
-  marginLeft: 40,
-  marginRight : 40,
-  marginTop: 10,
+  fontSize:20,
+  marginTop: "8%",
+  paddingLeft: 20,
+  color: "#7B7B7B",
   },
 logos :{
-    margin: 20,
-    height:70,
-    width :90,
-    alignItems: 'center',
-    justifyContent: 'center',
+  margin: 20,
+  height:70,
+  width :90,
+  alignItems: 'center',
+  justifyContent: 'center',
   },
-  sportIcon: {
-    width:60,
-    height:60,
-},
+sportIcon: {
+  width:60,
+  height:60,
+  },
 sports: {
-  display: 'none'
-},
+display: 'none'
+  },
 itemName: {
-    fontWeight: 'bold',
-    marginRight: 100,
+  fontWeight: 'bold',
+  marginRight: 100,
+  fontSize: 20,
   },
- removeButton: {
-    color: 'black',
-    fontWeight: 'bold',
-    marginLeft: 10,
-    fontSize: 16,
+darkItemName: {
+  color: '#FF6100'
   },
-  selectedImageContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 5,
+lightItemName: {
+  color: 'black'
   },
-  selectedImagesContainer: {
-    marginVertical: 10,
-    alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-    width: 350,
+darkRemoveButton: {
+  color: '#FF6100',
+  textShadowColor: 'white',  //'rgba(255, 165, 0, 1)', Couleur de l'ombre (noir avec opacité 0.75)
+  textShadowOffset: { width: 0.5, height: 1 }, // Décalage de l'ombre (effet relief)
+  textShadowRadius: 20,
   },
-camera: {
-    flex: 1,
-    },
-    buttonsContainer: {
-    flex: 0.1,
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    justifyContent: 'space-between',
-    paddingTop: 20,
-    paddingLeft: 20,
-    paddingRight: 20,
-    },
-    button: {
-    width: 44,
-    height: 44,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.2)',
-    borderRadius: 50,
-    },
-    snapContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    paddingBottom: 25,
-    },
-    input2: {
-    fontSize : 20,
-    backgroundColor: "#F2F2F2",
-    width : 200,
-    margin : "4%",
-    height: 40,
-    borderRadius: 5,
-    paddingLeft: 5
-    },
-    button2: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 150,
-    height: 50,
-    backgroundColor: '#F4A100',
-    borderRadius: 5,
-    marginTop: 15
-    }
+lightRemoveButton: {
+  color: 'black'
+  }, 
+selectedImageContainer: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  marginVertical: 5,
+  },
+selectedImagesContainer: {
+  marginVertical: 10,
+  alignItems: 'center',
+  width: 300,
+  marginBottom: 60,
+  },
+darkSelectedImagesContainer: {
+  // backgroundColor: '#2E2E2E'
+  },
+lightSelectedImagesContainer: {
+  // backgroundColor: '#FFFFFF'
+  },
+removeButton: {
+  color: 'black',
+  fontWeight: 'bold',
+  marginLeft: 10,
+  fontSize: 16,
+  },
+darkbutton: {
+justifyContent: 'center',
+alignItems: 'center',
+width: 150,
+height: 50,
+borderRadius: 25,
+marginTop: 20,
+marginBottom: 40,
+elevation: 15,
+backgroundColor: '#BF5000',
+shadowColor: '#FF6100',
+shadowOffset: { width: 50, height: 5,},
+shadowOpacity: 0.0001,
+  },
+lightTextButton: {
+fontSize : 15,
+color: 'white',
+fontWeight: 'bold',
+  },
+darkTextButton: {
+fontSize : 15,
+color: '#2E2E2E',
+fontWeight: 'bold',
+  },
+darkImg:{
+    backgroundColor: '#2E2E2E',
+    borderColor: "#F4A100",
+  },
+lightImg:{
+    backgroundColor: '#fff',
+    borderColor: "#E8E8E8",
+  },
+image :{
+  width:100,
+  height:100,
+  backgroundColor: "#fff",
+  borderRadius: 50,
+  marginLeft : 20,
+  },
 });

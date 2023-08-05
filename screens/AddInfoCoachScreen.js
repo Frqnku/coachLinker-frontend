@@ -38,7 +38,7 @@ export default function AddInfoCoachScreen({ navigation }) {
   const [coachCity, setCoachCity] = useState('')
   const [coachPlace, setCoachPlace] = useState('')
   const [coachProCard, setCoachProCard] = useState('')
-
+  const [errorNew, setErrorNew] = useState('')
   const [coachSports, setCoachSports] = useState([])
 
 
@@ -71,7 +71,7 @@ export default function AddInfoCoachScreen({ navigation }) {
               dispatch(signUp({image: data.url}))
               dispatch(addPhoto(data.url));
               setHasPermission(false);
-            } 
+            }
           })
       }
     };
@@ -182,8 +182,11 @@ export default function AddInfoCoachScreen({ navigation }) {
   
       const data = JSON.parse(responseBody);
       console.log('dataresult', data);
-  
+      if(!data.result) {
+        setErrorNew(data.error)
+      } 
       if (data.result) { 
+        setErrorNew('');
         console.log("salut");
         navigation.navigate("TabNavigator", { screen: "Menu" });
       }
@@ -389,8 +392,9 @@ if (!hasPermission || !isFocused) {
           placeholder='BIC' onChangeText={(value) => setBicNumber(value)} value={bicNumber}
           selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} 
           style={[ isDarkMode ? styles.darkInput : styles.lightInput]}></TextInput>
-    
-      
+
+          {errorNew && <Text style={{color: "#FF6100"}}>{errorNew}</Text>}
+
         <TouchableOpacity style={[ isDarkMode ? styles.darkbutton : styles.lightbutton]} onPress={handleSubmit}activeOpacity={0.8}>
           <Text style={[ isDarkMode ? styles.darkTextButton : styles.lightTextButton]}>Valider</Text>
         </TouchableOpacity>

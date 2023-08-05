@@ -27,6 +27,7 @@ export default function AddInfoStudentScreen({navigation}) {
   const [studentMyDescription, setStudentMyDescription] = useState('')
   const [studentSports, setStudentSports] = useState([])
   const [selectedImages, setSelectedImages] = useState([]);
+  const [errorNew, setErrorNew] = useState('')
   
   // const camera : 
   const [hasPermission, setHasPermission] = useState(false);
@@ -124,8 +125,11 @@ const handleValidate = async () => {
 
     const data = JSON.parse(responseBody);
     console.log('dataresult', data);
-
+    if(!data.result) {
+      setErrorNew(data.error)
+    } 
     if (data.result) { 
+      setErrorNew('');
       console.log("salut");
       navigation.navigate("TabNavigator", { screen: "Menu" });
     }
@@ -288,6 +292,7 @@ const handleValidate = async () => {
       </View>
       ))}
   </View>
+  {errorNew && <Text style={{color: "#FF6100"}}>{errorNew}</Text>}
         <TouchableOpacity onPress={() => handleValidate()} style={[ isDarkMode ? styles.darkbutton : styles.lightbutton]} activeOpacity={0.8}>
           <Text style={[ isDarkMode ? styles.darkTextButton : styles.lightTextButton]}>Valider</Text>
         </TouchableOpacity>

@@ -14,12 +14,12 @@ export default function ConnexionScreen({ navigation }) {
     const [signInPassword, setSignInPassword] = useState('')
     const [modalVisible, setModalVisible] = useState(false)
     const [pwdStrength, setPwdStrength] = useState('')
-    const [pwdColor, setPwdColor] = useState('')
+    const [pwdColor, setPwdColor] = useState('transparent')
     const [errorSignup, setErrorSignup] = useState('')
 
     const isDarkMode = useSelector(state => state.darkMode.value)
 
-const DARK_COLORS = ["black", "#FF6100"];
+const DARK_COLORS = ["black","#FF6100"];
 const LIGHT_COLORS = ["#FFF8EB", "#FF6100"];
 const DarkStart = {x : 0.4, y : 0.4};
 const DarkEnd = {x : -0.3, y : -0.3};
@@ -47,7 +47,7 @@ useEffect(() => {
   switch (pwdCheck) {
     case 0:
       setPwdStrength('');
-      setPwdColor('');
+      setPwdColor('transparent');
       break;
     case 1:
       setPwdStrength('Faible');
@@ -147,6 +147,7 @@ return (
         <TextInput selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#7B7B7B":"#7B7B7B"} style={[styles.inputP2, isDarkMode ? styles.darkInputMdp : styles.lightInputMdp]}
           placeholder="Confirmer le mot de passe" onChangeText={(value) => setSignUpPassword2(value)} value={signUpPassword2} secureTextEntry={true}/>
         {errorSignup && <Text style={{color: "#fff"}}>{errorSignup}</Text>}
+         
           <TouchableOpacity style={[ isDarkMode ? styles.darkbutton : styles.lightbutton]}
 
           onPress={() => handleSignup()} activeOpacity={0.8}>

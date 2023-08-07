@@ -200,7 +200,7 @@ const DarkEnd = {x : -0.3, y : -0.3};
 const LightStart = {x : 0.6, y : 0.4};
 const LightEnd = {x : 0.3, y : 0.1};
 
-useEffect(() => {
+/* useEffect(() => {
   fetch('https://coach-linker-backend.vercel.app/coachs/profil', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -212,7 +212,7 @@ useEffect(() => {
         
       dispatch(afficheprofil({token: token, data}))
     });
-}, []);
+}, []); */
 
 if (!hasPermission || !isFocused) {
 

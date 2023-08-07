@@ -54,30 +54,7 @@ export default function StudentProfileScreen({navigation}) {
           type: 'image/jpeg',
         });
        
-//         fetch('https://coach-linker-backend.vercel.app/upload', {
-//           method: 'POST',
-//           body: formData,
-//         }).then((response) => response.json())
-//           .then((data) => { 
-//             console.log(data)
-//             data.result && fetch('https://coach-linker-backend.vercel.app/students/profil', {
-//                 method: 'POST',
-//                 headers: { 'Content-Type': 'application/json' },
-//                 body: JSON.stringify({ 
-//                     image: data.url,
-//                     token: student.token,
-//              })
-             
-//           })
-//           .then((response) => response.json())
-//           .then((data) => {
-            
-//             dispatch(addPhoto(data.student.image));
-//             setHasPermission(false);
-//           })
-//        }) 
-//     }
-// }
+
 
 // fetch modifié comme sur AddinfStudentScreen
 fetch('http://coach-linker-backend.vercel.app/upload', {
@@ -94,10 +71,6 @@ fetch('http://coach-linker-backend.vercel.app/upload', {
 }
 };
   
-
-//    const realStudent = useSelector((state) => state.student.value)
-
-
 
 const handleValidate =() => {
     

@@ -41,7 +41,6 @@ export default function AddInfoCoachScreen({ navigation }) {
   const [errorNew, setErrorNew] = useState('')
   const [coachSports, setCoachSports] = useState([])
 
-
   // camera tel
   let cameraRef = useRef(null);
 

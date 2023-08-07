@@ -187,7 +187,7 @@ export default function AddInfoCoachScreen({ navigation }) {
       if (data.result) { 
         setErrorNew('');
         console.log("salut");
-        navigation.navigate("TabNavigator", { screen: "Menu" });
+        navigation.navigate("Verification");
       }
     } catch (error) {
       console.error('Error:', error);
@@ -227,33 +227,7 @@ fetch('https://coach-linker-backend.vercel.app/upload', {
   })
 }
 
-// const takeProCard = async () => {
-//   const procard = await cameraRef.takePictureAsync({ quality: 0.3 });
-//   const formData2 = new FormData();
 
-// formData2.append('photoFromFront',{
-// uri: procard.uri,
-// name: 'procard.jpg',
-// type: 'image/jpeg',
-// });
-
-// console.log('formData', formData2)
-
-// fetch('https://coach-linker-backend.vercel.app/upload', {
-// method: 'POST',
-// body: formData2,
-// }).then((response) => response.json())
-// .then((data) => { 
-//   console.log(data)
-//   if (data.result) {
-//     dispatch(signUp({proCard: data.url}))
-//     console.log(' pro card',user.signUp.proCard)
-//     dispatch(addProcard(data.url));
-
-//     setHasPermission(false);
-//   } 
-// })
-// }
 
 const DARK_COLORS = ["black", "#FF6100"];
 const LIGHT_COLORS = ["#FFF8EB", "#FF6100"];
@@ -357,8 +331,8 @@ if (!hasPermission || !isFocused) {
       </View>
 
         <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText]}>Adresses</Text>
-          <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachCity(value)} value={coachCity} placeholder='Adresse' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
-          <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachPlace(value)} value={coachPlace} placeholder='Adresse coachingPlaces' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
+          <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachCity(value)} value={coachCity} placeholder='Ville' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
+          <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachPlace(value)} value={coachPlace} placeholder='Lieu de coatching (ex. parc de Vincennes)' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
        
 
         <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText]}> Informations professionnelles </Text>

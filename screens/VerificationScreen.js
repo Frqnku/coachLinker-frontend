@@ -20,7 +20,8 @@ export default function VerificationScreen() {
           console.log('E-mail envoyé avec succès!', event);
         }
       },
-    );
+    )
+  }
   return (
     <View style={styles.container}>
       <ConfettiCannon count={200} origin={{x: -10, y: 0}} />
@@ -73,4 +74,3 @@ const styles = StyleSheet.create({
     }
 
 })
-}

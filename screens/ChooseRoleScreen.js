@@ -13,6 +13,11 @@ export default function ChooseRoleScreen({ navigation }) {
     navigation.navigate('AddInfoCoach')
   }
 
+  const chooseStudent = () => {
+    dispatch(signUp({isCoach: false}))
+    navigation.navigate('AddInfoStudent')
+  }
+
   return (
         <SafeAreaView style={[styles.container, isDarkMode ? styles.darkBg : styles.lightBg]}>
         <View style={[styles.cards, isDarkMode ? styles.darkCard : styles.lightCard]}>
@@ -21,7 +26,7 @@ export default function ChooseRoleScreen({ navigation }) {
             </View>
             
             <View style={styles.bottom}>
-              <Pressable style={styles.btnLocation} onPress={() => navigation.navigate('AddInfoStudent')}>
+              <Pressable style={styles.btnLocation} onPress={chooseStudent}>
                 <Text style={[styles.text, styles.darkText]}>Je recherche un coach</Text>
               </Pressable>
   

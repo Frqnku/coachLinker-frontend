@@ -150,62 +150,6 @@ return (
          
           <TouchableOpacity style={[ isDarkMode ? styles.darkbutton : styles.lightbutton]}
 
-<<<<<<< HEAD
-    return (
-        <KeyboardAvoidingView style={[styles.container, isDarkMode ? styles.darkBg : styles.lightBg]} behavior={Platform.OS === 'ios' ? 'padding' : 'position'}>
-          <LinearGradient
-        colors={isDarkMode ? DARK_COLORS : LIGHT_COLORS}
-        start={isDarkMode ? DarkStart : LightStart}
-        end={isDarkMode ? DarkEnd : LightEnd}
-        style={styles.background}
-        >
-            <View style={styles.boximage}>
-              <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={isDarkMode ? require('../assets/logodark.png') : require('../assets/logolight2.png')} />
-          
-              <TextInput selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[ isDarkMode ? styles.darkInput : styles.lightInput]}
-              placeholder="Email" onChangeText={(value) => setSignUpEmail(value)} value={signUpEmail}  />
-
-            <Text style={[styles.text, isDarkMode ? styles.darkText : styles.lightText]}>Le mot de passe doit contenir 8 caractères minimum, une majuscule, une minuscule, un chiffre et un caractère spécial</Text>
-            <TextInput selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]}
-              placeholder="Mot de passe" onChangeText={(value) => setSignUpPassword(value)} value={signUpPassword} secureTextEntry={true}/>
-            <Text style={[styles.text, {color: pwdColor, textAlign: 'left', fontWeight: 600}]}>{pwdStrength}</Text>
-             
-            <TextInput selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#7B7B7B":"#7B7B7B"} style={[styles.inputP2, isDarkMode ? styles.darkInputMdp : styles.lightInputMdp]}
-              placeholder="Confirmer le mot de passe" onChangeText={(value) => setSignUpPassword2(value)} value={signUpPassword2} secureTextEntry={true}/>
-
-              <TouchableOpacity style={[ isDarkMode ? styles.darkbutton : styles.lightbutton]}
-
-              onPress={() => handleSignup()} activeOpacity={0.8}>
-                  <Text style={[ isDarkMode ? styles.darkTextButton : styles.lightTextButton]}>S'inscrire</Text>
-              </TouchableOpacity>
-              <TouchableOpacity 
-              onPress={() => handleModal()} activeOpacity={0.8}>
-                  <Text style={[styles.signin, isDarkMode ? styles.darksignin : styles.lightsignin]}>T'es déjà inscrit ? Let's go !</Text>
-              </TouchableOpacity>
-              <Modal  animationType="slide" transparent={true} visible={modalVisible} onRequestClose={() => { Alert.alert('Modal has been closed.');
-                      setModalVisible(!modalVisible); }}>
-                <View style={styles.centeredView}>
-                  <LinearGradient
-                    colors={isDarkMode ? DARK_COLORS : LIGHT_COLORS}
-                    start={isDarkMode ? DarkStart : LightStart}
-                    end={isDarkMode ? DarkEnd : LightEnd}
-                    style={[ isDarkMode ? styles.darkmodalView : styles.lightmodalView]}>
-                          <TextInput selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} placeholder="Email" onChangeText={(value) => setSignInEmail(value)} value={signInEmail} style={[ isDarkMode ? styles.darkInput2 : styles.lightInput2]} />
-                          <TextInput selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} placeholder="Mot de passe" onChangeText={(value) => setSignInPassword(value)} value={signInPassword} style={[ isDarkMode ? styles.darkInput2 : styles.lightInput2]} secureTextEntry={true}/>
-                          <TouchableOpacity onPress={() => handleSignin()} style={[ isDarkMode ? styles.darkButton2 : styles.lightButton2]} activeOpacity={0.8}>
-                              <Text style={[ isDarkMode ? styles.darkTextButton : styles.lightTextButton]}>Se connecter</Text>
-                          </TouchableOpacity>
-                          <TouchableOpacity onPress={() => setModalVisible(false)} style={[ isDarkMode ? styles.darkButton2 : styles.lightButton2]} activeOpacity={0.8}>
-                              <Text style={[ isDarkMode ? styles.darkTextButton : styles.lightTextButton]}>Fermer</Text>
-                          </TouchableOpacity>
-                  </LinearGradient>
-                  </View>
-              </Modal>
-            </View>
-           </LinearGradient>
-        </KeyboardAvoidingView>
-    );
-=======
           onPress={() => handleSignup()} activeOpacity={0.8}>
               <Text style={[ isDarkMode ? styles.darkTextButton : styles.lightTextButton]}>S'inscrire</Text>
           </TouchableOpacity>
@@ -237,7 +181,6 @@ return (
        </LinearGradient>
     </KeyboardAvoidingView>
 );
->>>>>>> 7e209a3bef9a425a1697be7f8f589a0db07c23d1
 }
 
 const styles = StyleSheet.create({

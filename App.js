@@ -63,7 +63,6 @@ const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
   const isDarkMode = useSelector(state => state.darkMode.value)
-  const isCoach = user.signUp.isCoach;
   return (
     <Tab.Navigator 
     initialRouteName='Menu'
@@ -102,7 +101,7 @@ const TabNavigator = () => {
 };
 
 // à changer plus tard
-const isLogged = true
+const isLogged = false
 const isValidate = true
 const isCoach = false
 

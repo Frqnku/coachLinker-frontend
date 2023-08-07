@@ -227,33 +227,7 @@ fetch('https://coach-linker-backend.vercel.app/upload', {
   })
 }
 
-// const takeProCard = async () => {
-//   const procard = await cameraRef.takePictureAsync({ quality: 0.3 });
-//   const formData2 = new FormData();
 
-// formData2.append('photoFromFront',{
-// uri: procard.uri,
-// name: 'procard.jpg',
-// type: 'image/jpeg',
-// });
-
-// console.log('formData', formData2)
-
-// fetch('https://coach-linker-backend.vercel.app/upload', {
-// method: 'POST',
-// body: formData2,
-// }).then((response) => response.json())
-// .then((data) => { 
-//   console.log(data)
-//   if (data.result) {
-//     dispatch(signUp({proCard: data.url}))
-//     console.log(' pro card',user.signUp.proCard)
-//     dispatch(addProcard(data.url));
-
-//     setHasPermission(false);
-//   } 
-// })
-// }
 
 const DARK_COLORS = ["black", "#FF6100"];
 const LIGHT_COLORS = ["#FFF8EB", "#FF6100"];

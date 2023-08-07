@@ -20,7 +20,7 @@ export default function StudentMenuScreen() {
   const coachAround = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch('http://coach-linker-backend.vercel.app/coachs');
+      const response = await fetch('https://coach-linker-backend.vercel.app/coachs');
       const coachsData = await response.json();
 
       const fetchPromises = coachsData.data.map(async (coach) => {

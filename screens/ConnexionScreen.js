@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { LinearGradient } from 'expo-linear-gradient';
 import { signUp, addToken} from '../reducers/users'; 
+import ConfettiCannon from 'react-native-confetti-cannon';
 
 export default function ConnexionScreen({ navigation }) {
     const dispatch = useDispatch();
@@ -133,6 +134,7 @@ return (
     end={isDarkMode ? DarkEnd : LightEnd}
     style={styles.background}
     >
+        <ConfettiCannon count={200} origin={{x: -10, y: 0}} />
       <ScrollView>
         <View style={styles.boximage}>
           <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={isDarkMode ? require('../assets/logodark.png') : require('../assets/logolight2.png')} />

@@ -19,6 +19,7 @@ export default function ConnexionScreen({ navigation }) {
     const [errorSignup, setErrorSignup] = useState('')
 
     const isDarkMode = useSelector(state => state.darkMode.value)
+    const isCoach = useSelector(state => state.users.value.signUp.isCoach)
 
 const DARK_COLORS = ["black","#FF6100"];
 const LIGHT_COLORS = ["#FFF8EB", "#FF6100"];
@@ -119,9 +120,10 @@ const handleModal = () => {
                 if (data.result) {
                     dispatch(addToken(data.token));
                     dispatch(signUp({isCoach: data.isCoach}))
+                    console.log(isCoach)
                     setSignInEmail('');
                     setSignInPassword('');
-                  navigation.navigate('TabNavigator')
+                    navigation.navigate('TabNavigator')
                 }
             });
     }

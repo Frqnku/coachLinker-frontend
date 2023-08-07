@@ -3,17 +3,17 @@ import { StyleSheet, Text, View, Image} from 'react-native'
 import GoodMorning from '../components/GoodMorning';
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { addBooking } from '../reducers/bookingStudent';
+import { addBooking } from '../reducers/booking';
 
 export default function CoachingStudentScreen() {
   const dispatch = useDispatch();
   
   const token = useSelector(state => state.users.value.token)
-  const bookStudent = useSelector(state => state.bookingStudent.value.bookings)
-  const [booking, setBooking] = useState([])
+  const bookStudent = useSelector(state => state.booking.value.bookings)
+  //const [booking, setBooking] = useState([])
   
-  console.log('testtoken', token)
-  console.log('test book', bookStudent)
+  // console.log('testtoken', token)
+  // console.log('test book', bookStudent)
 
   useEffect(() => {
     fetch('https://coach-linker-backend.vercel.app/bookings/student', {
@@ -23,10 +23,10 @@ export default function CoachingStudentScreen() {
     })
       .then(response => response.json())
       .then(data => {
-          console.log('bookings', data.bookings)
+          // console.log('bookings', data.bookings)
           
         dispatch(addBooking({token: token, bookings: data.bookings}))
-        console.log('testbooking', dispatch(addBooking({token: token, bookings: data.bookings})))
+        // console.log('testbooking', dispatch(addBooking({token: token, bookings: data.bookings})))
       });
   }, []);
 

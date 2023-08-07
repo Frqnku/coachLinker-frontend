@@ -35,8 +35,6 @@ import coachs from './reducers/coachs';
 import student from './reducers/student';
 import bookingStudent from './reducers/bookingStudent';
 
-import { signUp } from './reducers/users'
-
 
 // Redux Persist Config
 const persistConfig = {
@@ -63,7 +61,8 @@ const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
   const isDarkMode = useSelector(state => state.darkMode.value)
-  const isCoach = user.signUp.isCoach;
+  const isCoach = useSelector(state => state.users.value.signUp.isCoach)
+  
   return (
     <Tab.Navigator 
     initialRouteName='Menu'
@@ -102,11 +101,8 @@ const TabNavigator = () => {
 };
 
 // à changer plus tard
-const isLogged = true
-const isValidate = true
-const isCoach = false
-
-
+const isLogged = false
+const isValidate = false
 
 export default function App() {
     // useEffect(() => {

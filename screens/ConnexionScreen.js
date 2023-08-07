@@ -118,7 +118,8 @@ const handleModal = () => {
         console.log(data)
                 if (data.result) {
                     dispatch(addToken(data.token));
-          setSignInEmail('');
+                    dispatch(signUp({isCoach: data.isCoach}))
+                    setSignInEmail('');
                     setSignInPassword('');
                   navigation.navigate('TabNavigator')
                 }

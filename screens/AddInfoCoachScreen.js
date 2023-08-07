@@ -187,7 +187,7 @@ export default function AddInfoCoachScreen({ navigation }) {
       if (data.result) { 
         setErrorNew('');
         console.log("salut");
-        navigation.navigate("Home");
+        navigation.navigate("Verification");
       }
     } catch (error) {
       console.error('Error:', error);

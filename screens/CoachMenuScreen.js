@@ -31,9 +31,9 @@ export default function CoachMenuScreen() {
         console.log('aurelie', data.studentID.firstname)
         return(
             <View key={i}>
-              <Image source={{uri:data.coachID.image}} style={styles.image}/>
-              <Text>{data.coachID.firstname}</Text>
-              <Text>{data.coachID.price}</Text>
+              <Image source={{uri:data.studentID.image}} style={styles.image}/>
+              <Text>{data.studentID.firstname}</Text>
+              <Text>{data.studentID.dateOfBirth}</Text>
               <Text>{data.coachingPlace}</Text>
               <Text>{data.date}</Text>
               <Text>{data.startTime}</Text>

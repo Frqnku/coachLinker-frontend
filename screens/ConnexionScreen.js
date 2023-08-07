@@ -87,18 +87,20 @@ const handleSignup = () => {
     console.log(data)
     if(!data.result) {
       setErrorSignup(data.error)
+    } else {
+      if (EMAIL_REGEX.test(signUpEmail) && (signUpPassword === signUpPassword2) && (pwdStrength === 'Fort')){
+
+        setErrorSignup('')
+        dispatch(signUp({ email: signUpEmail, password: signUpPassword }));
+        setSignUpEmail('');
+        setSignUpPassword('');
+        setSignUpPassword2('');
+        navigation.navigate('Localisation');
+  
+  }
     }
   })
-  if (EMAIL_REGEX.test(signUpEmail) && (signUpPassword === signUpPassword2) && (pwdStrength === 'Fort')){
-
-      setErrorSignup('')
-      dispatch(signUp({ email: signUpEmail, password: signUpPassword }));
-      setSignUpEmail('');
-      setSignUpPassword('');
-      setSignUpPassword2('');
-      navigation.navigate('Localisation');
-
-}}
+}
 
 const handleModal = () => {
     setModalVisible(true)

@@ -58,5 +58,9 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingTop: 15
+    },
+    image: {
+        height: 20,
+        width: 20
     }
 })

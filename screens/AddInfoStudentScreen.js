@@ -14,30 +14,29 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 export default function AddInfoStudentScreen({navigation}) {
 
+
   const dispatch = useDispatch()
   const isFocused = useIsFocused();
- 
   const isDarkMode = useSelector(state => state.darkMode.value)
-
   const user = useSelector((state) => state.users.value);
+  const student = useSelector((state) => state.users.value);
+ 
 
   const [studentName, setStudentName] = useState('')
   const [studentFirstname, setStudentFirstname] = useState('')
   const [studentDateOfBirth, setStudentDateOfBirth] = useState('')
   const [studentMyDescription, setStudentMyDescription] = useState('')
-//   const [studentImage, setStudentImage] = useState('')
   const [studentSports, setStudentSports] = useState([])
-
   const [selectedImages, setSelectedImages] = useState([]);
-  
+  const [errorNew, setErrorNew] = useState('')
+
+
   // const camera : 
   const [hasPermission, setHasPermission] = useState(false);
   const [type, setType] = useState(CameraType.back);
   const [flashMode, setFlashMode] = useState(FlashMode.off);
 
   let cameraRef = useRef(null);
-
-  const student = useSelector((state) => state.users.value) 
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -70,9 +69,33 @@ export default function AddInfoStudentScreen({navigation}) {
       }
     };
 
+
+    // sélection des sports
+    const handleImageSelect = (image, imageName) => {
+      if (selectedImages.length < 3 && !selectedImages.some((item) => item.image === image)) {
+        setSelectedImages((prevImages) => [...prevImages, { image, name: imageName }]);
+        setStudentSports((prevSports) => [...prevSports, imageName]); // Met à jour studentSports directement
+      }
+    };
+  
+    const handleImageRemove = (index) => {
+      setSelectedImages((prevImages) => {
+        const updatedImages = [...prevImages];
+        const removedImage = updatedImages.splice(index, 1)[0];
+        return updatedImages;
+      });
+      setStudentSports((prevSports) => {
+        const updatedSports = [...prevSports];
+        updatedSports.splice(index, 1); // Retire le sport de la liste
+        return updatedSports;
+      });
+    };  
+    
+
+
 const handleValidate = async () => {
   console.log(studentSports);
-  try {
+  try { 
     await dispatch(signUp({
       name: studentName, 
       firstname: studentFirstname,
@@ -93,7 +116,7 @@ const handleValidate = async () => {
       favoriteSport: studentSports,
     };
     
-    const response = await fetch('http://coach-linker-backend.vercel.app/students/new', {
+    const response = await fetch('https://coach-linker-backend.vercel.app/students/new', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(signUpData),
@@ -104,8 +127,11 @@ const handleValidate = async () => {
 
     const data = JSON.parse(responseBody);
     console.log('dataresult', data);
-
+    if(!data.result) {
+      setErrorNew(data.error)
+    } 
     if (data.result) { 
+      setErrorNew('');
       console.log("salut");
       navigation.navigate("TabNavigator", { screen: "Menu" });
     }
@@ -116,23 +142,6 @@ const handleValidate = async () => {
 }
 
     
-
-    // sélection des sports
-    const handleImageSelect = (image, imageName) => {
-        if (selectedImages.length < 3 && !selectedImages.some((item) => item.image === image)) {
-          setSelectedImages((prevImages) => [...prevImages, { image, name: imageName }])
-          setStudentSports(selectedImages.map(item => item.name))
-        }
-      }
-    
-      const handleImageRemove = (index) => {
-        setSelectedImages((prevImages) => {
-          const updatedImages = [...prevImages];
-          const removedImage = updatedImages.splice(index, 1)[0];
-          setStudentSports(prevSports => prevSports.filter(sport => sport !== removedImage.name)); // Retire le sport de la liste
-          return updatedImages;
-        });
-      };
     
     
         const requestCameraPermission = async () => { 
@@ -172,7 +181,6 @@ const handleValidate = async () => {
     const LightStart = {x : 0.6, y : 0.4};
     const LightEnd = {x : 0.3, y : 0.1};
     
-    // {/* <Text>{realStudent.name}</Text> */}
         if (!hasPermission || !isFocused) {
             
     return (
@@ -182,44 +190,46 @@ const handleValidate = async () => {
         start={isDarkMode ? DarkStart : LightStart}
         end={isDarkMode ? DarkEnd : LightEnd}
         style={styles.background} >
-            <GoodMorning/>
-            <Image style={[styles.return, isDarkMode ? styles.darkReturn : styles.lightReturn]} source={require('../assets/bouton-retour.png')} />
-        
+       
+       <TouchableOpacity  onPress={() => navigation.navigate('Localisation')} >
+          <Image style={[styles.return, isDarkMode ? styles.darkReturn : styles.lightReturn]} source={require('../assets/bouton-retour.png')}/>
+          </TouchableOpacity>
+           
+       <ScrollView contentContainerStyle={styles.scrollContainer}>  
+       
+       <Text style={[ isDarkMode ? styles.darksignin : styles.lightsignin]}>Bienvenue chez CoachLinker, merci de compléter ton profil pour passer à l'étape suivante </Text>
             <View style={styles.picture}>
                 <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={{uri : user.photo}} />
                 <TouchableOpacity onPress={() => requestCameraPermission() && pickImage()} >
                             <Image  style={styles.crayon} source={require('../assets/crayon.png')} />
                 </TouchableOpacity>
             </View>
-        <ScrollView style={styles.scrollInput} showsVerticalScrollIndicator={false}>
-             <View style={[styles.inputs, isDarkMode ? styles.darkIn : styles.lightIn]}>
-                <TextInput placeholder="Nom" onChangeText={(value) => setStudentName(value)} value={studentName}
-                placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.inputNom, isDarkMode ? styles.darkInput : styles.lightInput]} />
-                <TextInput placeholder="Prénom" onChangeText={(value) => setStudentFirstname(value)} value={studentFirstname}
-                placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.inputPrenom, isDarkMode ? styles.darkInput : styles.lightInput]} />
-        
-                <TextInput placeholder="Date de naissance"  onChangeText={(value) => setStudentDateOfBirth(value)} value={studentDateOfBirth}
-                placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.inputDate, isDarkMode ? styles.darkInput : styles.lightInput]} />
-            </View>
-        
-        
-            <View style={[styles.description, isDarkMode ? styles.darkIn : styles.lightIn]}>
-                <TextInput placeholder="A propos de moi ..." onChangeText={(value) => setStudentMyDescription(value)} value={studentMyDescription}
-                placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.inputMoi, isDarkMode ? styles.darkInput : styles.lightInput]} />
-        
-            </View>
-        </ScrollView>
+            
+        <View style={styles.inputView}>
+        <TextInput selectionColor={"#FF6100"} style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setStudentName(value)} value={studentName} placeholder='Nom' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"}  ></TextInput>
+        <TextInput selectionColor={"#FF6100"} style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setStudentFirstname(value)} value={studentFirstname} placeholder='Prénom' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} ></TextInput>
+        <TextInput selectionColor={"#FF6100"} style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setStudentDateOfBirth(value)} value={studentDateOfBirth} placeholder='Date de naissance (jj/mm/aa)' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} ></TextInput>
+      </View>
+
+      <View style={styles.cardAbout}>
+      <TextInput 
+        multiline numberOfLines={4} 
+        placeholder='A propos de moi'onChangeText={(value) => setStudentMyDescription(value)} value={studentMyDescription} 
+        selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} 
+        style={[ isDarkMode ? styles.darkInputapropos : styles.lightInputapropos]} ></TextInput>
+      </View>
+      
            
             <View>
-                <Text style={styles.favoris}>Choisis 3 sports favoris maximum :</Text>
+                <Text style={styles.favoris}>Choisis jusqu'à 3 sports favoris :</Text>
             </View>
         
             
-            <ScrollView  horizontal={true} style={styles.scroll} showsHorizontalScrollIndicator={false}>
-        <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/football.png'), 'Football')}>
-          <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/football.png')} />
-          <Text style={styles.sports}>Football</Text>
-          </TouchableOpacity>
+   <ScrollView  horizontal={true} style={styles.scroll} showsHorizontalScrollIndicator={false}>
+      <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/football.png'), 'Football')}>
+        <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/football.png')} />
+        <Text style={styles.sports}>Football</Text>
+      </TouchableOpacity>
 
       <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/gant-de-boxe.png'), 'Boxe')}>
         <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/gant-de-boxe.png')} />
@@ -257,21 +267,21 @@ const handleValidate = async () => {
       </TouchableOpacity>
   </ScrollView>
 
-  <View style={styles.selectedImagesContainer}>
+  <View style={[styles.selectedImagesContainer, isDarkMode ? styles.darkSelectedImagesContainer : styles.lightSelectedImagesContainer]}>
     {selectedImages.map((item, index) => (
       <View key={index} style={styles.selectedImageContainer}>
-        <Text style={styles.itemName}>{item.name}</Text>
+        <Text style={[styles.itemName, isDarkMode ? styles.darkItemName : styles.lightItemName]}>{item.name}</Text>
         <TouchableOpacity onPress={() => handleImageRemove(index)}>
-          <Text style={styles.removeButton}>X</Text>
+          <Text style={[styles.removeButton, isDarkMode ? styles.darkRemoveButton : styles.lightRemoveButton]}>X</Text>
         </TouchableOpacity>
       </View>
       ))}
   </View>
-        
-        <TouchableOpacity onPress={() => handleValidate()} style={styles.button2} activeOpacity={0.8}>
-                                <Text style={styles.textButton}>Valider</Text>
+  {errorNew && <Text style={{color: "#FF6100"}}>{errorNew}</Text>}
+        <TouchableOpacity onPress={() => handleValidate()} style={[ isDarkMode ? styles.darkbutton : styles.lightbutton]} activeOpacity={0.8}>
+          <Text style={[ isDarkMode ? styles.darkTextButton : styles.lightTextButton]}>Valider</Text>
         </TouchableOpacity>
-    
+        </ScrollView>
      </LinearGradient>   
     </KeyboardAvoidingView>
       )
@@ -305,235 +315,277 @@ const handleValidate = async () => {
         
         }
 const styles = StyleSheet.create({
-  container : {
+  // Caméra
+camera: {
+  flex: 1,
+  },
+buttonsContainer: {
+  flex: 0.1,
+  flexDirection: 'row',
+  alignItems: 'flex-end',
+  justifyContent: 'space-between',
+  paddingTop: 20,
+  paddingLeft: 20,
+  paddingRight: 20,
+  },
+button: {
+  width: 44,
+  height: 44,
+  alignItems: 'center',
+  justifyContent: 'center',
+  backgroundColor: 'rgba(0, 0, 0, 0.2)',
+  borderRadius: 50,
+  },
+snapContainer: {
+flex: 1,
+alignItems: 'center',
+justifyContent: 'flex-end',
+paddingBottom: 25,
+  },
+
+ container : {
     flex :1 ,
-    backgroundColor: '#E8E8E8',
-    justifyContent: "space-evenly",   
-    },  
+    alignItems: 'center',
+    },
   background:{
       width: "100%",
       height: "100%",
     },
-    darkBg :{
-        backgroundColor: 'black',
-    },
-    lightBg:{
-        backgroundColor: '#E8E8E8',
-    },
-    darkReturn:{
-        backgroundColor:"#2E2E2E",
-    },
-    lightReturn :{
-        backgroundColor: '#fff',
-    },
-    darkPicture:{
-        backgroundColor:"#2E2E2E",
-    },
-    lightPicture:{
-        backgroundColor: '#fff',
-    },
-    darkInput:{
-        backgroundColor: '#505050',
-        borderColor: "#505050",
-        
-    },
-    lightInput:{
-        backgroundColor: '#E8E8E8',
-        borderColor: "#E8E8E8",
-        
-    },
-    darkImg:{
-        backgroundColor: '#2E2E2E',
-        borderColor: "#F4A100",
-    },
-    lightImg:{
-        backgroundColor: '#fff',
-        borderColor: "#E8E8E8",
-    },
-    darkIn:{
-        backgroundColor: '#2E2E2E',
-    },
-    lightIn:{
-      backgroundColor: '#fff',
-    },
-    return :{
-        width:40,
-        height:40,
-        alignItems: "center",
-        marginLeft: "3%",
-        marginTop: "8%",
-        borderRadius: 50,
-    },
-    
-    picture : {
-        justifyContent: "center",
-        flexDirection: 'row',
-        marginTop: "2%",
-        
-    },
-    image :{
-        width:100,
-        height:100,
-        backgroundColor: "#fff",
-        borderRadius: 50,
+  darkBg :{
+      backgroundColor: 'black',
+  },
+  lightBg:{
+      backgroundColor: '#E8E8E8',
+  },
+return : {
+  width:40,
+  height:40,
+  alignItems: "center",
+  marginLeft: "3%",
+  marginTop: "8%",
+  borderRadius: 100,
+  },
+darkReturn:{
+  backgroundColor:"#2E2E2E",
+  },
+lightReturn :{
+  backgroundColor: '#fff',
+  },
+scrollContainer: {
+  alignItems: 'center',
+  marginTop: 5,
+  },
+scroll:{
+  marginLeft: 40,
+  marginRight : 40,
+  marginTop: 10,
+  },
+darksignin: {
+  width : "80%",
+  alignItems: 'center',
+  justifyContent: 'center',
+  fontSize : 15,
+  marginTop: 30,
+  color : '#AAAAAA',
+  fontWeight: 'bold',
+  textShadowColor: 'rgba(255, 165, 0, 1)',  //'rgba(255, 165, 0, 1)', Couleur de l'ombre (noir avec opacité 0.75)
+  textShadowOffset: { width: 0.5, height: 0.5 }, // Décalage de l'ombre (effet relief)
+  textShadowRadius: 20, // Rayon de l'ombre (effet relief)
+  },
+lightsignin: {
+  width : "80%",
+  justifyContent: 'center',
+  fontSize : 15,
+  marginTop: 30,
+  color : 'black',
+  fontWeight: 'bold',
+  // backgroundColor: '#58FD0B',
+  textShadowColor: 'rgba(255, 100, 0, 0.5)',  //'rgba(255, 165, 0, 1)', Couleur de l'ombre (noir avec opacité 0.75)
+  textShadowOffset: { width: 0.5, height: 0.5 }, // Décalage de l'ombre (effet relief)
+  textShadowRadius: 1, // Rayon de l'ombre (effet relief)
+  },
+darkPicture:{
+  backgroundColor:"#505050",
+  },
+lightPicture:{
+  backgroundColor: '#fff',
+  },
+picture : {
+  flexDirection: 'row',
+  justifyContent: 'center',
+  alignItems: 'center',
+  width: '80%',
+  marginVertical: 10
+  },
+crayon :{
+  width:20,
+  height:20,
+  },
+inputView: {
+  justifyContent: 'center',
+  alignItems: 'center',
+  width : "80%",
+  margin: 10,
+  borderRadius: 20,
+  },
+input: {
+  },
+darkInput:{
+  marginTop: 10,
+  fontSize : 15,
+  backgroundColor: '#2E2E2E',
+  width : "80%",
+  margin : "3%",
+  height: 40,
+  borderRadius: 13,
+  paddingLeft: 15,
+  marginBottom: 10, 
+  color: 'white',
 
-    },
-    crayon :{
-        width:20,
-        height:20,
-    },
-    inputs: {
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginTop: "8%",
-        marginLeft: "5%",
-        width: "90%",
-        backgroundColor:"#fff",
-        borderRadius: 5,
-        
-    },
-    inputNom: {
-        fontSize : 20,
-        borderColor: "#E8E8E8",
-        borderWidth: 2,
-        width : "80%",
-        margin : "4%",
-        height: 40,
-        paddingLeft: 5,
-        borderRadius: 5,
-        
-    },
-    
-    inputPrenom :{
-        fontSize : 20,
-        borderColor: "#E8E8E8",
-        borderWidth: 2,
-        width : "80%",
-        margin : "4%",
-        height: 40,
-        paddingLeft: 5,
-        borderRadius: 5,
-    },
-    inputDate :{
-        fontSize : 20,
-        borderColor: "#E8E8E8",
-        borderWidth: 2,
-        width : "80%",
-        margin : "4%",
-        height: 40,
-        paddingLeft: 5,
-        borderRadius: 5,
-    },
-    description :{
-        alignItems: 'center',
-        marginTop: "8%",
-        marginLeft: "5%",
-        width: "90%",
-        backgroundColor:"#fff",
-        borderRadius: 5,
-        
-    },
-    inputMoi :{
-        fontSize : 20,
-        alignItems:'flex-start',
-        borderColor: "#E8E8E8",
-        borderWidth: 2,
-        width : "80%",
-        margin : "4%",
-        height: 150,
-        paddingLeft: 5,
-        borderRadius: 5,
-        paddingBottom: 100,
-    },
-    favoris :{
-        fontSize:20,
-        marginTop: "8%",
-        paddingLeft: 20,
-        color: "#7B7B7B",
-    },
-    
-    scroll:{
-        marginLeft: 40,
-        marginRight : 40,
-      },
-    logos :{
-        margin: 20,
-        height:70,
-        width :90,
-        alignItems: 'center',
-        justifyContent: 'center',
-      },
-      sportIcon: {
-        width:60,
-        height:60,
-    },
-    sports: {
-      display: 'none'
-    },
-    itemName: {
-        fontWeight: 'bold',
-        marginRight: 100,
-      },
-     removeButton: {
-        color: 'black',
-        fontWeight: 'bold',
-        marginLeft: 10,
-        fontSize: 16,
-      },
-      selectedImageContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginVertical: 5,
-      },
-      selectedImagesContainer: {
-        marginVertical: 10,
-        alignItems: 'center',
-        backgroundColor: '#FFFFFF',
-        width: 350,
-      },
-    camera: {
-        flex: 1,
-        },
-        buttonsContainer: {
-        flex: 0.1,
-        flexDirection: 'row',
-        alignItems: 'flex-end',
-        justifyContent: 'space-between',
-        paddingTop: 20,
-        paddingLeft: 20,
-        paddingRight: 20,
-        },
-        button: {
-        width: 44,
-        height: 44,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.2)',
-        borderRadius: 50,
-        },
-        snapContainer: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-        paddingBottom: 25,
-        },
-        input2: {
-        fontSize : 20,
-        backgroundColor: "#F2F2F2",
-        width : 200,
-        margin : "4%",
-        height: 40,
-        borderRadius: 5,
-        paddingLeft: 5
-        },
-        button2: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: 150,
-        height: 50,
-        backgroundColor: '#F4A100',
-        borderRadius: 5,
-        marginTop: 15
-        }
+},
+lightInput:{
+  marginTop: 20,
+  fontSize : 15,
+  backgroundColor: '#E8E8E8',
+  width : "80%",
+  margin : "3%",
+  height: 40,
+  borderRadius: 13,
+  paddingLeft: 15,
+  marginBottom: 10, 
+  color: 'black', 
+},
+cardAbout: {
+  width: 350,
+  height: 150,
+  justifyContent: 'center',
+  alignItems: 'center',
+  margin: 10,
+  },
+darkInputapropos :{
+  marginTop: 30,
+  fontSize : 15,
+  backgroundColor: '#2E2E2E',
+  width : "85%",
+  margin : "3%",
+  height: 150,
+  borderRadius: 13,
+  paddingLeft: 15,
+  marginBottom: 50, 
+  color: 'white',
+},
+lightInputapropos:{
+  marginTop: 20,
+  fontSize : 15,
+  backgroundColor: '#E8E8E8',
+width : "85%",
+  margin : "3%",
+  height: 200,
+  borderRadius: 13,
+  paddingLeft: 15,
+  marginBottom: 10, 
+  color: 'black', 
+  },
+favoris :{
+  fontSize:20,
+  marginTop: "8%",
+  paddingLeft: 20,
+  color: "#7B7B7B",
+  },
+logos :{
+  margin: 20,
+  height:70,
+  width :90,
+  alignItems: 'center',
+  justifyContent: 'center',
+  },
+sportIcon: {
+  width:60,
+  height:60,
+  },
+sports: {
+display: 'none'
+  },
+itemName: {
+  fontWeight: 'bold',
+  marginRight: 100,
+  fontSize: 20,
+  },
+darkItemName: {
+  color: '#FF6100'
+  },
+lightItemName: {
+  color: 'black'
+  },
+darkRemoveButton: {
+  color: '#FF6100',
+  textShadowColor: 'white',  //'rgba(255, 165, 0, 1)', Couleur de l'ombre (noir avec opacité 0.75)
+  textShadowOffset: { width: 0.5, height: 1 }, // Décalage de l'ombre (effet relief)
+  textShadowRadius: 20,
+  },
+lightRemoveButton: {
+  color: 'black'
+  }, 
+selectedImageContainer: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  marginVertical: 5,
+  },
+selectedImagesContainer: {
+  marginVertical: 10,
+  alignItems: 'center',
+  width: 300,
+  marginBottom: 60,
+  },
+darkSelectedImagesContainer: {
+  // backgroundColor: '#2E2E2E'
+  },
+lightSelectedImagesContainer: {
+  // backgroundColor: '#FFFFFF'
+  },
+removeButton: {
+  color: 'black',
+  fontWeight: 'bold',
+  marginLeft: 10,
+  fontSize: 16,
+  },
+darkbutton: {
+  justifyContent: 'center',
+  alignItems: 'center',
+  width: 150,
+  height: 50,
+  borderRadius: 25,
+  marginTop: 20,
+  marginBottom: 40,
+  elevation: 15,
+  backgroundColor: '#BF5000',
+  shadowColor: '#FF6100',
+  shadowOffset: { width: 50, height: 5,},
+  shadowOpacity: 0.0001,
+  },
+lightTextButton: {
+  fontSize : 15,
+  color: 'white',
+  fontWeight: 'bold',
+  },
+darkTextButton: {
+  fontSize : 15,
+  color: '#2E2E2E',
+  fontWeight: 'bold',
+  },
+darkImg:{
+    // backgroundColor: '#2E2E2E',
+    borderColor: "#F4A100",
+  },
+lightImg:{
+    // backgroundColor: '#fff',
+    // borderColor: "#E8E8E8",
+  },
+image :{
+  width:100,
+  height:100,
+  backgroundColor: "#fff",
+  borderRadius: 50,
+  marginLeft : 20,
+  },
 });
-

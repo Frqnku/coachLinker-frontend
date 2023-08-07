@@ -27,7 +27,7 @@ export default function StudentMenuScreen() {
         if (coach.city.length < 3) {
           return null;
         }
-        const response = await fetch(`https://api-adresse.data.gouv.fr/search/?q=${coach.localisation}`);
+        const response = await fetch(`https://api-adresse.data.gouv.fr/search/?type=municipality&q=${coach.city}`);
         const data = await response.json();
         const firstCity = data.features[0];
         const newPlace = {
@@ -100,7 +100,7 @@ export default function StudentMenuScreen() {
           <Image style={styles.leftCoach} source={{uri : data.image}}/>
           <View style={styles.midCoach}>
               <Text style={[styles.coachName, isDarkMode ? styles.darkText : styles.lightText]}>{data.firstname}</Text>
-              <Text style={[isDarkMode ? styles.darkText : styles.lightText]}>{data.teachSport[0]}</Text>
+              <Text style={[isDarkMode ? styles.darkText : styles.lightText]}>{data.teachedSport[0]}</Text>
           </View>
           <View style={styles.rightCoach}>
               <Text style={[styles.star, isDarkMode ? styles.darkText : styles.lightText]}>{data.notes.length === 0 ? 'Pas de note' : `(${data.notes.length})`} {data.notes.length !== 0 && stars}</Text>
@@ -131,7 +131,7 @@ export default function StudentMenuScreen() {
     setCurrentCity(city);
     dispatch(updateCoachsAround([]));
 
-    fetch(`https://api-adresse.data.gouv.fr/search/?q=${city}`)
+    fetch(`https://api-adresse.data.gouv.fr/search/?type=municipality&q=${city}`)
       .then((response) => response.json())
       .then((data) => {
         const firstCity = data.features[0];

@@ -193,7 +193,7 @@ const handleValidate = async () => {
         end={isDarkMode ? DarkEnd : LightEnd}
         style={styles.background} >
        
-       <TouchableOpacity  onPress={() => navigation.navigate('Localisation')} >
+       <TouchableOpacity  onPress={() => navigation.navigate('ChooseRole')} >
           <Image style={[styles.return, isDarkMode ? styles.darkReturn : styles.lightReturn]} source={require('../assets/bouton-retour.png')}/>
           </TouchableOpacity>
            

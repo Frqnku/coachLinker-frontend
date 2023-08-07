@@ -16,7 +16,7 @@ export default function CoachProfileScreen() {
   const isDarkMode = useSelector(state => state.darkMode.value)
   const user = useSelector((state) => state.users.value);
   const coach = useSelector((state) => state.users.value); 
-  
+  const token = useSelector(state => state.users.value.token)
 
   // les useStates
   // const camera : 
@@ -73,38 +73,6 @@ export default function CoachProfileScreen() {
           })
       }
     };
-
-// const pickProcard = async () => {
-//   let result = await ImagePicker.launchImageLibraryAsync({
-//     mediaTypes: ImagePicker.MediaTypeOptions.All,
-//     allowsEditing: true,
-//     aspect: [4, 3],
-//     quality: 1,
-//   });
-
-//   if (!result.canceled) {
-//     const formData = new FormData();
-
-//     formData.append('photoFromFront',{
-//       uri: result.assets[0].uri,
-//       name: 'procard.jpg',
-//       type: 'image/jpeg',
-//     });
-   
-//     fetch('https://coach-linker-backend.vercel.app/upload', {
-//       method: 'POST',
-//       body: formData,
-//     }).then((response) => response.json())
-//       .then((data) => { 
-//         if (data.result) {
-//           dispatch(signUp({proCard: data.url}))
-//           dispatch(addProcard(data.url));
-//           setHasPermission(false);
-//         } 
-//       })
-//   }
-// };
-    
 
       
     // sélection des sports

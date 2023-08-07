@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import { updatePlanning } from '../reducers/coachs';
 
 const TimePicker = (props) => {
   const dispatch = useDispatch()
   const isDarkMode = useSelector(state => state.darkMode.value)
+
 
   const [isStartPickerVisible, setStartPickerVisibility] = useState(false);
   const [isEndPickerVisible, setEndPickerVisibility] = useState(false);
@@ -12,7 +14,15 @@ const TimePicker = (props) => {
   const [selectedEndHour, setSelectedEndHour] = useState('');
 
   const handleSubmit = () => {
-    dispatch(updatePlanning())
+    if (selectedStartHour && selectedEndHour) {
+      dispatch(updatePlanning({
+        day: props.name,
+        start: selectedStartHour,
+        end: selectedEndHour,
+      }));
+    } else {
+      console.log('Il faut choisir une heure de début et de fin')
+    }
   }
 
   const toggleStartPicker = () => {
@@ -35,13 +45,13 @@ const TimePicker = (props) => {
 
   const renderStartHours = () => {
     const hours = ['Je veux pas','08:00','09:00','10:00','11:00', '12:00','13:00','14:00','15:00','16:00','17:00', '18:00','19:00','20:00', '21:00','22:00', '23:00']; // Ajoutez plus d'options d'heures
-    return hours.map((shour) => (
+    return hours.map((hour) => (
       <TouchableOpacity
-        key={shour}
+        key={hour}
         style={styles.option}
-        onPress={() => handleStartHourSelect(shour)}
+        onPress={() => handleStartHourSelect(hour)}
       >
-        <Text>{shour}</Text>
+        <Text>{hour}</Text>
       </TouchableOpacity>
     ));
   };
@@ -62,13 +72,13 @@ const TimePicker = (props) => {
   return (
     <View style={styles.container}>
 
-      <Text>{props.name}</Text>
-
+      <Text>Début</Text>
       <TouchableOpacity style={[styles.input, isDarkMode ? styles.darkBlock: styles.lightBlock]} onPress={toggleStartPicker}>
         <Text style={styles.heure} >{selectedStartHour || 'Choisissez une heure'}</Text>
       </TouchableOpacity>
       {isStartPickerVisible && <View style={styles.pickerContainer}>{renderStartHours()}</View>}
       
+      <Text>Fin</Text>
       <TouchableOpacity style={styles.input} onPress={toggleEndPicker}>
         <Text>{selectedEndHour || 'Choisissez une heure'}</Text>
       </TouchableOpacity>

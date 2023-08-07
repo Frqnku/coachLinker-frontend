@@ -2,11 +2,47 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { LinearGradient } from 'expo-linear-gradient';
 import TimePicker from '../components/TimePicker';
+import { updatePlanning } from '../reducers/coachs';
 import GoodMorning from '../components/GoodMorning';
 import {StyleSheet, Pressable, KeyboardAvoidingView, Image, TextInput, View, Text, ScrollView, TouchableOpacity} from 'react-native';
 
 export default function AgendaScreen() {
     const isDarkMode = useSelector(state => state.darkMode.value)
+    const planning = useSelector(state => state.coachs.value.planning)
+  /*   const user = use */
+  console.log(planning)
+
+  const handleValidate = async () => {
+    const token = '123123'; // Replace this with your actual token retrieval logic
+
+    // Fetch complete planning data from Redux store
+    const completePlanningData = Object.keys(planning).map(day => {
+      return {
+        [planning[day].day]: planning[day].day,
+        start: planning[day].start,
+        end: planning[day].end
+      };
+    });
+
+    // Prepare request body
+    const requestBody = {
+      token: token,
+      planning: completePlanningData
+    };
+
+
+      // Send data to backend
+      const response = await fetch('http://192.168.147.198/plannings/new', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestBody)
+      });
+
+      // Handle response as needed
+      const data = await response.json();
+      console.log('Response from backend:', data);
+  }
+
 
     const DARK_COLORS = ["black", "#FF6100"];
     const LIGHT_COLORS = ["#FFF8EB", "#FF6100"];
@@ -27,81 +63,61 @@ export default function AgendaScreen() {
     <View style={[styles.block, isDarkMode ? styles.darkIn : styles.lightIn]}>
         <Text style={[styles.texte, isDarkMode ? styles.darkText : styles.lightText]}>Lundi</Text>
         <View style={[styles.blocks, isDarkMode ? styles.darkIn : styles.lightIn]}>
-                <Text style={[styles.Debut, isDarkMode ? styles.darkBlock: styles.lightBlock]}>Début :</Text>
-                <TimePicker/>
+{/*                 <Text style={[styles.Debut, isDarkMode ? styles.darkBlock: styles.lightBlock]}>Début :</Text> */}
+                <TimePicker name='Lundi'/>
             </View>
-            <View style={[styles.blocks, isDarkMode ? styles.darkIn : styles.lightIn]}>
+{/*             <View style={[styles.blocks, isDarkMode ? styles.darkIn : styles.lightIn]}>
                 <Text style={[styles.Fin, isDarkMode ? styles.darkBlock : styles.lightBlock]}>Fin :</Text>
                 <TimePicker/>
-            </View>
+            </View> */}
        
     </View>
     <View style={[styles.block, isDarkMode ? styles.darkIn : styles.lightIn]}>
         <Text style={[styles.texte, isDarkMode ? styles.darkText : styles.lightText]}>Mardi</Text>
         <View style={[styles.blocks, isDarkMode ? styles.darkIn : styles.lightIn]}>
-                <Text style={[styles.Debut, isDarkMode ? styles.darkBlock: styles.lightBlock]}>Début :</Text>
-                <TimePicker/>
+                <TimePicker name='Mardi'/>
             </View>
-            <View style={[styles.blocks, isDarkMode ? styles.darkIn : styles.lightIn]}>
-                <Text style={[styles.Fin, isDarkMode ? styles.darkBlock : styles.lightBlock]}>Fin :</Text>
-                <TimePicker/>
-            </View>
+      
         </View>
     <View style={[styles.block, isDarkMode ? styles.darkIn : styles.lightIn]}>
         <Text style={[styles.texte, isDarkMode ? styles.darkText : styles.lightText]}>Mercredi</Text>
         <View style={[styles.blocks, isDarkMode ? styles.darkIn : styles.lightIn]}>
-                <Text style={[styles.Debut, isDarkMode ? styles.darkBlock: styles.lightBlock]}>Début :</Text>
-                <TimePicker/>
+                <TimePicker name='Mercredi'/>
             </View>
-            <View style={[styles.blocks, isDarkMode ? styles.darkIn : styles.lightIn]}>
-                <Text style={[styles.Fin, isDarkMode ? styles.darkBlock : styles.lightBlock]}>Fin :</Text>
-                <TimePicker/>
-            </View>
+          
         </View>
     <View style={[styles.block, isDarkMode ? styles.darkIn : styles.lightIn]}>
         <Text style={[styles.texte, isDarkMode ? styles.darkText : styles.lightText]}>Jeudi</Text>
         <View style={[styles.blocks, isDarkMode ? styles.darkIn : styles.lightIn]}>
-                <Text style={[styles.Debut, isDarkMode ? styles.darkBlock: styles.lightBlock]}>Début :</Text>
-                <TimePicker/>
+                <TimePicker name='Jeudi'/>
             </View>
-            <View style={[styles.blocks, isDarkMode ? styles.darkIn : styles.lightIn]}>
-                <Text style={[styles.Fin, isDarkMode ? styles.darkBlock : styles.lightBlock]}>Fin :</Text>
-                <TimePicker/>
-            </View>
+          
         </View>
     <View style={[styles.block, isDarkMode ? styles.darkIn : styles.lightIn]}>
         <Text style={[styles.texte, isDarkMode ? styles.darkText : styles.lightText]}>Vendredi</Text>
         <View style={[styles.blocks, isDarkMode ? styles.darkIn : styles.lightIn]}>
-                <Text style={[styles.Debut, isDarkMode ? styles.darkBlock: styles.lightBlock]}>Début :</Text>
-                <TimePicker/>
+                <TimePicker name='Vendredi'/>
             </View>
-            <View style={[styles.blocks, isDarkMode ? styles.darkIn : styles.lightIn]}>
-                <Text style={[styles.Fin, isDarkMode ? styles.darkBlock : styles.lightBlock]}>Fin :</Text>
-                <TimePicker/>
-            </View>
+           
         </View>
     <View style={[styles.block, isDarkMode ? styles.darkIn : styles.lightIn]}>
         <Text style={[styles.texte, isDarkMode ? styles.darkText : styles.lightText]}>Samedi</Text>
         <View style={[styles.blocks, isDarkMode ? styles.darkIn : styles.lightIn]}>
-                <Text style={[styles.Debut, isDarkMode ? styles.darkBlock: styles.lightBlock]}>Début :</Text>
-                <TimePicker/>
+                <TimePicker name='Samedi'/>
             </View>
-            <View style={[styles.blocks, isDarkMode ? styles.darkIn : styles.lightIn]}>
-                <Text style={[styles.Fin, isDarkMode ? styles.darkBlock : styles.lightBlock]}>Fin :</Text>
-                <TimePicker/>
-            </View>
+           
         </View>
     <View style={[styles.block, isDarkMode ? styles.darkIn : styles.lightIn]}>
         <Text style={[styles.texte, isDarkMode ? styles.darkText : styles.lightText]}>Dimanche</Text>
         <View style={[styles.blocks, isDarkMode ? styles.darkIn : styles.lightIn]}>
-                <Text style={[styles.Debut, isDarkMode ? styles.darkBlock: styles.lightBlock]}>Début :</Text>
-                <TimePicker/>
+                <TimePicker name='Dimanche'/>
             </View>
-            <View style={[styles.blocks, isDarkMode ? styles.darkIn : styles.lightIn]}>
-                <Text style={[styles.Fin, isDarkMode ? styles.darkBlock : styles.lightBlock]}>Fin :</Text>
-                <TimePicker/>
-            </View>
+           
         </View>
+
+        <TouchableOpacity onPress={handleValidate}>
+            <Text>Valider</Text>
+        </TouchableOpacity>
     </ScrollView>
         </LinearGradient>
 </KeyboardAvoidingView>

@@ -31,6 +31,7 @@ const initialState = {
         notes: [], 
         city: '', 
         coachingPlaces: [],
+        isCoach: false,
         // infos student
         dateOfBirth: '',
         favoriteSport: []
@@ -59,6 +60,9 @@ export const userSlice = createSlice({
     addPhoto: (state, action) => {
       state.value.photo = action.payload;
     },
+    addProcard: (state, action) => {
+      state.value.signUp.proCard = action.payload;
+    },
     signUp: (state, action) => {
       state.value.signUp = {
         ...state.value.signUp, // Copie toutes les propriétés actuelles
@@ -76,5 +80,5 @@ export const userSlice = createSlice({
   },
 });
 
-export const { updateCurrentLocation, updateSearchLocation, updateStatus, addPhoto, signUp, addToken,logout } = userSlice.actions;
+export const { updateCurrentLocation, updateSearchLocation, updateStatus, addPhoto, signUp, addToken,logout,addProcard } = userSlice.actions;
 export default userSlice.reducer;

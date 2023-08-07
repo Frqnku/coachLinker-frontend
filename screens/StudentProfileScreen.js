@@ -19,7 +19,7 @@ export default function StudentProfileScreen({navigation}) {
     const dispatch = useDispatch()
     const isFocused = useIsFocused();
     const isDarkMode = useSelector(state => state.darkMode.value)
-    const user = useSelector((state) => state.users.value);
+    const user = useSelector((state) => state.users.value); 
 
         
     const [selectedImages, setSelectedImages] = useState([]);
@@ -33,7 +33,7 @@ export default function StudentProfileScreen({navigation}) {
   
     let cameraRef = useRef(null);
     
-    const student = useSelector((state) => state.user.value) 
+    const student = useSelector((state) => state.user.value)  // en comparatif user avec s dans add info
  
     
     const pickImage = async () => {
@@ -54,36 +54,23 @@ export default function StudentProfileScreen({navigation}) {
           type: 'image/jpeg',
         });
        
-        fetch('https://coach-linker-backend.vercel.app/upload', {
-          method: 'POST',
-          body: formData,
-        }).then((response) => response.json())
-          .then((data) => { 
-            console.log(data)
-            data.result && fetch('https://coach-linker-backend.vercel.app/students/profil', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    image: data.url,
-                    token: student.token,
-             })
-             
-          })
-          .then((response) => response.json())
-          .then((data) => {
-            
-            dispatch(addPhoto(data.student.image));
-            setHasPermission(false);
-          })
-       }) 
-    }
+
+
+// fetch modifié comme sur AddinfStudentScreen
+fetch('http://coach-linker-backend.vercel.app/upload', {
+  method: 'POST',
+  body: formData,
+}).then((response) => response.json())
+  .then((data) => { 
+    if (data.result) {
+      dispatch(signUp({image: data.url}))
+      dispatch(addPhoto(data.url));
+      setHasPermission(false);
+    } 
+  })
 }
-
+};
   
-
-//    const realStudent = useSelector((state) => state.student.value)
-
-
 
 const handleValidate =() => {
     
@@ -112,7 +99,6 @@ const handleValidate =() => {
                     myDescription: studentMyDescription,
                     image: studentImage }));
                     
-
                 navigation.navigate('Menu')
 
             }
@@ -120,20 +106,23 @@ const handleValidate =() => {
 }
 
 
-
+// 04/08 sélection des sports modifié à partir de AddinsoStudentScreen
 const handleImageSelect = (image, imageName) => {
-    if (selectedImages.length < 3 && !selectedImages.some((item) => item.image === image)) {
-      setSelectedImages((prevImages) => [...prevImages, { image, name: imageName }])
-    }
+  if (selectedImages.length < 3 && !selectedImages.some((item) => item.image === image)) {
+    setSelectedImages((prevImages) => [...prevImages, { image, name: imageName }])
+    setStudentSports(selectedImages.map(item => item.name))
   }
+}
 
-  const handleImageRemove = (index) => {
-    setSelectedImages((prevImages) => {
-      const updatedImages = [...prevImages];
-      updatedImages.splice(index, 1);
-      return updatedImages;
-    });
-  };
+// 04/08 sélection images modifié à partir de AddinsoStudentScreen
+const handleImageRemove = (index) => {
+  setSelectedImages((prevImages) => {
+    const updatedImages = [...prevImages];
+    const removedImage = updatedImages.splice(index, 1)[0];
+    setStudentSports(prevSports => prevSports.filter(sport => sport !== removedImage.name)); // Retire le sport de la liste
+    return updatedImages;
+  });
+};
 
 
     const requestCameraPermission = async () => { 
@@ -150,30 +139,43 @@ const handleImageSelect = (image, imageName) => {
       type: 'image/jpeg',
     });
    
-    fetch('https://coach-linker-backend.vercel.app/upload', {
-      method: 'POST',
-      body: formData,
-    }).then((response) => response.json())
-      .then((data) => { 
-        console.log(data)
-        data.result && fetch('https://coach-linker-backend.vercel.app/students/profil', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                image: data.url,
-                token: student.token,
-         })
+//     fetch('https://coach-linker-backend.vercel.app/upload', {
+//       method: 'POST',
+//       body: formData,
+//     }).then((response) => response.json())
+//       .then((data) => { 
+//         console.log(data)
+//         data.result && fetch('https://coach-linker-backend.vercel.app/students/profil', {
+//             method: 'POST',
+//             headers: { 'Content-Type': 'application/json' },
+//             body: JSON.stringify({ 
+//                 image: data.url,
+//                 token: student.token,
+//          })
          
-      })
-      .then((response) => response.json())
-      .then((data) => {
+//       })
+//       .then((response) => response.json())
+//       .then((data) => {
         
-        dispatch(addPhoto(data.student.image));
-        setHasPermission(false);
-      })
-   })  
-}
+//         dispatch(addPhoto(data.student.image));
+//         setHasPermission(false);
+//       })
+//    })  
+// }
 
+
+        fetch('http://coach-linker-backend.vercel.app/upload', { // fetch modifié comme sur AddinfStudentScreen
+          method: 'POST',
+          body: formData,
+        }).then((response) => response.json())
+          .then((data) => { 
+            if (data.result) {
+              dispatch(signUp({image: data.url}))
+              dispatch(addPhoto(data.url));
+              setHasPermission(false);
+            } 
+          })
+   }
 
         const DARK_COLORS = ["black", "#FF6100"];
         const LIGHT_COLORS = ["#FFF8EB", "#FF6100"];

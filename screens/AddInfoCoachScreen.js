@@ -10,6 +10,9 @@ import { signUp, addProcard, addPhoto } from '../reducers/users'
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
 
+import { backend_address } from '../backendAddress';
+
+
 export default function AddInfoCoachScreen({ navigation }) {
 
   const dispatch = useDispatch()
@@ -61,7 +64,7 @@ export default function AddInfoCoachScreen({ navigation }) {
           type: 'image/jpeg',
         });
        
-        fetch('https://coach-linker-backend.vercel.app/upload', {
+        fetch(`${backend_address}/upload`, {
           method: 'POST',
           body: formData,
         }).then((response) => response.json())
@@ -170,7 +173,7 @@ export default function AddInfoCoachScreen({ navigation }) {
         coachingPlaces : coachPlace,
       };
       
-      const response = await fetch('https://coach-linker-backend.vercel.app/coachs/new', {
+      const response = await fetch(`${backend_address}/coachs/new`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(signUpData),
@@ -213,7 +216,7 @@ formData.append('photoFromFront',{
 
 console.log('formData', formData)
 
-fetch('https://coach-linker-backend.vercel.app/upload', {
+fetch(`${backend_address}/upload`, {
   method: 'POST',
   body: formData,
 }).then((response) => response.json())

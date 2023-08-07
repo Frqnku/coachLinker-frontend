@@ -5,6 +5,9 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { addBooking } from '../reducers/booking';
 
+import { backend_address } from '../backendAddress';
+
+
 export default function CoachingStudentScreen() {
   const dispatch = useDispatch();
   
@@ -16,7 +19,7 @@ export default function CoachingStudentScreen() {
   // console.log('test book', bookStudent)
 
   useEffect(() => {
-    fetch('https://coach-linker-backend.vercel.app/bookings/student', {
+    fetch(`${backend_address}/bookings/students`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({token: token})

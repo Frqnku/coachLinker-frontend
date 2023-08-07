@@ -4,14 +4,13 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
 import { useSelector, useDispatch } from 'react-redux';
 import { switchMode } from '../reducers/darkMode';
-import { updateCurrentLocation, updateSearchLocation, updateStatus,logout } from '../reducers/users';
+import { updateCurrentLocation, updateSearchLocation,logout } from '../reducers/users';
 
 import * as Location from 'expo-location';
 
 export default function OptionScreen({ navigation }) {
     const dispatch = useDispatch()
     const isDarkMode = useSelector(state => state.darkMode.value)
-    const isGranted = useSelector(state => state.users.value.statusGranted)
 
     const disconnect = () => {
         dispatch(logout())
@@ -19,20 +18,13 @@ export default function OptionScreen({ navigation }) {
     }
     const activateLocation = async () => {
 
-        if(isGranted) {
-            return
-        }
-
         const { status } = await Location.requestForegroundPermissionsAsync();
 
         if(status === 'granted') {
             Location.watchPositionAsync({ distanceInterval: 10 }, (location) => {
                     dispatch(updateCurrentLocation({latitude: location.coords.latitude, longitude: location.coords.longitude}));
                     dispatch(updateSearchLocation({name: 'Autour de moi', latitude: location.coords.latitude, longitude: location.coords.longitude}));
-                    dispatch(updateStatus(true))
             })
-        } else {
-            dispatch(updateStatus(false))
         }
     }
 
@@ -58,8 +50,8 @@ export default function OptionScreen({ navigation }) {
                 <Pressable
                 style={[styles.clickableOption, isDarkMode ? styles.darkCard : styles.lightCard]}
                 onPress={activateLocation}>
-                    <FontAwesome name='location-arrow' size={24} color={isGranted ? 'grey' : isDarkMode ? '#fff' : '#000'} />
-                    <Text style={[styles.text, isGranted ? styles.greyText : isDarkMode ? styles.darkText : styles.lightText]}>Activer la localisation</Text>
+                    <FontAwesome name='location-arrow' size={24} color={/* isGranted ? 'grey' : */ isDarkMode ? '#fff' : '#000'} />
+                    <Text style={[styles.text, /* isGranted ? styles.greyText : */ isDarkMode ? styles.darkText : styles.lightText]}>Activer la localisation</Text>
                 </Pressable>
                 <Pressable
                 style={[styles.clickableOption, isDarkMode ? styles.darkCard : styles.lightCard]}

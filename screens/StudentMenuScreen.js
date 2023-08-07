@@ -6,6 +6,9 @@ import GoodMorning from '../components/GoodMorning';
 import { updateSearchLocation } from '../reducers/users';
 import { updateCoachsAround } from '../reducers/coachs';
 
+import { backend_address } from '../backendAddress';
+
+
 export default function StudentMenuScreen() {
   const dispatch = useDispatch();
   const isDarkMode = useSelector(state => state.darkMode.value);
@@ -20,7 +23,7 @@ export default function StudentMenuScreen() {
   const coachAround = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch('https://coach-linker-backend.vercel.app/coachs');
+      const response = await fetch(`${backend_address}/coachs`);
       const coachsData = await response.json();
 
       const fetchPromises = coachsData.data.map(async (coach) => {

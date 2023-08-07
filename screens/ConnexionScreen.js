@@ -5,6 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { signUp, addToken} from '../reducers/users'; 
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+import { backend_address } from '../backendAddress';
 
 
 
@@ -84,7 +85,7 @@ useEffect(() => {
 // Lors de l'inscription, email et password sont envoyés dans le store.
 const handleSignup = () => {
   console.log('click')
-  fetch('https://coach-linker-backend.vercel.app/isExisting', {
+  fetch(`${backend_address}/isExisting`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email: signUpEmail, password: signUpPassword }),
@@ -115,7 +116,7 @@ const handleModal = () => {
 
 // log à partir du mot de passe et email (route users).
   const handleSignin = () => {
-        fetch('https://coach-linker-backend.vercel.app/connect', {
+        fetch(`${backend_address}/connect`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email: signInEmail, password: signInPassword }),

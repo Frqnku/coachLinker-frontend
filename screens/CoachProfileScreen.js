@@ -1,24 +1,26 @@
 import React from 'react'
 import { StyleSheet, KeyboardAvoidingView, Text, View, TextInput, ScrollView, TouchableOpacity, Image} from 'react-native'
 import GoodMorning from '../components/GoodMorning';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Camera, CameraType, FlashMode } from 'expo-camera';
 import { useIsFocused } from "@react-navigation/native";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useSelector,useDispatch } from 'react-redux';
-import { signUp, addProcard, addPhoto } from '../reducers/users'
-import { afficheprofil } from '../reducers/coachs'
+import { signUp, addProcard, addPhoto, addToken } from '../reducers/users'
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
+
+import { backend_address } from '../backendAddress';
+
 
 export default function CoachProfileScreen() {
   const dispatch = useDispatch()
   const isFocused = useIsFocused();
   const isDarkMode = useSelector(state => state.darkMode.value)
   const user = useSelector((state) => state.users.value);
-  const coach = useSelector((state) => state.users.value); 
-  const token = useSelector(state => state.coachs.value.token)
-  console.log('coach', token)
+  const coach = useSelector((state) => state.coachs.value); 
+  const token = useSelector(state => state.users.value.token)
+  console.log('coach10', token)
 
   // les useStates
   // const camera : 
@@ -62,7 +64,7 @@ export default function CoachProfileScreen() {
           type: 'image/jpeg',
         });
        
-        fetch('https://coach-linker-backend.vercel.app/upload', {
+        fetch(`${backend_address}/upload`, {
           method: 'POST',
           body: formData,
         }).then((response) => response.json())
@@ -139,7 +141,7 @@ export default function CoachProfileScreen() {
         coachingPlaces : coachPlace,
       };
       
-      const response = await fetch('https://coach-linker-backend.vercel.app/coachs/new', {
+      const response = await fetch(`${backend_address}/coachs/new`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(signUpData),
@@ -179,7 +181,7 @@ formData.append('photoFromFront',{
 
 console.log('formData', formData)
 
-fetch('https://coach-linker-backend.vercel.app/upload', {
+fetch(`${backend_address}/upload`, {
   method: 'POST',
   body: formData,
 }).then((response) => response.json())
@@ -200,7 +202,7 @@ const DarkEnd = {x : -0.3, y : -0.3};
 const LightStart = {x : 0.6, y : 0.4};
 const LightEnd = {x : 0.3, y : 0.1};
 
-/* useEffect(() => {
+useEffect(() => {
   fetch('https://coach-linker-backend.vercel.app/coachs/profil', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -210,9 +212,10 @@ const LightEnd = {x : 0.3, y : 0.1};
     .then(data => {
         console.log('profilcoach', data)
         
-      dispatch(afficheprofil({token: token, data}))
+      dispatch(addToken({token: token, data}))
+      console.log('yes', dispatch(addToken({token: token, data})))
     });
-}, []); */
+}, []);
 
 if (!hasPermission || !isFocused) {
 

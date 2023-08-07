@@ -6,6 +6,9 @@ import { updatePlanning } from '../reducers/coachs';
 import GoodMorning from '../components/GoodMorning';
 import {StyleSheet, Pressable, KeyboardAvoidingView, Image, TextInput, View, Text, ScrollView, TouchableOpacity} from 'react-native';
 
+import { backend_address } from '../backendAddress';
+
+
 export default function AgendaScreen() {
     const isDarkMode = useSelector(state => state.darkMode.value)
     const planning = useSelector(state => state.coachs.value.planning)
@@ -32,7 +35,7 @@ export default function AgendaScreen() {
 
 
       // Send data to backend
-      const response = await fetch('http://192.168.147.198/plannings/new', {
+      const response = await fetch(`${backend_address}/plannings/new`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestBody)

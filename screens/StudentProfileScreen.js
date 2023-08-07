@@ -14,6 +14,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import {StyleSheet, KeyboardAvoidingView, Image, TextInput, View, Text, ScrollView, TouchableOpacity} from 'react-native';
 import { nanoid } from '@reduxjs/toolkit';
 
+import { backend_address } from '../backendAddress';
+
 
 export default function StudentProfileScreen({navigation}) {
     const dispatch = useDispatch()
@@ -57,7 +59,7 @@ export default function StudentProfileScreen({navigation}) {
 
 
 // fetch modifié comme sur AddinfStudentScreen
-fetch('http://coach-linker-backend.vercel.app/upload', {
+fetch(`${backend_address}/upload`, {
   method: 'POST',
   body: formData,
 }).then((response) => response.json())
@@ -76,7 +78,7 @@ const handleValidate =() => {
     
 // faire un useselector du usedispatch de connexionscreen et récpérer l'id
 
-    fetch('http://192.168.10.124:3000/students/profil', {
+    fetch(`${backend_address}/students/profil`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
@@ -164,7 +166,7 @@ const handleImageRemove = (index) => {
 // }
 
 
-        fetch('http://coach-linker-backend.vercel.app/upload', { // fetch modifié comme sur AddinfStudentScreen
+        fetch(`${backend_address}/upload`, { // fetch modifié comme sur AddinfStudentScreen
           method: 'POST',
           body: formData,
         }).then((response) => response.json())

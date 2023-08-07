@@ -12,6 +12,8 @@ import { signUp } from '../reducers/users'
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
 
+import { backend_address } from '../backendAddress';
+
 export default function AddInfoStudentScreen({navigation}) {
 
 
@@ -55,7 +57,7 @@ export default function AddInfoStudentScreen({navigation}) {
           type: 'image/jpeg',
         });
        
-        fetch('https://coach-linker-backend.vercel.app/upload', {
+        fetch(`${backend_address}/upload`, {
           method: 'POST',
           body: formData,
         }).then((response) => response.json())
@@ -116,7 +118,7 @@ const handleValidate = async () => {
       favoriteSport: studentSports,
     };
     
-    const response = await fetch('https://coach-linker-backend.vercel.app/students/new', {
+    const response = await fetch(`${backend_address}/students/new`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(signUpData),
@@ -160,7 +162,7 @@ const handleValidate = async () => {
        
         console.log('formData', formData)
 
-        fetch('https://coach-linker-backend.vercel.app/upload', {
+        fetch(`${backend_address}/upload`, {
           method: 'POST',
           body: formData,
         }).then((response) => response.json())
@@ -191,7 +193,7 @@ const handleValidate = async () => {
         end={isDarkMode ? DarkEnd : LightEnd}
         style={styles.background} >
        
-       <TouchableOpacity  onPress={() => navigation.navigate('Localisation')} >
+       <TouchableOpacity  onPress={() => navigation.navigate('ChooseRole')} >
           <Image style={[styles.return, isDarkMode ? styles.darkReturn : styles.lightReturn]} source={require('../assets/bouton-retour.png')}/>
           </TouchableOpacity>
            

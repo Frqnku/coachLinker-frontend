@@ -8,7 +8,6 @@ import { updateCoachsAround } from '../reducers/coachs';
 
 import { backend_address } from '../backendAddress';
 
-
 export default function StudentMenuScreen() {
   const dispatch = useDispatch();
   const isDarkMode = useSelector(state => state.darkMode.value);
@@ -81,11 +80,45 @@ export default function StudentMenuScreen() {
     }
   };
 
+  const today = new Date();
+  const daysOfWeek = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
+  const months = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
+  const formattedDate = `${daysOfWeek[today.getDay()]} ${today.getDate().toString().padStart(2, '0')} ${months[today.getMonth()]}`;
 
-  
+  const getNextDays = (startDate, numberOfDays) => {
+    const days = [];
+    for (let i = 1; i <= numberOfDays; i++) {
+      const nextDay = new Date(startDate);
+      nextDay.setDate(startDate.getDate() + i);
+      days.push(nextDay);
+    }
+    return days;
+  };
+
   const allCoachs = coachsAround.map((data, i) => {
-    console.log(data._id)
+    const sixNextDays = getNextDays(today, 3);
     const planningVisible = visibleCoachIndices.includes(i);
+
+    if (planningVisible) {
+      fetch(`${backend_address}/plannings/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ coachID: data._id }),
+      })
+      .then(response => response.json())
+      .then(planning => {
+        const availabilityTexts = planning.data.days.map((availability) => (
+          <Text key={availability._id} style={[styles.book, isDarkMode ? styles.darkText : styles.lightText]}>
+            {/* Display your availability text here */}
+          </Text>
+        ));
+        // TODO: Set the availabilityTexts to your state to render in your component
+      })
+      .catch(error => {
+        console.error("Erreur lors de la récupération des disponibilités :", error);
+      });
+    }
+
     const stars = [];
     for (let i = 0; i < 5; i++) {
       let style = {};
@@ -113,12 +146,11 @@ export default function StudentMenuScreen() {
         {planningVisible && <View style={[styles.planning, isDarkMode ? styles.darkCard : styles.lightCard]}>
           <Text style={[isDarkMode ? styles.darkText : styles.lightText]}>Prochaines disponibilités</Text>
           <View style={styles.displayCoaching}>
-            <Text style={[styles.book, isDarkMode ? styles.darkText : styles.lightText]}>Jeu 03</Text>
-            <Text style={[styles.book, isDarkMode ? styles.darkText : styles.lightText]}>Jeu 03</Text>
-            <Text style={[styles.book, isDarkMode ? styles.darkText : styles.lightText]}>Jeu 03</Text>
-            <Text style={[styles.book, isDarkMode ? styles.darkText : styles.lightText]}>Jeu 03</Text>
-            <Text style={[styles.book, isDarkMode ? styles.darkText : styles.lightText]}>Jeu 03</Text>
-            <Text style={[styles.book, isDarkMode ? styles.darkText : styles.lightText]}>Jeu 03</Text>
+            {sixNextDays.map((nextDay, index) => (
+              <Text key={index} style={[styles.book, isDarkMode ? styles.darkText : styles.lightText]}>
+                {daysOfWeek[nextDay.getDay()]} {nextDay.getDate().toString().padStart(2, '0')} {months[nextDay.getMonth()]}
+              </Text>
+            ))}
           </View>
         </View>}
       </View>
@@ -165,11 +197,6 @@ export default function StudentMenuScreen() {
     dispatch(updateSearchLocation(newLocation));
     setCurrentCity('');
   };
-
-  const today = new Date();
-  const daysOfWeek = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
-  const months = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
-  const formattedDate = `${daysOfWeek[today.getDay()]} ${today.getDate().toString().padStart(2, '0')} ${months[today.getMonth()]}`;
 
   return (
     <KeyboardAvoidingView style={[styles.container, isDarkMode ? styles.darkBg : styles.lightBg]} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>

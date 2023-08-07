@@ -230,9 +230,7 @@ lightText: {
 darkText: {
   color: '#ffffff'
 },
-inputP2: {
 
-},
 darkInputMdp:{
   marginTop: 10,
   fontSize : 15,

@@ -14,6 +14,8 @@ export default function CoachMenuScreen() {
     // console.log('coach', token)
     const bookCoach = useSelector(state => state.booking.value.bookings)
 
+
+
     console.log('test bookCoach', bookCoach)
     useEffect(() => {
         fetch(`${backend_address}/bookings/coachs`, {

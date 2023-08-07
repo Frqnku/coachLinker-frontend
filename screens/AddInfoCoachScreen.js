@@ -20,8 +20,6 @@ export default function AddInfoCoachScreen({ navigation }) {
   const isDarkMode = useSelector(state => state.darkMode.value)
   const user = useSelector((state) => state.users.value);
   const coach = useSelector((state) => state.users.value); 
-  const username = useSelector(state => state.users.value.name)
-  
 
   // les useStates
   // const camera : 
@@ -78,39 +76,7 @@ export default function AddInfoCoachScreen({ navigation }) {
       }
     };
 
-// const pickProcard = async () => {
-//   let result = await ImagePicker.launchImageLibraryAsync({
-//     mediaTypes: ImagePicker.MediaTypeOptions.All,
-//     allowsEditing: true,
-//     aspect: [4, 3],
-//     quality: 1,
-//   });
-
-//   if (!result.canceled) {
-//     const formData = new FormData();
-
-//     formData.append('photoFromFront',{
-//       uri: result.assets[0].uri,
-//       name: 'procard.jpg',
-//       type: 'image/jpeg',
-//     });
-   
-//     fetch('https://coach-linker-backend.vercel.app/upload', {
-//       method: 'POST',
-//       body: formData,
-//     }).then((response) => response.json())
-//       .then((data) => { 
-//         if (data.result) {
-//           dispatch(signUp({proCard: data.url}))
-//           dispatch(addProcard(data.url));
-//           setHasPermission(false);
-//         } 
-//       })
-//   }
-// };
-    
-
-      
+       
     // sélection des sports
     const handleImageSelect = (image, imageName) => {
       if (selectedImages.length < 3 && !selectedImages.some((item) => item.image === image)) {
@@ -250,7 +216,7 @@ if (!hasPermission || !isFocused) {
         end={isDarkMode ? DarkEnd : LightEnd}
         style={styles.background}
         >
-          <TouchableOpacity  onPress={() => navigation.navigate('Localisation')} >
+          <TouchableOpacity  onPress={() => navigation.navigate('ChooseRole')} >
           <Image style={[styles.return, isDarkMode ? styles.darkReturn : styles.lightReturn]} source={require('../assets/bouton-retour.png')}/>
           </TouchableOpacity>
 

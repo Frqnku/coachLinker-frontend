@@ -303,7 +303,7 @@ background:{
     marginBottom: 30,
   },
     container: {
-        flex: 1,
+        flex: 1
     },
     boximage:{
       alignItems: 'center',

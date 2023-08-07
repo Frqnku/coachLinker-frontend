@@ -1,11 +1,17 @@
 import React from 'react'
 import { StyleSheet, Text, View, Pressable, SafeAreaView} from 'react-native'
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { signUp } from '../reducers/users';
 
 export default function ChooseRoleScreen({ navigation }) {
+  const dispatch = useDispatch()
   const isDarkMode = useSelector(state => state.darkMode.value)
 
   // fonction à créer : si je clique sur Je suis coach, je passe dans User : isCoach à true.
+  const chooseCoach = () => {
+    dispatch(signUp({isCoach: true}))
+    navigation.navigate('AddInfoCoach')
+  }
 
   return (
         <SafeAreaView style={[styles.container, isDarkMode ? styles.darkBg : styles.lightBg]}>
@@ -19,7 +25,7 @@ export default function ChooseRoleScreen({ navigation }) {
                 <Text style={[styles.text, styles.darkText]}>Je recherche un coach</Text>
               </Pressable>
   
-              <Pressable style={styles.btnLocation} onPress={() => navigation.navigate('AddInfoCoach')}>
+              <Pressable style={styles.btnLocation} onPress={chooseCoach}>
                 <Text style={[styles.text, styles.darkText]}>Je suis coach</Text>
               </Pressable>
             </View>

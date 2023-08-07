@@ -31,6 +31,7 @@ const initialState = {
         notes: [], 
         city: '', 
         coachingPlaces: [],
+        isCoach: false,
         // infos student
         dateOfBirth: '',
         favoriteSport: []

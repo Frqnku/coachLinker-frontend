@@ -2,7 +2,6 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
     value: {
-      token : null,
       coachsAround: [],
       planning: {
         Lundi: {
@@ -58,12 +57,9 @@ export const coachSlice = createSlice({
         state.value.planning[day].start = start;
         state.value.planning[day].end = end;
       }
-    },
-    afficheprofil:(state, action) => { 
-      state.value.token = action.payload.token
-  }
+    }
   },
 });
 
-export const { updateCoachsAround, updatePlanning,afficheprofil } = coachSlice.actions;
+export const { updateCoachsAround, updatePlanning } = coachSlice.actions;
 export default coachSlice.reducer;

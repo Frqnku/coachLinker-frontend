@@ -61,10 +61,6 @@ const persistor = persistStore(store);
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-const isValidate = useSelector(state => state.users.value.signUp.isValidate)
-const isLogged = useSelector(state => state.users.value.token)
-const isCoach = useSelector(state => state.users.value.signUp.isCoach)
-
 const TabNavigator = () => {
   const isDarkMode = useSelector(state => state.darkMode.value)
 
@@ -107,6 +103,9 @@ const TabNavigator = () => {
 
 // à changer plus tard
 export default function App() {
+  const isValidate = useSelector(state => state.users.value.signUp.isValidate)
+  const isLogged = useSelector(state => state.users.value.token)
+  const isCoach = useSelector(state => state.users.value.signUp.isCoach)
     // useEffect(() => {
     //   // Charger les polices au démarrage de l'application
     //   Font.loadAsync({

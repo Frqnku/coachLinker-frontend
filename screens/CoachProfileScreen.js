@@ -21,7 +21,9 @@ export default function CoachProfileScreen() {
   const coach = useSelector((state) => state.coachs.value); 
   const token = useSelector(state => state.users.value.token)
   console.log('coach10', token)
-
+  const profilCoach = useSelector(state => state.users.value.signUp)
+  console.log('profilCoach10', profilCoach)
+  
   // les useStates
   // const camera : 
   const [hasPermission, setHasPermission] = useState(false);
@@ -104,64 +106,64 @@ export default function CoachProfileScreen() {
       
   // sélection de la procard : à compléter
 
-  const handleSubmit = async () => {
-    console.log(coachSports);
-    try { 
-      await dispatch(signUp({
-        name: coachName, 
-        firstname: coachFirstname,
-        dateOfBirth: coachBirthDate,
-        myDescription: coachAbout,
-        image: user.photo,
-        teachedSport: coachSports,
-        proCard : coachProCard,
-        siret : siretNumber, 
-        iban : ibanNumber,
-        bic : bicNumber, 
-        price : coachPrice,
-        city : coachCity,
-        coachingPlaces : coachPlace,
-      }));
+  // const handleSubmit = async () => {
+  //   console.log(coachSports);
+  //   try { 
+  //     await dispatch(signUp({
+  //       name: coachName, 
+  //       firstname: coachFirstname,
+  //       dateOfBirth: coachBirthDate,
+  //       myDescription: coachAbout,
+  //       image: user.photo,
+  //       teachedSport: coachSports,
+  //       proCard : coachProCard,
+  //       siret : siretNumber, 
+  //       iban : ibanNumber,
+  //       bic : bicNumber, 
+  //       price : coachPrice,
+  //       city : coachCity,
+  //       coachingPlaces : coachPlace,
+  //     }));
   
-      const signUpData = {
-        email: coach.signUp.email,
-        password: coach.signUp.password,
-        name: coachName, 
-        firstname: coachFirstname,
-        dateOfBirth: coachBirthDate,
-        myDescription: coachAbout,
-        image: user.photo,
-        teachedSport: coachSports,
-        proCard : coachProCard,
-        siret : siretNumber, 
-        iban : ibanNumber,
-        bic : bicNumber, 
-        price : coachPrice,
-        city : coachCity,
-        coachingPlaces : coachPlace,
-      };
+  //     const signUpData = {
+  //       email: coach.signUp.email,
+  //       password: coach.signUp.password,
+  //       name: coachName, 
+  //       firstname: coachFirstname,
+  //       dateOfBirth: coachBirthDate,
+  //       myDescription: coachAbout,
+  //       image: user.photo,
+  //       teachedSport: coachSports,
+  //       proCard : coachProCard,
+  //       siret : siretNumber, 
+  //       iban : ibanNumber,
+  //       bic : bicNumber, 
+  //       price : coachPrice,
+  //       city : coachCity,
+  //       coachingPlaces : coachPlace,
+  //     };
       
-      const response = await fetch(`${backend_address}/coachs/new`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(signUpData),
-      });
+  //     const response = await fetch(`${backend_address}/coachs/new`, {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify(signUpData),
+  //     });
   
-      const responseBody = await response.text();
-      console.log('Response from server:', responseBody);
+  //     const responseBody = await response.text();
+  //     console.log('Response from server:', responseBody);
   
-      const data = JSON.parse(responseBody);
-      console.log('dataresult', data);
+  //     const data = JSON.parse(responseBody);
+  //     console.log('dataresult', data);
   
-      if (data.result) { 
-        console.log("salut");
-        navigation.navigate("TabNavigator", { screen: "Menu" });
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      // Gérer les erreurs
-    }
-  }
+  //     if (data.result) { 
+  //       console.log("salut");
+  //       navigation.navigate("TabNavigator", { screen: "Menu" });
+  //     }
+  //   } catch (error) {
+  //     console.error('Error:', error);
+  //     // Gérer les erreurs
+  //   }
+  // }
 
 
 
@@ -203,7 +205,7 @@ const LightStart = {x : 0.6, y : 0.4};
 const LightEnd = {x : 0.3, y : 0.1};
 
 useEffect(() => {
-  fetch('https://coach-linker-backend.vercel.app/coachs/profil', {
+  fetch(`${backend_address}/coachs/profil`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({token: token})
@@ -212,8 +214,22 @@ useEffect(() => {
     .then(data => {
         console.log('profilcoach', data)
         
-      dispatch(addToken({token: token, data}))
-      console.log('yes', dispatch(addToken({token: token, data})))
+      dispatch(signUp({token:token, 
+        name: data.data.name,
+        firstname: data.data.firstname,
+        myDescription:data.data.myDescription,
+        dateOfBirth:data.data.dateOfBirth,
+        image: data.data.image,
+        teachedSport: data.data.teachedSport,
+        proCard : data.data.proCard,
+        siret : data.data.siret, 
+        iban : data.data.iban,
+        bic : data.data.bic, 
+        price : data.data.price,
+        city : data.data.coacitychCity,
+        coachingPlaces : data.data.coachingPlaces,
+       }))
+        
     });
 }, []);
 
@@ -236,11 +252,13 @@ if (!hasPermission || !isFocused) {
           </View>
     
       <ScrollView contentContainerStyle={styles.scrollContainer}>  
+ 
+      <Text> profilCoach {profilCoach.name || 'coach'}</Text>
 
       <View style={styles.inputView}>
-        <TextInput selectionColor={"#FF6100"} style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachName(value)} value={coachName} placeholder='Nom' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"}  ></TextInput>
-        <TextInput selectionColor={"#FF6100"} style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachFirstname(value)} value={coachFirstname} placeholder='Prénom' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} ></TextInput>
-        <TextInput selectionColor={"#FF6100"} style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachBirthDate(value)} value={coachBirthDate} placeholder='Date de naissance (jj/mm/aaaa)' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} ></TextInput>
+        <Text selectionColor={"#FF6100"} style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]}>{profilCoach.name || 'coach'}</Text>
+        <TextInput selectionColor={"#FF6100"} style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]}  placeholder='Prénom' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} ></TextInput>
+        <TextInput selectionColor={"#FF6100"} style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]}  placeholder='Date de naissance (jj/mm/aaaa)' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} ></TextInput>
       </View>
       
       <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText]}>Sports enseignés : </Text>
@@ -301,49 +319,49 @@ if (!hasPermission || !isFocused) {
       <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText]}>A propos de moi </Text>
         <TextInput 
         multiline numberOfLines={4} 
-        placeholder='Ma description'onChangeText={(value) => setCoachAbout(value)} value={coachAbout} 
+        placeholder='Ma description'
         selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} 
         style={[ isDarkMode ? styles.darkInputapropos : styles.lightInputapropos]} ></TextInput>
       </View>
 
         <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText]}>Adresses</Text>
-          <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachCity(value)} value={coachCity} placeholder='Adresse' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
-          <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} onChangeText={(value) => setCoachPlace(value)} value={coachPlace} placeholder='Adresse coachingPlaces' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
+          <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} placeholder='Adresse' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
+          <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]}  placeholder='Adresse coachingPlaces' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
        
 
         <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText]}> Informations professionnelles </Text>
           <TextInput 
-          onChangeText={(value) => setCoachProCard(value)} value={coachProCard} placeholder='Référence carte Pro.'
+           placeholder='Référence carte Pro.'
           selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} 
           style={[ isDarkMode ? styles.darkInput : styles.lightInput]}  >
          </TextInput>
 
           <TextInput 
-          onChangeText={(value) => setCoachPrice(value)} value={coachPrice} placeholder='Taux horaire'
+           placeholder='Taux horaire'
           selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} 
           style={[ isDarkMode ? styles.darkInput : styles.lightInput]}  >
           </TextInput>
 
           <TextInput 
-          placeholder='Numéro de Siret'  onChangeText={(value) => setSiretNumber(value)} value={siretNumber}  
+          placeholder='Numéro de Siret'   
           selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} 
           style={[ isDarkMode ? styles.darkInput : styles.lightInput]}>
           </TextInput>
     
         <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText]}>Informations de paiements</Text>
           <TextInput 
-          placeholder="IBAN" onChangeText={(value) => setIbanNumber(value)} value={ibanNumber}
+          placeholder="IBAN"
           selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} 
           style={[ isDarkMode ? styles.darkInput : styles.lightInput]}>
           </TextInput>
 
           <TextInput 
-          placeholder='BIC' onChangeText={(value) => setBicNumber(value)} value={bicNumber}
+          placeholder='BIC' 
           selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} 
           style={[ isDarkMode ? styles.darkInput : styles.lightInput]}></TextInput>
     
       
-        <TouchableOpacity style={[ isDarkMode ? styles.darkbutton : styles.lightbutton]} onPress={handleSubmit}activeOpacity={0.8}>
+        <TouchableOpacity style={[ isDarkMode ? styles.darkbutton : styles.lightbutton]} activeOpacity={0.8}>
           <Text style={[ isDarkMode ? styles.darkTextButton : styles.lightTextButton]}>Valider</Text>
         </TouchableOpacity>
       

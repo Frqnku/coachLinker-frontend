@@ -1,3 +1,4 @@
+import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
@@ -19,6 +20,7 @@ import OptionScreen from './screens/OptionScreen';
 import StudentMenuScreen from './screens/StudentMenuScreen';
 import StudentProfileScreen from './screens/StudentProfileScreen';
 import VerificationScreen from './screens/VerificationScreen';
+import { ConfettisScreen } from './screens/ConfettisScreen';
 
 // import React, { useEffect } from 'react';
 // import * as Font from 'expo-font';
@@ -33,6 +35,7 @@ import { useSelector } from 'react-redux';
 import users from './reducers/users';
 import coachs from './reducers/coachs';
 import student from './reducers/student';
+
 
 
 // Redux Persist Config
@@ -99,7 +102,7 @@ const TabNavigator = () => {
 // à changer plus tard
 const isLogged = true
 const isValidate = true
-const isCoach = true
+const isCoach = false
 
 
 export default function App() {

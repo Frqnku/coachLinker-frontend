@@ -11,7 +11,7 @@ import { backend_address } from '../backendAddress';
 export default function CoachMenuScreen() {
     const dispatch = useDispatch();
     const token = useSelector(state => state.users.value.token)
-    console.log('coach', token)
+    // console.log('coach', token)
     const bookCoach = useSelector(state => state.booking.value.bookings)
 
     console.log('test bookCoach', bookCoach)
@@ -23,10 +23,10 @@ export default function CoachMenuScreen() {
         })
           .then(response => response.json())
           .then(data => {
-              console.log('bookingscoach', data.bookings)
+            // console.log('bookingscoach', data.bookings)
               
             dispatch(addBooking({token: token, bookings: data.bookings}))
-            console.log('testbookingcoach', dispatch(addBooking({token: token, bookings: data.bookings})))
+            // console.log('testbookingcoach', dispatch(addBooking({token: token, bookings: data.bookings})))
           });
       }, []);
 

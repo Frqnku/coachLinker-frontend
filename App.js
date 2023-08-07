@@ -63,8 +63,7 @@ const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
   const isDarkMode = useSelector(state => state.darkMode.value)
-  const isCoach = useSelector(state => state.users.value.signUp.isCoach)
-  
+
   return (
     <Tab.Navigator 
     initialRouteName='Menu'
@@ -103,10 +102,10 @@ const TabNavigator = () => {
 };
 
 // à changer plus tard
-const isLogged = false
-const isValidate = false
-
 export default function App() {
+  const isValidate = useSelector(state => state.users.value.signUp.isValidate)
+  const isLogged = useSelector(state => state.users.value.token)
+  const isCoach = useSelector(state => state.users.value.signUp.isCoach)
     // useEffect(() => {
     //   // Charger les polices au démarrage de l'application
     //   Font.loadAsync({
@@ -121,7 +120,7 @@ export default function App() {
       <PersistGate loading={null} persistor={persistor}>
       <NavigationContainer>  
           <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="Home" component={!isLogged ? ConnexionScreen : (isValidate ? TabNavigator : VerificationScreen)} />
+            <Stack.Screen name="Home" component={!isLogged ? ConnexionScreen : ((isValidate && isCoach) || !isCoach ? TabNavigator : VerificationScreen)} />
             <Stack.Screen name="Localisation" component={ActivateLocationScreen} />
             <Stack.Screen name="ChooseRole" component={ChooseRoleScreen} />
             <Stack.Screen name="AddInfoStudent" component={AddInfoStudentScreen} />

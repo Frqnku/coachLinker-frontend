@@ -11,7 +11,7 @@ const initialState = {
         latitude: 48.8877611,
         longitude: 2.3036914
       },
-      photo: '../assets/utilisateur.png',
+      photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/510px-Default_pfp.svg.png?20220226140232',
       statusGranted: null,
       signUp: {
         // infos communes
@@ -32,6 +32,7 @@ const initialState = {
         city: '', 
         coachingPlaces: [],
         isCoach: false,
+        isValidate: false,
         // infos student
         dateOfBirth: '',
         favoriteSport: []

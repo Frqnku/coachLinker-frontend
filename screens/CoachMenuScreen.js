@@ -7,8 +7,8 @@ import { addBooking } from '../reducers/booking';
 
 export default function CoachMenuScreen() {
     const dispatch = useDispatch();
-    // const token = useSelector(state => state.users.value.token)
-    // console.log('coach', token)
+    const token = useSelector(state => state.users.value.token)
+    console.log('coach', token)
     const bookCoach = useSelector(state => state.booking.value.bookings)
 
     console.log('test bookCoach', bookCoach)
@@ -16,14 +16,14 @@ export default function CoachMenuScreen() {
         fetch('https://coach-linker-backend.vercel.app/bookings/coach', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({token: '123123'})
+          body: JSON.stringify({token: token})
         })
           .then(response => response.json())
           .then(data => {
               console.log('bookingscoach', data.bookings)
               
-            dispatch(addBooking({token: '123123', bookings: data.bookings}))
-            console.log('testbookingcoach', dispatch(addBooking({token: '123123', bookings: data.bookings})))
+            dispatch(addBooking({token: token, bookings: data.bookings}))
+            console.log('testbookingcoach', dispatch(addBooking({token: token, bookings: data.bookings})))
           });
       }, []);
 
@@ -31,9 +31,9 @@ export default function CoachMenuScreen() {
         console.log('aurelie', data.studentID.firstname)
         return(
             <View key={i}>
-              <Image source={{uri:data.coachID.image}} style={styles.image}/>
-              <Text>{data.coachID.firstname}</Text>
-              <Text>{data.coachID.price}</Text>
+              <Image source={{uri:data.studentID.image}} style={styles.image}/>
+              <Text>{data.studentID.firstname}</Text>
+              <Text>{data.studentID.dateOfBirth}</Text>
               <Text>{data.coachingPlace}</Text>
               <Text>{data.date}</Text>
               <Text>{data.startTime}</Text>

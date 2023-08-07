@@ -33,21 +33,21 @@ import { useSelector, useDispatch } from 'react-redux';
 import users from './reducers/users';
 import coachs from './reducers/coachs';
 import student from './reducers/student';
-import bookingStudent from './reducers/bookingStudent';
+import booking from './reducers/booking';
 
 
 // Redux Persist Config
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  blacklist: ['darkMode','users','student','coachs', 'bookingStudent'] 
+  blacklist: ['darkMode','users','student','coachs', 'booking'] 
 };
 const rootReducer = combineReducers({
   darkMode,
   users,
   coachs,
   student,
-  bookingStudent
+  booking
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 const store = configureStore({

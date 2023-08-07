@@ -4,8 +4,8 @@ const initialState = {
   value: {token: null, bookings: []}
 };
 
-export const bookingStudentSlice = createSlice({
-  name: 'bookingStudent',
+export const bookingSlice = createSlice({
+  name: 'booking',
   initialState,
   reducers: {
     addBooking: (state, action) => { 
@@ -16,5 +16,5 @@ export const bookingStudentSlice = createSlice({
   },
 });
 
-export const { addBooking } = bookingStudentSlice.actions;
-export default bookingStudentSlice.reducer;
+export const { addBooking } = bookingSlice.actions;
+export default bookingSlice.reducer;

@@ -4,11 +4,11 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useDispatch, useSelector } from 'react-redux';
 import GoodMorning from '../components/GoodMorning';
 import { updateSearchLocation } from '../reducers/users';
-import { updateCoachsAround } from '../reducers/coachs';
+import { updateCoachsAround, updateBookedCoach } from '../reducers/coachs';
 
 import { backend_address } from '../backendAddress';
 
-export default function StudentMenuScreen() {
+export default function StudentMenuScreen({ navigation }) {
   const dispatch = useDispatch();
   const isDarkMode = useSelector(state => state.darkMode.value);
   
@@ -95,29 +95,14 @@ export default function StudentMenuScreen() {
     return days;
   };
 
+  const handleBook = (coachID) => {
+    dispatch(updateBookedCoach(coachID))
+    navigation.navigate('Book')
+  }
+
   const allCoachs = coachsAround.map((data, i) => {
     const sixNextDays = getNextDays(today, 3);
     const planningVisible = visibleCoachIndices.includes(i);
-
-    if (planningVisible) {
-      fetch(`${backend_address}/plannings/`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ coachID: data._id }),
-      })
-      .then(response => response.json())
-      .then(planning => {
-        const availabilityTexts = planning.data.days.map((availability) => (
-          <Text key={availability._id} style={[styles.book, isDarkMode ? styles.darkText : styles.lightText]}>
-            {/* Display your availability text here */}
-          </Text>
-        ));
-        // TODO: Set the availabilityTexts to your state to render in your component
-      })
-      .catch(error => {
-        console.error("Erreur lors de la récupération des disponibilités :", error);
-      });
-    }
 
     const stars = [];
     for (let i = 0; i < 5; i++) {
@@ -148,9 +133,14 @@ export default function StudentMenuScreen() {
           <View style={styles.displayCoaching}>
             {sixNextDays.map((nextDay, index) => (
               <Text key={index} style={[styles.book, isDarkMode ? styles.darkText : styles.lightText]}>
-                {daysOfWeek[nextDay.getDay()]} {nextDay.getDate().toString().padStart(2, '0')} {months[nextDay.getMonth()]}
+                {daysOfWeek[nextDay.getDay()].slice(0,3)} {nextDay.getDate().toString().padStart(2, '0')}
               </Text>
             ))}
+          </View>
+          <View>
+            <TouchableOpacity onPress={() => handleBook(data._id)}>
+              <Text style={[styles.text, isDarkMode ? styles.darkText : styles.lightText]}>Réserver une séance</Text>
+            </TouchableOpacity>
           </View>
         </View>}
       </View>
@@ -212,7 +202,7 @@ export default function StudentMenuScreen() {
               onChangeText={value => setCity(value)}
               value={city}
             />
-            <TouchableOpacity onPress={handleSubmit} >
+            <TouchableOpacity onPress={handleSubmit}>
                 <FontAwesome name='search' size={24} color={isDarkMode ? '#AAAAAA' : '#7B7B7B'}/>
             </TouchableOpacity>
           </View>
@@ -237,123 +227,122 @@ export default function StudentMenuScreen() {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        paddingTop: 15
-    },
-    book: {
-        fontSize: 13,
-        width: 70,
-        height: 30,
-        textAlign: 'center',
-        textAlignVertical: 'center',
-        backgroundColor: '#FFDFA3',
-        marginHorizontal: 5,
-        marginVertical: 10,
-        borderRadius: 15
-    },
-    borderRadiusBottom: {
-        borderRadius: 5,
-    },
-    bottomScreen: {
-        width: '80%'
-    },
-    card: {
-        width: '100%',
-        borderTopEndRadius: 5,
-        borderTopStartRadius: 5,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: 10,
-        marginTop: 15
-    },
-    coachName: {
-        fontSize: 22
-    },
-    displayCoaching: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        flexWrap: 'wrap',
-    },
-    input: {
-        height: 35,
-        backgroundColor: 'red',
-        width: '85%',
-        borderRadius: 5,
-        paddingLeft: 10
-    },
-    leftCoach: {
-        height: 80,
-        width: 80,
-        borderRadius: 5
-    },
-    midCoach: {
-        flex: 1,
-        justifyContent: 'flex-start',
-        alignItems: 'flex-start',
-        height: 80,
-        paddingLeft: 10,
-    },
-    planning: {
-        width: '100%',
-        borderBottomEndRadius: 5,
-        borderBottomStartRadius: 5,
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: 10,
-        borderTopColor: '#AAAAAA',
-        borderTopWidth: 1
-    },
-    rightCoach: {
-        justifyContent: 'space-between',
-        alignItems: 'flex-end',
-        height: 80,
-    },
-    searchLocation: {
-        width: '100%',
-        backgroundColor: 'yellow',
-        borderRadius: 5,
-        paddingHorizontal: 20,
-        paddingTop: 20,
-        paddingBottom: 10,
-        marginBottom: 20
-    },
-    text: {
-        fontSize: 18
-    },
-    btnSearch: {
-        paddingVertical: 5
-    },
-    row: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: 5
-    },
-    darkBg: {
-        backgroundColor: '#000'
-    },
-    darkText: {
-        color: '#fff'
-    },
-    darkCard: {
-        backgroundColor: '#2E2E2E'
-    },
-    darkInput: {
-        backgroundColor: '#505050'
-    },
-    lightBg: {
-        backgroundColor: '#f2f2f2'
-    },
-    lightCard: {
-        backgroundColor: '#fff'
-    },
-    lightText: {
-        color: '#000'
-    },
-
-})
+  container: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    paddingTop: 15
+  },
+  book: {
+    fontSize: 13,
+    width: 70,
+    height: 30,
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    backgroundColor: '#FFDFA3',
+    marginHorizontal: 5,
+    marginVertical: 10,
+    borderRadius: 15
+  },
+  borderRadiusBottom: {
+    borderRadius: 5,
+  },
+  bottomScreen: {
+    width: '80%'
+  },
+  card: {
+    width: '100%',
+    borderTopEndRadius: 5,
+    borderTopStartRadius: 5,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 10,
+    marginTop: 15
+  },
+  coachName: {
+    fontSize: 22
+  },
+  displayCoaching: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+  },
+  input: {
+    height: 35,
+    backgroundColor: 'red',
+    width: '85%',
+    borderRadius: 5,
+    paddingLeft: 10
+  },
+  leftCoach: {
+    height: 80,
+    width: 80,
+    borderRadius: 5
+  },
+  midCoach: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    height: 80,
+    paddingLeft: 10,
+  },
+  planning: {
+    width: '100%',
+    borderBottomEndRadius: 5,
+    borderBottomStartRadius: 5,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 10,
+    borderTopColor: '#AAAAAA',
+    borderTopWidth: 1
+  },
+  rightCoach: {
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    height: 80,
+  },
+  searchLocation: {
+    width: '100%',
+    backgroundColor: 'yellow',
+    borderRadius: 5,
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 10,
+    marginBottom: 20
+  },
+  text: {
+    fontSize: 18
+  },
+  btnSearch: {
+    paddingVertical: 5
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 5
+  },
+  darkBg: {
+    backgroundColor: '#000'
+  },
+  darkText: {
+    color: '#fff'
+  },
+  darkCard: {
+    backgroundColor: '#2E2E2E'
+  },
+  darkInput: {
+    backgroundColor: '#505050'
+  },
+  lightBg: {
+    backgroundColor: '#f2f2f2'
+  },
+  lightCard: {
+    backgroundColor: '#fff'
+  },
+  lightText: {
+    color: '#000'
+  },
+});

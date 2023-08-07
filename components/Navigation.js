@@ -18,6 +18,7 @@ import OptionScreen from '../screens/OptionScreen';
 import StudentMenuScreen from '../screens/StudentMenuScreen';
 import StudentProfileScreen from '../screens/StudentProfileScreen';
 import VerificationScreen from '../screens/VerificationScreen';
+import BookScreen from '../screens/BookScreen';
 
 import { useSelector } from 'react-redux';
 
@@ -60,6 +61,7 @@ const TabNavigator = () => {
       <Tab.Screen name="Profil" component={isCoach ? CoachProfileScreen : StudentProfileScreen} />
       <Tab.Screen name="Menu" component={isCoach ? CoachMenuScreen : StudentMenuScreen} />
       <Tab.Screen name="Option" component={OptionScreen} />
+      <Tab.Screen name="Book" component={BookScreen} />
       <Tab.Screen name="Agenda" component={isCoach ? AgendaCoachScreen : CoachingStudentScreen} />
     </Tab.Navigator>
   );

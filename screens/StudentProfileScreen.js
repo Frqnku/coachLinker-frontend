@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Camera, CameraType, FlashMode } from 'expo-camera';
 import { useIsFocused } from "@react-navigation/native";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -9,9 +9,7 @@ import { signUp, addPhoto } from '../reducers/users'
 import { updateStudent} from '../reducers/student';
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
-
 import {StyleSheet, KeyboardAvoidingView, Image, TextInput, View, Text, ScrollView, TouchableOpacity} from 'react-native';
-import { nanoid } from '@reduxjs/toolkit';
 
 import { backend_address } from '../backendAddress';
 
@@ -34,9 +32,9 @@ export default function StudentProfileScreen({navigation}) {
   
     let cameraRef = useRef(null);
     
-    const student = useSelector((state) => state.user.value)  // en comparatif user avec s dans add info
+    const student = useSelector((state) => state.users.value) 
     const token = useSelector(state => state.users.value.token)
-    console.log('student10', token)
+    console.log('student10', student)
     const profilStudent = useSelector(state => state.users.value.signUp)
     console.log('profilStudent10', profilStudent)
  
@@ -151,7 +149,7 @@ fetch(`${backend_address}/upload`, {
                   <TouchableOpacity onPress={() => requestCameraPermission() && pickImage()} >
                   <Image  style={styles.crayon} source={require('../assets/crayon.png')} />
                   </TouchableOpacity>
-                  <Text style={[ isDarkMode ? styles.darksignin : styles.lightsignin]}>Good morning {profilCoach.firstname}!</Text>
+                  <Text style={[ isDarkMode ? styles.darksignin : styles.lightsignin]}>Good morning {profilStudent.firstname}!</Text>
           </View>
       <ScrollView contentContainerStyle={styles.scrollContainer}>  
  
@@ -168,7 +166,7 @@ fetch(`${backend_address}/upload`, {
  <View style={styles.cardAbout}>
    <Text
    multiline numberOfLines={4}  
-   style={[ isDarkMode ? styles.darkInputapropos : styles.lightInputapropos,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{studentCoach.myDescription} </Text>
+   style={[ isDarkMode ? styles.darkInputapropos : styles.lightInputapropos,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilStudent.myDescription} </Text>
  </View>
  
 </ScrollView>

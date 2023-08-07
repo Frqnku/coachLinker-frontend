@@ -1,6 +1,5 @@
 import React from 'react'
 import { StyleSheet, KeyboardAvoidingView, Text, View, TextInput, ScrollView, TouchableOpacity, Image} from 'react-native'
-import GoodMorning from '../components/GoodMorning';
 import { useState, useRef, useEffect } from 'react';
 import { Camera, CameraType, FlashMode } from 'expo-camera';
 import { useIsFocused } from "@react-navigation/native";

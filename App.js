@@ -29,23 +29,27 @@ import { persistStore, persistReducer } from 'redux-persist'; // Import Redux Pe
 import { PersistGate } from 'redux-persist/integration/react';
 import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStoragee
 import darkMode from './reducers/darkMode';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import users from './reducers/users';
 import coachs from './reducers/coachs';
 import student from './reducers/student';
+import bookingStudent from './reducers/bookingStudent';
+
+import { signUp } from './reducers/users'
 
 
 // Redux Persist Config
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  blacklist: ['darkMode','users','student','coachs'] 
+  blacklist: ['darkMode','users','student','coachs', 'bookingStudent'] 
 };
 const rootReducer = combineReducers({
   darkMode,
   users,
   coachs,
   student,
+  bookingStudent
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 const store = configureStore({
@@ -59,6 +63,7 @@ const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
   const isDarkMode = useSelector(state => state.darkMode.value)
+  const isCoach = user.signUp.isCoach;
   return (
     <Tab.Navigator 
     initialRouteName='Menu'
@@ -97,9 +102,10 @@ const TabNavigator = () => {
 };
 
 // à changer plus tard
-const isLogged = false
+const isLogged = true
 const isValidate = true
 const isCoach = false
+
 
 
 export default function App() {

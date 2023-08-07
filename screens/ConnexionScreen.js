@@ -122,7 +122,7 @@ const handleModal = () => {
                     dispatch(signUp({isCoach: data.isCoach, isValidate: data.isValidate}))
                     setSignInEmail('');
                     setSignInPassword('');
-                    navigation.navigate('TabNavigator')
+                    navigation.navigate('Home')
                 }
             });
     }

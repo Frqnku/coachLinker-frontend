@@ -69,7 +69,10 @@ const Navigation = () => {
 
     const isCoach = useSelector(state => state.users.value.signUp.isCoach)
     const isValidate = useSelector(state => state.users.value.signUp.isValidate)
+
     const isLogged = useSelector(state => state.users.value.token)
+
+    console.log((!isCoach))
 
     return (
         <NavigationContainer>  

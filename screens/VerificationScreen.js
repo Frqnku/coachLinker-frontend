@@ -19,7 +19,8 @@ export default function VerificationScreen() {
           console.log('E-mail envoyé avec succès!', event);
         }
       },
-    );
+    )
+  }
   return (
     <View style={styles.container}>
         <Text style={styles.text1}>Félicitations</Text>
@@ -71,4 +72,3 @@ const styles = StyleSheet.create({
     }
 
 })
-}

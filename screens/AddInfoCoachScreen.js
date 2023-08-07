@@ -20,8 +20,6 @@ export default function AddInfoCoachScreen({ navigation }) {
   const isDarkMode = useSelector(state => state.darkMode.value)
   const user = useSelector((state) => state.users.value);
   const coach = useSelector((state) => state.users.value); 
-  const username = useSelector(state => state.users.value.name)
-  
 
   // les useStates
   // const camera : 
@@ -218,7 +216,7 @@ if (!hasPermission || !isFocused) {
         end={isDarkMode ? DarkEnd : LightEnd}
         style={styles.background}
         >
-          <TouchableOpacity  onPress={() => navigation.navigate('Localisation')} >
+          <TouchableOpacity  onPress={() => navigation.navigate('ChooseRole')} >
           <Image style={[styles.return, isDarkMode ? styles.darkReturn : styles.lightReturn]} source={require('../assets/bouton-retour.png')}/>
           </TouchableOpacity>
 

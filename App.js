@@ -20,7 +20,7 @@ import OptionScreen from './screens/OptionScreen';
 import StudentMenuScreen from './screens/StudentMenuScreen';
 import StudentProfileScreen from './screens/StudentProfileScreen';
 import VerificationScreen from './screens/VerificationScreen';
-import { ConfettisScreen } from './screens/ConfettisScreen';
+
 
 // import React, { useEffect } from 'react';
 // import * as Font from 'expo-font';

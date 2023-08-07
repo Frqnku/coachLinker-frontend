@@ -1,6 +1,7 @@
 import React from 'react'
 import { StyleSheet, Text, View} from 'react-native'
 import Mailer from 'react-native-mail';
+import ConfettiCannon from 'react-native-confetti-cannon';
 
 export default function VerificationScreen() {
 
@@ -22,6 +23,7 @@ export default function VerificationScreen() {
     );
   return (
     <View style={styles.container}>
+      <ConfettiCannon count={200} origin={{x: -10, y: 0}} />
         <Text style={styles.text1}>Félicitations</Text>
         <Text style={styles.text2}>Nous procédons à une vérification de vos qualifications</Text>
         <Text style={styles.text3}>Vous recevrez un mail d'ici 5 jours ouvrés</Text>

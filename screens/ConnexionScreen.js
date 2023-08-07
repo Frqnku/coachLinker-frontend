@@ -3,7 +3,11 @@ import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { LinearGradient } from 'expo-linear-gradient';
 import { signUp, addToken} from '../reducers/users'; 
-import ConfettiCannon from 'react-native-confetti-cannon';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
+
+
+
 
 export default function ConnexionScreen({ navigation }) {
     const dispatch = useDispatch();
@@ -17,6 +21,7 @@ export default function ConnexionScreen({ navigation }) {
     const [pwdStrength, setPwdStrength] = useState('')
     const [pwdColor, setPwdColor] = useState('transparent')
     const [errorSignup, setErrorSignup] = useState('')
+    const [isPasswordSecure, setIsPasswordSecure] = useState(true);
 
     const isDarkMode = useSelector(state => state.darkMode.value)
 
@@ -133,7 +138,7 @@ return (
     end={isDarkMode ? DarkEnd : LightEnd}
     style={styles.background}
     >
-        <ConfettiCannon count={200} origin={{x: -10, y: 0}} />
+        
       <ScrollView>
         <View style={styles.boximage}>
           <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={isDarkMode ? require('../assets/logodark.png') : require('../assets/logolight2.png')} />
@@ -142,13 +147,24 @@ return (
           placeholder="Email" onChangeText={(value) => setSignUpEmail(value)} value={signUpEmail}  />
 
         <Text style={[styles.text, isDarkMode ? styles.darkText : styles.lightText]}>Le mot de passe doit contenir 8 caractères minimum, une majuscule, une minuscule, un chiffre et un caractère spécial</Text>
-        <TextInput selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]}
-          placeholder="Mot de passe" onChangeText={(value) => setSignUpPassword(value)} value={signUpPassword} secureTextEntry={true}/>
-        <Text style={[styles.text, {color: pwdColor, textAlign: 'left', fontWeight: 600}]}>{pwdStrength}</Text>
+      <View style={styles.eye}>
+            <TextInput selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]}
+          placeholder="Mot de passe" onChangeText={(value) => setSignUpPassword(value)} value={signUpPassword} secureTextEntry={isPasswordSecure}/>
+          <TouchableOpacity >
+             <Icon name={isPasswordSecure ? 'eye-slash': 'eye'} size={28} color='#F4A100'onPress={() => { isPasswordSecure ? setIsPasswordSecure(false) : setIsPasswordSecure(true) }}/>
+          </TouchableOpacity>
          
+      </View>
+    
+        <Text style={[styles.text, {color: pwdColor, textAlign: 'left', fontWeight: 600}]}>{pwdStrength}</Text>
+      <View style={styles.eye}>
         <TextInput selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#7B7B7B":"#7B7B7B"} style={[styles.inputP2, isDarkMode ? styles.darkInputMdp : styles.lightInputMdp]}
-          placeholder="Confirmer le mot de passe" onChangeText={(value) => setSignUpPassword2(value)} value={signUpPassword2} secureTextEntry={true}/>
+          placeholder="Confirmer le mot de passe" onChangeText={(value) => setSignUpPassword2(value)} value={signUpPassword2} secureTextEntry={isPasswordSecure} />
         {errorSignup && <Text style={{color: "#fff"}}>{errorSignup}</Text>}
+        <TouchableOpacity >
+             <Icon name={isPasswordSecure ? 'eye-slash': 'eye'} size={28} color='#F4A100'onPress={() => { isPasswordSecure ? setIsPasswordSecure(false) : setIsPasswordSecure(true) }}/>
+          </TouchableOpacity>
+        </View>
          
           <TouchableOpacity style={[ isDarkMode ? styles.darkbutton : styles.lightbutton]}
 
@@ -218,7 +234,7 @@ darkInputMdp:{
   marginTop: 10,
   fontSize : 15,
   backgroundColor: '#2E2E2E',
-  width : "80%",
+  width : "70%",
   margin : "3%",
   height: 40,
   borderRadius: 13,
@@ -231,13 +247,17 @@ lightInputMdp:{
   marginTop: 20,
   fontSize : 15,
   backgroundColor: '#E8E8E8',
-  width : "80%",
+  width : "70%",
   margin : "3%",
   height: 40,
   borderRadius: 13,
   paddingLeft: 15,
   fontStyle: 'italic',
   color: 'black', 
+},
+eye :{
+  flexDirection: 'row',
+  alignItems: 'center',
 },
 text: {
   width: '80%',
@@ -256,7 +276,7 @@ darkInput:{
   marginTop: 10,
   fontSize : 15,
   backgroundColor: '#2E2E2E',
-  width : "80%",
+  width : "70%",
   margin : "3%",
   height: 40,
   borderRadius: 13,
@@ -268,7 +288,7 @@ lightInput:{
   marginTop: 20,
   fontSize : 15,
   backgroundColor: '#E8E8E8',
-  width : "80%",
+  width : "70%",
   margin : "3%",
   height: 40,
   borderRadius: 13,

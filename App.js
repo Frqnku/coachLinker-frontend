@@ -63,6 +63,7 @@ const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
   const isDarkMode = useSelector(state => state.darkMode.value)
+  const isCoach = useSelector(state => state.users.value.signUp.isCoach)
 
   return (
     <Tab.Navigator 

@@ -226,7 +226,7 @@ useEffect(() => {
         iban : data.data.iban,
         bic : data.data.bic, 
         price : data.data.price,
-        city : data.data.coacitychCity,
+        city : data.data.city,
         coachingPlaces : data.data.coachingPlaces,
        }))
         
@@ -244,126 +244,48 @@ if (!hasPermission || !isFocused) {
         style={styles.background}
         >
        <View style={styles.picture}>
-                  <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={{uri : user.photo}} />
+                  <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={{uri:profilCoach.image}} />
                   <TouchableOpacity onPress={() => requestCameraPermission() && pickImage()} >
-                      <Image  style={styles.crayon} source={require('../assets/crayon.png')} />
-                      <Text style={isDarkMode ? styles.darkText : styles.lightText}>            Good morning {user.signUp.firstnamename}!</Text>
+                  <Image  style={styles.crayon} source={require('../assets/crayon.png')} />
                   </TouchableOpacity>
+                  <Text style={[ isDarkMode ? styles.darksignin : styles.lightsignin]}>Good morning {profilCoach.firstname}!</Text>
           </View>
     
       <ScrollView contentContainerStyle={styles.scrollContainer}>  
  
-      <Text> profilCoach {profilCoach.name || 'coach'}</Text>
-
       <View style={styles.inputView}>
-        <Text selectionColor={"#FF6100"} style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]}>{profilCoach.name || 'coach'}</Text>
-        <TextInput selectionColor={"#FF6100"} style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]}  placeholder='Prénom' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} ></TextInput>
-        <TextInput selectionColor={"#FF6100"} style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]}  placeholder='Date de naissance (jj/mm/aaaa)' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} ></TextInput>
-      </View>
-      
-      <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText]}>Sports enseignés : </Text>
-      <ScrollView  horizontal={true} style={styles.scroll} showsHorizontalScrollIndicator={false}>
-          <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/football.png'), 'Football')}>
-            <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/football.png')} />
-            <Text style={styles.sports}>Football</Text>
-          </TouchableOpacity>
 
-          <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/gant-de-boxe.png'), 'Boxe')}>
-            <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/gant-de-boxe.png')} />
-            <Text style={styles.sports}>Boxe</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/gym.png'), 'Gym')}>
-            <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/gym.png')} />
-            <Text style={styles.sports}>Gym</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/basket-ball.png'), 'Basket ball')}>
-            <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/basket-ball.png')} />
-            <Text style={styles.sports}>Basket ball</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/le-golf.png'), 'Golf')}>
-            <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/le-golf.png')} />
-            <Text style={styles.sports}>Golf</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/nageur.png'), 'Natation')}>
-            <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/nageur.png')} />
-            <Text style={styles.sports}>Natation</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/tennis.png'), 'Tennis')}>
-            <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/tennis.png')} />
-            <Text style={styles.sports}>Tennis</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/volant.png'), 'Course')}>
-            <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/volant.png')} />
-            <Text style={styles.sports}>Course</Text>
-          </TouchableOpacity>
-      </ScrollView>
-
-      <View style={[styles.selectedImagesContainer, isDarkMode ? styles.darkSelectedImagesContainer : styles.lightSelectedImagesContainer]}>
-        {selectedImages.map((item, index) => (
-          <View key={index} style={styles.selectedImageContainer}>
-            <Text style={[styles.itemName, isDarkMode ? styles.darkItemName : styles.lightItemName]}>{item.name}</Text>
-            <TouchableOpacity onPress={() => handleImageRemove(index)}>
-              <Text style={[styles.removeButton, isDarkMode ? styles.darkRemoveButton : styles.lightRemoveButton]}>X</Text>
-            </TouchableOpacity>
-          </View>
-          ))}
+      <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "white":"#7B7B7B"}]}>Informations générales </Text>
+        <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilCoach.name}</Text>
+        <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilCoach.firstname}</Text>
+        <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilCoach.dateOfBirth}</Text>
+        <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "white":"#7B7B7B"}]}>Sports enseignés et à propos </Text>
+        <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilCoach.teachedSport}</Text>
       </View>
      
       <View style={styles.cardAbout}>
-      <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText]}>A propos de moi </Text>
-        <TextInput 
-        multiline numberOfLines={4} 
-        placeholder='Ma description'
-        selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} 
-        style={[ isDarkMode ? styles.darkInputapropos : styles.lightInputapropos]} ></TextInput>
+        <Text
+        multiline numberOfLines={4}  
+        style={[ isDarkMode ? styles.darkInputapropos : styles.lightInputapropos,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilCoach.myDescription} </Text>
       </View>
 
-        <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText]}>Adresses</Text>
-          <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]} placeholder='Adresse' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
-          <TextInput style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]}  placeholder='Adresse coachingPlaces' placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} selectionColor={"#FF6100"}></TextInput>
+         <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "white":"#7B7B7B"}]} >City et lieu de coaching</Text>
+          <Text style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilCoach.coachCity}</Text>
+          <Text style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilCoach.coachingPlaces} </Text>
        
 
-        <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText]}> Informations professionnelles </Text>
-          <TextInput 
-           placeholder='Référence carte Pro.'
-          selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} 
-          style={[ isDarkMode ? styles.darkInput : styles.lightInput]}  >
-         </TextInput>
+        <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "white":"#7B7B7B"}]}> Informations professionnelles </Text>
+          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>Cart Pro. : {profilCoach.proCard}</Text>
 
-          <TextInput 
-           placeholder='Taux horaire'
-          selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} 
-          style={[ isDarkMode ? styles.darkInput : styles.lightInput]}  >
-          </TextInput>
+          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>Taux horaire :{profilCoach.price} €</Text>
 
-          <TextInput 
-          placeholder='Numéro de Siret'   
-          selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} 
-          style={[ isDarkMode ? styles.darkInput : styles.lightInput]}>
-          </TextInput>
+          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>Siret : 
+          </Text>
     
-        <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText]}>Informations de paiements</Text>
-          <TextInput 
-          placeholder="IBAN"
-          selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} 
-          style={[ isDarkMode ? styles.darkInput : styles.lightInput]}>
-          </TextInput>
+        <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "white":"#7B7B7B"}]}>Informations de paiements</Text>
+          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>IBAN :{profilCoach.iban} </Text>
 
-          <TextInput 
-          placeholder='BIC' 
-          selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} 
-          style={[ isDarkMode ? styles.darkInput : styles.lightInput]}></TextInput>
-    
-      
-        <TouchableOpacity style={[ isDarkMode ? styles.darkbutton : styles.lightbutton]} activeOpacity={0.8}>
-          <Text style={[ isDarkMode ? styles.darkTextButton : styles.lightTextButton]}>Valider</Text>
-        </TouchableOpacity>
+          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>BIC : {profilCoach.bic} </Text>
       
     </ScrollView>
     </LinearGradient>
@@ -487,9 +409,11 @@ const styles = StyleSheet.create({
   picture : {
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'space-between',
+    alignItems: 'center',
     width: '80%',
     marginVertical: 10,
+    marginLeft: 40,
+    marginRight : 40,
     },
   image :{
     width:50,
@@ -592,6 +516,7 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     marginBottom: 10, 
     color: 'white',
+    justifyContent: "center",
     },
   lightInput:{
     marginTop: 20,

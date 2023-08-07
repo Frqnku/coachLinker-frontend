@@ -1,3 +1,4 @@
+import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
@@ -20,6 +21,7 @@ import StudentMenuScreen from './screens/StudentMenuScreen';
 import StudentProfileScreen from './screens/StudentProfileScreen';
 import VerificationScreen from './screens/VerificationScreen';
 
+
 // import React, { useEffect } from 'react';
 // import * as Font from 'expo-font';
 
@@ -33,21 +35,21 @@ import { useSelector, useDispatch } from 'react-redux';
 import users from './reducers/users';
 import coachs from './reducers/coachs';
 import student from './reducers/student';
-import bookingStudent from './reducers/bookingStudent';
+import booking from './reducers/booking';
 
 
 // Redux Persist Config
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  blacklist: ['darkMode','users','student','coachs', 'bookingStudent'] 
+  blacklist: ['darkMode','users','student','coachs', 'booking'] 
 };
 const rootReducer = combineReducers({
   darkMode,
   users,
   coachs,
   student,
-  bookingStudent
+  booking
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 const store = configureStore({

@@ -30,9 +30,6 @@ export default function CoachProfileScreen() {
   const [type, setType] = useState(CameraType.back);
   const [flashMode, setFlashMode] = useState(FlashMode.off);
 
-  const [coachName, setCoachName] = useState('')
-  const [coachFirstname, setCoachFirstname] = useState('')
-  const [coachBirthDate, setCoachBirthDate] = useState('')
   const [coachAbout, setCoachAbout] = useState('')
   const [siretNumber, setSiretNumber] = useState('')
   const [ibanNumber, setIbanNumber] = useState('')
@@ -82,25 +79,25 @@ export default function CoachProfileScreen() {
 
       
     // sélection des sports
-    const handleImageSelect = (image, imageName) => {
-      if (selectedImages.length < 3 && !selectedImages.some((item) => item.image === image)) {
-        setSelectedImages((prevImages) => [...prevImages, { image, name: imageName }]);
-        setCoachSports((prevSports) => [...prevSports, imageName]); // Met à jour studentSports directement
-      }
-    };
+    // const handleImageSelect = (image, imageName) => {
+    //   if (selectedImages.length < 3 && !selectedImages.some((item) => item.image === image)) {
+    //     setSelectedImages((prevImages) => [...prevImages, { image, name: imageName }]);
+    //     setCoachSports((prevSports) => [...prevSports, imageName]); // Met à jour studentSports directement
+    //   }
+    // };
   
-    const handleImageRemove = (index) => {
-      setSelectedImages((prevImages) => {
-        const updatedImages = [...prevImages];
-        const removedImage = updatedImages.splice(index, 1)[0];
-        return updatedImages;
-      });
-      setCoachSports((prevSports) => {
-        const updatedSports = [...prevSports];
-        updatedSports.splice(index, 1); // Retire le sport de la liste
-        return updatedSports;
-      });
-    };  
+    // const handleImageRemove = (index) => {
+    //   setSelectedImages((prevImages) => {
+    //     const updatedImages = [...prevImages];
+    //     const removedImage = updatedImages.splice(index, 1)[0];
+    //     return updatedImages;
+    //   });
+    //   setCoachSports((prevSports) => {
+    //     const updatedSports = [...prevSports];
+    //     updatedSports.splice(index, 1); // Retire le sport de la liste
+    //     return updatedSports;
+    //   });
+    // };  
     
 
       
@@ -270,7 +267,7 @@ if (!hasPermission || !isFocused) {
       </View>
 
          <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "white":"#7B7B7B"}]} >City et lieu de coaching</Text>
-          <Text style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilCoach.coachCity}</Text>
+          <Text style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilCoach.city}</Text>
           <Text style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilCoach.coachingPlaces} </Text>
        
 

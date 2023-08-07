@@ -5,8 +5,7 @@ import { useIsFocused } from "@react-navigation/native";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useSelector, useDispatch } from 'react-redux';
 import { switchMode } from '../reducers/darkMode';
-import users from '../reducers/users';
-import { addPhoto} from '../reducers/users';
+import { signUp, addPhoto } from '../reducers/users'
 import { updateStudent} from '../reducers/student';
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -36,6 +35,10 @@ export default function StudentProfileScreen({navigation}) {
     let cameraRef = useRef(null);
     
     const student = useSelector((state) => state.user.value)  // en comparatif user avec s dans add info
+    const token = useSelector(state => state.users.value.token)
+    console.log('student10', token)
+    const profilStudent = useSelector(state => state.users.value.signUp)
+    console.log('profilStudent10', profilStudent)
  
     
     const pickImage = async () => {
@@ -58,7 +61,7 @@ export default function StudentProfileScreen({navigation}) {
        
 
 
-// fetch modifié comme sur AddinfStudentScreen
+
 fetch(`${backend_address}/upload`, {
   method: 'POST',
   body: formData,
@@ -73,58 +76,6 @@ fetch(`${backend_address}/upload`, {
 }
 };
   
-
-const handleValidate =() => {
-    
-// faire un useselector du usedispatch de connexionscreen et récpérer l'id
-
-    fetch(`${backend_address}/students/profil`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-            name: studentName, 
-            firstname: studentFirstname,
-            dateOfBirth: studentDateOfBirth,
-            myDescription: studentMyDescription,
-            image: studentImage,
-            token: student.token,
-    
-     }),
-    }).then(response => response.json())
-        .then(data => {
-            console.log('test', data)
-            if (data.result) {
-                dispatch(updateStudent({ 
-                    name: studentName, 
-                    firstname: studentFirstname,
-                    dateOfBirth: studentDateOfBirth,
-                    myDescription: studentMyDescription,
-                    image: studentImage }));
-                    
-                navigation.navigate('Menu')
-
-            }
-        });
-}
-
-
-// 04/08 sélection des sports modifié à partir de AddinsoStudentScreen
-const handleImageSelect = (image, imageName) => {
-  if (selectedImages.length < 3 && !selectedImages.some((item) => item.image === image)) {
-    setSelectedImages((prevImages) => [...prevImages, { image, name: imageName }])
-    setStudentSports(selectedImages.map(item => item.name))
-  }
-}
-
-// 04/08 sélection images modifié à partir de AddinsoStudentScreen
-const handleImageRemove = (index) => {
-  setSelectedImages((prevImages) => {
-    const updatedImages = [...prevImages];
-    const removedImage = updatedImages.splice(index, 1)[0];
-    setStudentSports(prevSports => prevSports.filter(sport => sport !== removedImage.name)); // Retire le sport de la liste
-    return updatedImages;
-  });
-};
 
 
     const requestCameraPermission = async () => { 
@@ -141,30 +92,6 @@ const handleImageRemove = (index) => {
       type: 'image/jpeg',
     });
    
-//     fetch('https://coach-linker-backend.vercel.app/upload', {
-//       method: 'POST',
-//       body: formData,
-//     }).then((response) => response.json())
-//       .then((data) => { 
-//         console.log(data)
-//         data.result && fetch('https://coach-linker-backend.vercel.app/students/profil', {
-//             method: 'POST',
-//             headers: { 'Content-Type': 'application/json' },
-//             body: JSON.stringify({ 
-//                 image: data.url,
-//                 token: student.token,
-//          })
-         
-//       })
-//       .then((response) => response.json())
-//       .then((data) => {
-        
-//         dispatch(addPhoto(data.student.image));
-//         setHasPermission(false);
-//       })
-//    })  
-// }
-
 
         fetch(`${backend_address}/upload`, { // fetch modifié comme sur AddinfStudentScreen
           method: 'POST',
@@ -186,8 +113,28 @@ const handleImageRemove = (index) => {
         const LightStart = {x : 0.6, y : 0.4};
         const LightEnd = {x : 0.3, y : 0.1};
  
-         
-// {/* <Text>{realStudent.name}</Text> */}
+        useEffect(() => {
+          fetch(`${backend_address}/students/profil`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({token: token})
+          })
+            .then(response => response.json())
+            .then(data => {
+                console.log('student', data)
+                
+              dispatch(signUp({token:token, 
+                name: data.data.name,
+                firstname: data.data.firstname,
+                myDescription:data.data.myDescription,
+                dateOfBirth:data.data.dateOfBirth,
+                image: data.data.image,
+                favoriteSport: data.data.favoriteSport,
+               }))
+                
+            });
+        }, []);
+
     if (!hasPermission || !isFocused) {
         
        
@@ -199,98 +146,33 @@ const handleImageRemove = (index) => {
           end={isDarkMode ? DarkEnd : LightEnd}
         style={styles.background}
         >
-<ScrollView  contentContainerStyle={styles.scrollContainer}showsVerticalScrollIndicator={false}>
-     <Image style={[styles.return, isDarkMode ? styles.darkReturn : styles.lightReturn]} source={require('../assets/bouton-retour.png')} />
-
-    <View style={styles.picture}>
-       
-        <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={{uri : user.photo}} />
-        <TouchableOpacity onPress={() => requestCameraPermission() && pickImage()} >
-                    <Image  style={styles.crayon} source={require('../assets/crayon.png')} />
-        </TouchableOpacity>
-    </View>
-
-     <View style={[styles.inputs, isDarkMode ? styles.darkIn : styles.lightIn]}>
-        <TextInput placeholder="Nom" onChangeText={(value) => setStudentName(value)} value={studentName}
-        placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.inputNom, isDarkMode ? styles.darkInput : styles.lightInput]} />
-        <TextInput placeholder="Prénom" onChangeText={(value) => setStudentFirstname(value)} value={studentFirstname}
-        placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.inputPrenom, isDarkMode ? styles.darkInput : styles.lightInput]} />
-
-        <TextInput placeholder="Date de naissance"  onChangeText={(value) => setStudentDateOfBirth(value)} value={studentDateOfBirth}
-        placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.inputDate, isDarkMode ? styles.darkInput : styles.lightInput]} />
-    </View>
-
-
-    <View style={[styles.description, isDarkMode ? styles.darkIn : styles.lightIn]}>
-        <TextInput placeholder="A propos de moi ..." onChangeText={(value) => setStudentMyDescription(value)} value={studentMyDescription}
-        placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.inputMoi, isDarkMode ? styles.darkInput : styles.lightInput]} />
-
-    </View>
-
-   
-    <View>
-        <Text style={styles.favoris}>Sports favoris :</Text>
-    </View>
-
-    
-    <ScrollView  horizontal={true} style={styles.scroll} showsHorizontalScrollIndicator={false}>
-        <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/football.png'), 'Football')}>
-          <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/football.png')} />
-          <Text style={styles.sports}>Football</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/gant-de-boxe.png'), 'Boxe')}>
-            <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/gant-de-boxe.png')} />
-            <Text style={styles.sports}>Boxe</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/gym.png'), 'Gym')}>
-            <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/gym.png')} />
-            <Text style={styles.sports}>Gym</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/basket-ball.png'), 'Basket ball')}>
-            <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/basket-ball.png')} />
-            <Text style={styles.sports}>Basket ball</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/le-golf.png'), 'Golf')}>
-            <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/le-golf.png')} />
-            <Text style={styles.sports}>Golf</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/nageur.png'), 'Natation')}>
-            <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/nageur.png')} />
-            <Text style={styles.sports}>Natation</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/tennis.png'), 'Tennis')}>
-            <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/tennis.png')} />
-            <Text style={styles.sports}>Tennis</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.logos} onPress={() => handleImageSelect(require('../assets/sports/volant.png'), 'Course')}>
-            <Image style={[styles.sportIcon, isDarkMode ? styles.darkImg : styles.lightImg]} source={require('../assets/sports/volant.png')} />
-            <Text style={styles.sports}>Course</Text>
-          </TouchableOpacity>
-      </ScrollView>
-      <View style={styles.selectedImagesContainer}>
-        {selectedImages.map((item, index) => (
-          <View key={index} style={styles.selectedImageContainer}>
-            <Text style={styles.itemName}>{item.name}</Text>
-            <TouchableOpacity onPress={() => handleImageRemove(index)}>
-              <Text style={styles.removeButton}>X</Text>
-            </TouchableOpacity>
+           <View style={styles.picture}>
+                  <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={{uri:profilStudent.image}} />
+                  <TouchableOpacity onPress={() => requestCameraPermission() && pickImage()} >
+                  <Image  style={styles.crayon} source={require('../assets/crayon.png')} />
+                  </TouchableOpacity>
+                  <Text style={[ isDarkMode ? styles.darksignin : styles.lightsignin]}>Good morning {profilCoach.firstname}!</Text>
           </View>
-          ))}
-      </View>
-    
-    <TouchableOpacity onPress={() => handleValidate()} style={styles.button2} activeOpacity={0.8}>
-                            <Text style={styles.textButton}>Valider</Text>
-    </TouchableOpacity>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>  
+ 
+ <View style={styles.inputView}>
+
+ <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "white":"#7B7B7B"}]}>Informations générales </Text>
+   <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilStudent.name}</Text>
+   <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilStudent.firstname}</Text>
+   <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilStudent.dateOfBirth}</Text>
+   <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "white":"#7B7B7B"}]}>Sports favories et à propos </Text>
+   <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilStudent.favoriteSportSport}</Text>
+ </View>
+
+ <View style={styles.cardAbout}>
+   <Text
+   multiline numberOfLines={4}  
+   style={[ isDarkMode ? styles.darkInputapropos : styles.lightInputapropos,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{studentCoach.myDescription} </Text>
+ </View>
+ 
 </ScrollView>
-            </LinearGradient>
-      
+</LinearGradient>
 </KeyboardAvoidingView>
   )
     };
@@ -323,240 +205,566 @@ const handleImageRemove = (index) => {
 }
 
 const styles = StyleSheet.create({
-    darkBg :{
-        backgroundColor: 'black',
+  container: {
+    flex:1,
+    alignItems: 'center',
     },
-    lightBg:{
-        // backgroundColor: '#E8E8E8',
-    },
-    darkReturn:{
-        backgroundColor:"#2E2E2E",
-    },
-    lightReturn :{
-        backgroundColor: '#fff',
-    },
-    darkPicture:{
-        backgroundColor:"#2E2E2E",
-    },
-    lightPicture:{
-        backgroundColor: '#fff',
-    },
-    darkInput:{
-        backgroundColor: '#505050',
-        borderColor: "#505050",
-        
-    },
-    lightInput:{
-        backgroundColor: '#E8E8E8',
-        borderColor: "#E8E8E8",
-        
-    },
-    darkImg:{
-        backgroundColor: 'black',
-        borderColor: "#F4A100",
-    },
-    lightImg:{
-        backgroundColor: '#FFF8EB',
-        borderColor: "#E8E8E8",
-    },
-    darkIn:{
-     backgroundColor: '#2E2E2E',
-    },
-    lightIn:{
-    backgroundColor: '#fff',
-    },
-    container : {
-        flex :1 ,
-       justifyContent: "space-evenly",
-       
-    },
-    background:{
+  background:{
     width: "100%",
     height: "100%",
     },
-    scrollContainer:{
-        alignItems:'center',
+  darkBg :{
+    backgroundColor: 'black',
     },
-    return :{
-        width:40,
-        height:40,
-        marginRight: "80%",
-        marginTop: "15%",
-        borderRadius: 50,
+  lightBg:{
+    backgroundColor: '#E8E8E8',
     },
-   
-    picture : {
-        justifyContent: "center",
-        flexDirection: 'row',
-        marginTop: "2%",
+  return : {
+    width:40,
+    height:40,
+    alignItems: "center",
+    marginLeft: "3%",
+    marginTop: "8%",
+    borderRadius: 100,
+    },
+  darkReturn:{
+    backgroundColor:"#2E2E2E",
+    },
+  lightReturn :{
+    backgroundColor: '#fff',
+    },
+  scroll:{
+    marginLeft: 40,
+    marginRight : 40,
+    marginTop: 10,
+    },
+  scrollContainer: {
+    alignItems: 'center',
+    marginTop: 5,
+    },
+  aPropos: {
+    height: 100,
+    width: 350,
+    backgroundColor: '#F2F2F2',
+    borderRadius: 13
+    },
+  btnPhoto: {
+    height: 60,
+    width: 100,
+    backgroundColor: "#BF5000",
+    margin: 10,
+    justifyContent:'center',
+    alignItems: 'center',
+    borderRadius: 25,
+    },
+  btnValidate: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '30%',
+    height: 40,
+    backgroundColor: '#BF5000',
+    borderRadius: 25,
+    marginTop: 30,
+    elevation: 15,
+    shadowColor: '#FF6100',
+    shadowOffset: { width: 50, height: 5 },
+    shadowOpacity: 0.0001,
+    },
+  buttonsContainer: {
+    flex: 0.1,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+    paddingTop: 20,
+    paddingLeft: 20,
+    paddingRight: 20,
+    },
+  cardAbout: {
+    width: 350,
+    height: 150,
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 10,
+    },
+  camera: {
+    flex: 1
+    },
+  picture : {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '80%',
+    marginVertical: 10,
+    marginLeft: 40,
+    marginRight : 40,
+    },
+  image :{
+    width:50,
+    height:50,
+    backgroundColor: "#fff",
+    borderRadius: 50,
+    marginLeft : 20,
+    marginTop : 40
+    },
+  crayon :{
+    width: 10,
+    height:10,
+    marginLeft : 20,
+    },
+  input: {
+    },
+  inputView: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width : "100%",
+    margin: 10,
+    borderRadius: 20,
+    },
+  itemName: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginRight: 100,
+    },
+  logos :{
+    margin: 20,
+    height:70,
+    width :90,
+    alignItems: 'center',
+    justifyContent: 'center',
+    },
+  removeButton: {
+    color: 'black',
+    fontWeight: 'bold',
+    marginLeft: 10,
+    fontSize: 16,
+    },
+  selectedImageContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 5,
+    },
+  selectedImagesContainer: {
+    marginVertical: 10,
+    alignItems: 'center',
+    width: 300,
+    marginBottom: 60,
+    },
+  snapContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    paddingBottom: 25,
+    },
+  snapContainer2: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    paddingBottom: 25,
+    },
+  sportIcon: {
+    width:60,
+    height:60,
+    },
+  sports: {
+    display: 'none'
+    },
+  text: {
+    color: '#FFF'
+    },
+  titre: {
+    fontSize: 15,
+    marginTop: 20
+    },
+    // style du Darkmode
+  darkBg :{
+    backgroundColor: 'black',
+    },
+  lightBg:{
+    backgroundColor: '#E8E8E8',
+    },
+  darkPicture:{
+    backgroundColor:"#505050",
+    },
+  lightPicture:{
+    backgroundColor: '#fff',
+    },
+  darkInput:{
+    marginTop: 10,
+    fontSize : 15,
+    backgroundColor: '#2E2E2E',
+    width : "80%",
+    margin : "3%",
+    height: 40,
+    borderRadius: 13,
+    paddingLeft: 15,
+    marginBottom: 10, 
+    color: 'white',
+    justifyContent: "center",
+    },
+  lightInput:{
+    marginTop: 20,
+    fontSize : 15,
+    backgroundColor: '#E8E8E8',
+    width : "80%",
+    margin : "3%",
+    height: 40,
+    borderRadius: 13,
+    paddingLeft: 15,
+    marginBottom: 10, 
+    color: 'black', 
+    },
+  darkInputapropos:{
+    marginTop: 30,
+    fontSize : 15,
+    backgroundColor: '#2E2E2E',
+    width : "80%",
+    margin : "3%",
+    height: 150,
+    borderRadius: 13,
+    paddingLeft: 15,
+    marginBottom: 50, 
+    color: 'white',
+    },
+  lightInputapropos:{
+    marginTop: 20,
+    fontSize : 15,
+    backgroundColor: '#E8E8E8',
+    width : "80%",
+    margin : "3%",
+    height: 200,
+    borderRadius: 13,
+    paddingLeft: 15,
+    marginBottom: 10, 
+    color: 'black', 
+    },
+  darkImg:{
+    borderColor: "#FF6100",
+    },
+  lightImg:{
+    backgroundColor: '#fff',
+    borderColor: "#E8E8E8",
+    },
+  darkText: {
+    color: '#FFFFFF'
+    },
+  lightText: {
+    color: 'black'
+    },
+  darkSelectedImagesContainer: {
+    // backgroundColor: '#2E2E2E'
+    },
+  lightSelectedImagesContainer: {
+    // backgroundColor: '#FFFFFF'
+    },
+  darkItemName: {
+    color: '#FF6100'
+    },
+  lightItemName: {
+    color: 'black'
+    },
+  darkRemoveButton: {
+    color: '#FF6100',
+    textShadowColor: 'white',  //'rgba(255, 165, 0, 1)', Couleur de l'ombre (noir avec opacité 0.75)
+    textShadowOffset: { width: 0.5, height: 1 }, // Décalage de l'ombre (effet relief)
+    textShadowRadius: 20,
+    },
+  lightRemoveButton: {
+    color: 'black'
+    },
+  darksignin: {
+    width : "80%",
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize : 15,
+    marginTop: 30,
+    color : '#AAAAAA',
+    fontWeight: 'bold',
+    textShadowColor: 'rgba(255, 165, 0, 1)',  //'rgba(255, 165, 0, 1)', Couleur de l'ombre (noir avec opacité 0.75)
+    textShadowOffset: { width: 0.5, height: 0.5 }, // Décalage de l'ombre (effet relief)
+    textShadowRadius: 20, // Rayon de l'ombre (effet relief)
+    },
+  lightsignin: {
+    width : "80%",
+    justifyContent: 'center',
+    fontSize : 15,
+    marginTop: 30,
+    color : 'black',
+    fontWeight: 'bold',
+    // backgroundColor: '#58FD0B',
+    textShadowColor: 'rgba(255, 100, 0, 0.5)',  //'rgba(255, 165, 0, 1)', Couleur de l'ombre (noir avec opacité 0.75)
+    textShadowOffset: { width: 0.5, height: 0.5 }, // Décalage de l'ombre (effet relief)
+    textShadowRadius: 1, // Rayon de l'ombre (effet relief)
+    },
+  lightbutton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '30%',
+    height: 40,
+    backgroundColor: '#FF711A',
+    borderRadius: 25,
+    marginTop: 30,
+    elevation: 15,
+    shadowColor: '#FF6100',
+    shadowOffset: { width: 50, height: 5 },
+    shadowOpacity: 0.0001,
+    },
+  darkbutton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 150,
+    height: 50,
+    borderRadius: 25,
+    marginTop: 20,
+    marginBottom: 40,
+    elevation: 15,
+    backgroundColor: '#BF5000',
+    shadowColor: '#FF6100',
+    shadowOffset: { width: 50, height: 5,},
+    shadowOpacity: 0.0001,
+    },
+  lightTextButton: {
+    fontSize : 15,
+    color: 'white',
+    fontWeight: 'bold',
+    },
+  darkTextButton: {
+    fontSize : 15,
+    color: '#2E2E2E',
+    fontWeight: 'bold',
+  },
+})
+    // darkBg :{
+    //     backgroundColor: 'black',
+    // },
+    // lightBg:{
+    //     // backgroundColor: '#E8E8E8',
+    // },
+    // darkReturn:{
+    //     backgroundColor:"#2E2E2E",
+    // },
+    // lightReturn :{
+    //     backgroundColor: '#fff',
+    // },
+    // darkPicture:{
+    //     backgroundColor:"#2E2E2E",
+    // },
+    // lightPicture:{
+    //     backgroundColor: '#fff',
+    // },
+    // darkInput:{
+    //     backgroundColor: '#505050',
+    //     borderColor: "#505050",
         
-    },
-    image :{
-        width:100,
-        height:100,
-        backgroundColor: "#fff",
-        borderRadius: 50,
-    },
-    crayon :{
-        width:20,
-        height:20,
-    },
-    inputs: {
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginTop: "8%",
-        marginLeft: "5%",
-        width: "90%",
-        backgroundColor:"#fff",
-        borderRadius: 5,
-     
-    },
-    inputNom: {
-        fontSize : 20,
-        borderColor: "#E8E8E8",
-        borderWidth: 2,
-        width : "80%",
-        margin : "4%",
-        height: 40,
-        paddingLeft: 5,
-        borderRadius: 5,
+    // },
+    // lightInput:{
+    //     backgroundColor: '#E8E8E8',
+    //     borderColor: "#E8E8E8",
+        
+    // },
+    // darkImg:{
+    //     backgroundColor: 'black',
+    //     borderColor: "#F4A100",
+    // },
+    // lightImg:{
+    //     backgroundColor: '#FFF8EB',
+    //     borderColor: "#E8E8E8",
+    // },
+    // darkIn:{
+    //  backgroundColor: '#2E2E2E',
+    // },
+    // lightIn:{
+    // backgroundColor: '#fff',
+    // },
+    // container : {
+    //     flex :1 ,
+    //    justifyContent: "space-evenly",
        
-    },
-    
-    inputPrenom :{
-        fontSize : 20,
-        borderColor: "#E8E8E8",
-        borderWidth: 2,
-        width : "80%",
-        margin : "4%",
-        height: 40,
-        paddingLeft: 5,
-        borderRadius: 5,
-    },
-    inputDate :{
-        fontSize : 20,
-        borderColor: "#E8E8E8",
-        borderWidth: 2,
-        width : "80%",
-        margin : "4%",
-        height: 40,
-        paddingLeft: 5,
-        borderRadius: 5,
-    },
-    description :{
-        alignItems: 'center',
-        marginTop: "8%",
-        marginLeft: "5%",
-        width: "90%",
-        backgroundColor:"#fff",
-        borderRadius: 5,
-        
-    },
-    inputMoi :{
-        fontSize : 20,
-        alignItems:'flex-start',
-        borderColor: "#E8E8E8",
-        borderWidth: 2,
-        width : "80%",
-        margin : "4%",
-        height: 150,
-        paddingLeft: 5,
-        borderRadius: 5,
-        paddingBottom: 100,
-    },
-    favoris :{
-        fontSize:20,
-        marginTop: "8%",
-        paddingLeft: 20,
-        color: "#7B7B7B",
-    },
+    // },
+    // background:{
+    // width: "100%",
+    // height: "100%",
+    // },
+    // scrollContainer:{
+    //     alignItems:'center',
+    // },
+    // return :{
+    //     width:40,
+    //     height:40,
+    //     marginRight: "80%",
+    //     marginTop: "15%",
+    //     borderRadius: 50,
+    // },
    
-    scroll:{
-        marginLeft: 40,
-        marginRight : 40,
-        marginTop: "15%",
-    },
-    logos :{
-      margin: 20,
-      height:70,
-      width :90,
-      alignItems: 'center',
-      justifyContent: 'center',
-      paddingBottom: 50,
+    // picture : {
+    //     justifyContent: "center",
+    //     flexDirection: 'row',
+    //     marginTop: "2%",
+        
+    // },
+    // image :{
+    //     width:100,
+    //     height:100,
+    //     backgroundColor: "#fff",
+    //     borderRadius: 50,
+    // },
+    // crayon :{
+    //     width:20,
+    //     height:20,
+    // },
+    // inputs: {
+    //     justifyContent: 'space-between',
+    //     alignItems: 'center',
+    //     marginTop: "8%",
+    //     marginLeft: "5%",
+    //     width: "90%",
+    //     backgroundColor:"#fff",
+    //     borderRadius: 5,
+     
+    // },
+    // inputNom: {
+    //     fontSize : 20,
+    //     borderColor: "#E8E8E8",
+    //     borderWidth: 2,
+    //     width : "80%",
+    //     margin : "4%",
+    //     height: 40,
+    //     paddingLeft: 5,
+    //     borderRadius: 5,
+       
+    // },
+    
+    // inputPrenom :{
+    //     fontSize : 20,
+    //     borderColor: "#E8E8E8",
+    //     borderWidth: 2,
+    //     width : "80%",
+    //     margin : "4%",
+    //     height: 40,
+    //     paddingLeft: 5,
+    //     borderRadius: 5,
+    // },
+    // inputDate :{
+    //     fontSize : 20,
+    //     borderColor: "#E8E8E8",
+    //     borderWidth: 2,
+    //     width : "80%",
+    //     margin : "4%",
+    //     height: 40,
+    //     paddingLeft: 5,
+    //     borderRadius: 5,
+    // },
+    // description :{
+    //     alignItems: 'center',
+    //     marginTop: "8%",
+    //     marginLeft: "5%",
+    //     width: "90%",
+    //     backgroundColor:"#fff",
+    //     borderRadius: 5,
+        
+    // },
+    // inputMoi :{
+    //     fontSize : 20,
+    //     alignItems:'flex-start',
+    //     borderColor: "#E8E8E8",
+    //     borderWidth: 2,
+    //     width : "80%",
+    //     margin : "4%",
+    //     height: 150,
+    //     paddingLeft: 5,
+    //     borderRadius: 5,
+    //     paddingBottom: 100,
+    // },
+    // favoris :{
+    //     fontSize:20,
+    //     marginTop: "8%",
+    //     paddingLeft: 20,
+    //     color: "#7B7B7B",
+    // },
+   
+    // scroll:{
+    //     marginLeft: 40,
+    //     marginRight : 40,
+    //     marginTop: "15%",
+    // },
+    // logos :{
+    //   margin: 20,
+    //   height:70,
+    //   width :90,
+    //   alignItems: 'center',
+    //   justifyContent: 'center',
+    //   paddingBottom: 50,
       
-    },
-    sportIcon: {
-        width:60,
-        height:60,
-    },
-    sports: {
-      display: 'none',
-    },
-    selectedImageContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginVertical: 5,
-      },
-      selectedImagesContainer: {
-        marginVertical: 10,
-        alignItems: 'center',
-        backgroundColor: '#FFFFFF',
-        width: "90%",
-        marginLeft: "5%",
-      },
-      itemName: {
-        fontWeight: 'bold',
-        marginRight: 100,
-      },
-      removeButton: {
-        color: 'black',
-        fontWeight: 'bold',
-        marginLeft: 10,
-        fontSize: 16,
-      },
-    camera: {
-        flex: 1,
-      },
-      buttonsContainer: {
-        flex: 0.1,
-        flexDirection: 'row',
-        alignItems: 'flex-end',
-        justifyContent: 'space-between',
-        paddingTop: 20,
-        paddingLeft: 20,
-        paddingRight: 20,
-      },
-      button: {
-        width: 44,
-        height: 44,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.2)',
-        borderRadius: 50,
-      },
-      snapContainer: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-        paddingBottom: 25,
-      },
-      input2: {
-        fontSize : 20,
-        backgroundColor: "#F2F2F2",
-        width : 200,
-        margin : "4%",
-        height: 40,
-        borderRadius: 5,
-        paddingLeft: 5
-      },
-      button2: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: 150,
-        height: 50,
-        backgroundColor: '#FF7C00',
-        borderRadius: 5,
-        marginTop: 15
-      },
-});
+    // },
+    // sportIcon: {
+    //     width:60,
+    //     height:60,
+    // },
+    // sports: {
+    //   display: 'none',
+    // },
+    // selectedImageContainer: {
+    //     flexDirection: 'row',
+    //     alignItems: 'center',
+    //     marginVertical: 5,
+    //   },
+    //   selectedImagesContainer: {
+    //     marginVertical: 10,
+    //     alignItems: 'center',
+    //     backgroundColor: '#FFFFFF',
+    //     width: "90%",
+    //     marginLeft: "5%",
+    //   },
+    //   itemName: {
+    //     fontWeight: 'bold',
+    //     marginRight: 100,
+    //   },
+    //   removeButton: {
+    //     color: 'black',
+    //     fontWeight: 'bold',
+    //     marginLeft: 10,
+    //     fontSize: 16,
+    //   },
+    // camera: {
+    //     flex: 1,
+    //   },
+    //   buttonsContainer: {
+    //     flex: 0.1,
+    //     flexDirection: 'row',
+    //     alignItems: 'flex-end',
+    //     justifyContent: 'space-between',
+    //     paddingTop: 20,
+    //     paddingLeft: 20,
+    //     paddingRight: 20,
+    //   },
+    //   button: {
+    //     width: 44,
+    //     height: 44,
+    //     alignItems: 'center',
+    //     justifyContent: 'center',
+    //     backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    //     borderRadius: 50,
+    //   },
+    //   snapContainer: {
+    //     flex: 1,
+    //     alignItems: 'center',
+    //     justifyContent: 'flex-end',
+    //     paddingBottom: 25,
+    //   },
+    //   input2: {
+    //     fontSize : 20,
+    //     backgroundColor: "#F2F2F2",
+    //     width : 200,
+    //     margin : "4%",
+    //     height: 40,
+    //     borderRadius: 5,
+    //     paddingLeft: 5
+    //   },
+    //   button2: {
+    //     justifyContent: 'center',
+    //     alignItems: 'center',
+    //     width: 150,
+    //     height: 50,
+    //     backgroundColor: '#FF7C00',
+    //     borderRadius: 5,
+    //     marginTop: 15
 

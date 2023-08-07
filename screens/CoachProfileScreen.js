@@ -200,19 +200,19 @@ const DarkEnd = {x : -0.3, y : -0.3};
 const LightStart = {x : 0.6, y : 0.4};
 const LightEnd = {x : 0.3, y : 0.1};
 
-useEffect(() => {
-  fetch('https://coach-linker-backend.vercel.app/coachs/profil', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({token: token})
-  })
-    .then(response => response.json())
-    .then(data => {
-        console.log('profilcoach', data)
+// useEffect(() => {
+//   fetch('https://coach-linker-backend.vercel.app/coachs/profil', {
+//     method: 'POST',
+//     headers: { 'Content-Type': 'application/json' },
+//     body: JSON.stringify({token: token})
+//   })
+//     .then(response => response.json())
+//     .then(data => {
+//         console.log('profilcoach', data)
         
-      dispatch(afficheprofil({token: token, data}))
-    });
-}, []);
+//       dispatch(afficheprofil({token: token, data}))
+//     });
+// }, []);
 
 if (!hasPermission || !isFocused) {
 

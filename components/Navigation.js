@@ -19,6 +19,7 @@ import StudentMenuScreen from '../screens/StudentMenuScreen';
 import StudentProfileScreen from '../screens/StudentProfileScreen';
 import VerificationScreen from '../screens/VerificationScreen';
 import BookScreen from '../screens/BookScreen';
+import CongratsScreen from '../screens/CongratsScreen'
 
 import { useSelector } from 'react-redux';
 
@@ -85,6 +86,7 @@ const Navigation = () => {
             <Stack.Screen name="AddInfoCoach" component={AddInfoCoachScreen} />
             <Stack.Screen name='Verification' component={VerificationScreen} />
             <Stack.Screen name="Book" component={BookScreen} />
+            <Stack.Screen name="Congrats" component={CongratsScreen} />
             <Stack.Screen name="TabNavigator" component={TabNavigator} />
           </Stack.Navigator>
         </NavigationContainer>

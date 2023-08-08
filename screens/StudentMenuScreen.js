@@ -95,8 +95,8 @@ export default function StudentMenuScreen({ navigation }) {
     return days;
   };
 
-  const handleBook = (coachID) => {
-    dispatch(updateBookedCoach(coachID))
+  const handleBook = (coachID, coachingPlaces, teachedSport) => {
+    dispatch(updateBookedCoach({coachID: coachID, coachingPlaces: coachingPlaces, teachedSport: teachedSport}))
     navigation.navigate('Book')
   }
 
@@ -138,7 +138,7 @@ export default function StudentMenuScreen({ navigation }) {
             ))}
           </View>
           <View>
-            <TouchableOpacity onPress={() => handleBook(data._id)}>
+            <TouchableOpacity onPress={() => handleBook(data._id, data.coachingPlaces, data.teachedSport)}>
               <Text style={[styles.text, isDarkMode ? styles.darkText : styles.lightText]}>Réserver une séance</Text>
             </TouchableOpacity>
           </View>

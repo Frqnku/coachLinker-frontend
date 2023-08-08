@@ -1,113 +1,370 @@
-import React, { useState, useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
-import { FlatList, View, TextInput, TouchableOpacity, Text, ScrollView,StyleSheet } from "react-native";
-import Moment from "moment";
-import io from "socket.io-client";
+import {
+    KeyboardAvoidingView,
+    Platform,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View
+  } from 'react-native';
+  import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+  import { Audio } from 'expo-av';
+  import React, { useState, useEffect } from 'react';
+  import socketIOClient from "socket.io-client";
+import { useSelector } from 'react-redux';
 
-const socket = io("http://localhost:8090");
-
-export default function MessageScreen(){
-  const user = useSelector((state) => state.users.value);
-  console.log(user)
-
-  const [messages, setMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState("");
-  const messagesList = useRef(null);
-  let currentDate = new Date("August 19, 1975 23:15:30").toDateString();
-
-  useEffect(() => {
-    // Fetch messages from server and scroll to bottom of messages list on load and every 60 seconds
-    const fetchMessages = async () => {
-      const { data, ok } = await api.get(`/chat/all`);
-      ok && setMessages(data);
-    };
-    fetchMessages();
-    messagesList.current.scrollToEnd();
-  }, []);
-
-//   useEffect(() => {
-//     if (user){
-//     socket.emit("join", user.organisation);
-
-//     // Listen for new messages from server
-//     socket.on("receive message", ({ message }) => {
-//       setMessages((prevMessages) => [...prevMessages, message]);
+  const socket = socketIOClient("http://192.168.10.126:3000")
+  
+  export default function MessageScreen(params) {
+    const [message, setMessage] = useState([])
+    const [myMessage, setMyMessage] = useState('')
+    const user = useSelector((state) => state.users.value)
+    const id = useSelector((state) => state.booking.value)
     
-//     });
-
-//     return () => {
-//       socket.off("receive message");
-//       socket.off("join");
-//     };
-// }
-//   }, [user]);
 
 
-  // Send message to server
-  const handleSubmit = async () => {
-    const { data, ok } = await api.post(`/chat/new`, { content: newMessage });
-    if (ok) {
-    //   socket.emit("messages", { message: data });
-    //   setNewMessage("");
+  console.log(user)
+    useEffect(() => {
+
+        socket.emit("join" , id)
+      socket.on('sendMessageFromBack', (newMessage)=> {
+        console.log("newMessage",newMessage);
+        if (myMessage === newMessage) {
+          return
+        }
+
+        // if (id !== newMessage.id) {
+        //     return
+        //   }
+  
+        setMessage([...message, newMessage]);
+      });
+
+      return () => {
+        socket.off('sendMessageFromBack')
+        socket.off('join')
+      };
+    }, [message]);
+  
+    useEffect(() => {
+
+    }, []);
+  
+    const messages = message.map((data, i) => {
+        return (
+          <View key={i} style={data.token !== user.token? [styles.messageWrapper, styles.messageRecieved] : [styles.messageWrapper, styles.messageSent]}>
+            <View style={data.token !== user.token ? [styles.message, styles.messageRecievedBg] : [styles.message, styles.messageSentBg]}>
+              <Text style={styles.whoSent}>{data.user}</Text>
+              <Text style={[styles.messageText, data.message.startsWith('audio') && styles.messageAudio]}>{data.message.startsWith('audio') ? <MaterialIcons onPress={() => playSoundFromURL(data.message)} name="audiotrack" color="#ffffff" size={24}/> : data.message}</Text>
+            </View>
+            <Text style={styles.timeText}>{data.time}</Text>
+          </View>
+        )
+    })
+    const sendMessage = () => {
+        const dateNow = new Date();
+        const hourNow = dateNow.getHours();
+        const minuteNow = dateNow.getMinutes();
+        const timeNow = `${hourNow}h${minuteNow < 10 ? '0' + minuteNow : minuteNow}`;
+      
+  
+  if(isRecording) {
+    return
+  }
+  
+  if(newRecord) {
+    const formData = new FormData();
+    formData.append('recordFromFront', newRecord);
+    setNewRecord()
+    
+    fetch('http://192.168.10.126:3000/audio', {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data)
+      socket.emit('sendMessage', {message: data.url, user: user.signUp.firstname, time: timeNow, id : id})
+      setMyMessage('audio Message') ;
+    }) 
+  } else if(!newRecord && myMessage.trim() !== '') {
+   
+    socket.emit('sendMessage', {message: myMessage, user: user.signUp.firstname, time: timeNow, token : user.token}, id)  
+     setMessage([...message, { user: user.signUp.firstname, message: myMessage, time: timeNow, token : user.token , id : id}]); 
+  } setMyMessage('')
+} 
+    const [recording, setRecording] = useState(undefined);
+    const [newRecord, setNewRecord] = useState()
+    const [isRecording, setIsRecording] = useState(false);
+    console.log(user)
+    const handleRecording = () => {
+      recording === undefined ? startRecording() : stopRecording()
     }
-  };
-
-  // Render message based on if it's from the current user or not
-//   const RenderMessage = ({ item }) => {
-//     return (
-//       <View>
-//         {item.name === user.name ? (
-//           <MyMessage message={item.content} date={item.date} name={item.name} avatar={item.avatar} />
-//         ) : (
-//           <Message message={item.content} date={item.date} name={item.name} avatar={item.avatar} />
-//         )}
-//       </View>
-//     );
-//   };
-
-  return (
-    <View style={{ flex: 1, padding: 2, paddingBottom: 8 }}>
-      <ScrollView
-        ref={messagesList}
-        style={{ flex: 1, borderWidth: 1, borderColor: "#888", backgroundColor: "white" }}
-        contentContainerStyle={{ flexGrow: 1, justifyContent: "flex-end" }}
-      >
-        <FlatList
-          data={messages}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={RenderMessage}
-          ListHeaderComponent={() => (
-            <Text style={{ textAlign: "center", color: "#666" }}>
-              <Moment format="MMM Do YY">{currentDate}</Moment>
-            </Text>
-          )}
-          ListHeaderComponentStyle={{ marginTop: 10 }}
-          onContentSizeChange={() => messagesList.current.scrollToEnd()}
-        />
+  
+    async function startRecording() {
+      if(newRecord) {
+        return
+      }
+  
+  try {
+    console.log('Requesting permissions..');
+    await Audio.requestPermissionsAsync();
+    await Audio.setAudioModeAsync({
+      allowsRecordingIOS: true,
+      playsInSilentModeIOS: true,
+    });
+  
+    console.log('Starting recording..');
+    const { recording } = await Audio.Recording.createAsync( Audio.RecordingOptionsPresets.HIGH_QUALITY
+    );
+    setRecording(recording);
+    setIsRecording(true)
+    setMyMessage('Recording audio...')
+    console.log('Recording started');
+  } catch (err) {
+    console.error('Failed to start recording', err);
+  }
+    }
+  
+    async function stopRecording() {
+      console.log('Stopping recording..');
+      setIsRecording(false)
+      setMyMessage('Audio message')
+  
+      await recording.stopAndUnloadAsync();
+      await Audio.setAudioModeAsync(
+        {
+          allowsRecordingIOS: false,
+        }
+      );
+      const uri = recording.getURI();
+      console.log('Recording stopped and stored at', uri);
+  
+      setNewRecord({
+        uri: uri,
+        name: 'record.mp3',
+        type: 'record/mp3',
+      })
+  
+      setRecording(undefined);
+  
+    }
+  
+    const [sound, setSound] = useState();
+  
+    const playSoundFromURL = async (url) => {
+        try {
+          console.log('Loading Sound');
+          const { sound } = await Audio.Sound.createAsync(
+            { uri: url },
+            { shouldPlay: true }
+          );
+          setSound(sound);
+      
+          sound.setOnPlaybackStatusUpdate((status) => {
+            if (status.didJustFinish) {
+              // Si la lecture de l'audio est terminée, déchargez le son pour libérer les ressources.
+              sound.unloadAsync();
+              setSound(null);
+            }
+          });
+        } catch (error) {
+          console.error('Erreur lors de la lecture de l\'audio', error);
+        }
+      };
+  
+    useEffect(() => {
+      return sound
+        ? () => {
+            console.log('Unloading Sound');
+            sound.unloadAsync();
+          }
+        : undefined;
+    }, [sound]);
+  
+    return (
+      <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+        <View style={styles.banner}>
+          <MaterialIcons name="keyboard-backspace" color="#ffffff" size={24} onPress={() => navigation.goBack()} />
+          <Text style={styles.greetingText}>Welcome {params.name}</Text>
+        </View>
+  
+    <View style={styles.inset}>
+      <ScrollView style={styles.scroller}>
+          {messages}
       </ScrollView>
-      <View style={{ flexDirection: "row", alignItems: "center", marginVertical: 5 }}>
-        <TextInput
-          style={{ flex: 1, fontSize: 14, paddingHorizontal: 10, borderRadius: 10, borderWidth: 1, borderColor: "#ddd" }}
-          value={newMessage}
-          onChangeText={(text) => setNewMessage(text)}
-          placeholder="Type your message..."
-        />
-        <TouchableOpacity
-          style={{ paddingHorizontal: 20, paddingVertical: 10, borderRadius: 10, backgroundColor: "#0560FD", marginLeft: 10 }}
-          onPress={handleSubmit}
-        >
-          <Text style={{ color: "white" }}>Send</Text>
+  
+      <View style={styles.inputContainer}>
+        <TextInput style={styles.input} onChangeText={(!isRecording && !newRecord) && (value => setMyMessage(value))} value={myMessage}/>
+        <TouchableOpacity onPress={() => handleRecording()} style={styles.recordButton}>
+          <MaterialIcons name="mic" color="#ffffff" size={24} />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.sendButton} onPress={() => sendMessage()}>
+          <MaterialIcons name="send" color="#ffffff" size={24} />
         </TouchableOpacity>
       </View>
     </View>
-  );
-};
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingTop: 15
+  </KeyboardAvoidingView>
+    );
     }
-})
+  
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      backgroundColor: '#000',
+    },
+    inset: {
+      flex: 1,
+      borderTopLeftRadius: 50,
+      borderTopRightRadius: 50,
+      backgroundColor: '#ffffff',
+      width: '100%',
+      paddingTop: 20,
+      position: 'relative',
+      borderTopColor: '#ffe099',
+      borderLeftColor: '#ffe099',
+      borderRightColor: '#ffe099',
+      borderTopWidth: 4,
+      borderRightWidth: 0.1,
+      borderLeftWidth: 0.1,
+    },
+    banner: {
+      width: '100%',
+      height: '15%',
+      paddingTop: 20,
+      paddingLeft: 20,
+      flexDirection: 'row',
+      justifyContent: 'flex-start',
+      alignItems: 'center',
+    },
+    greetingText: {
+      color: '#fff',
+      fontWeight: 'bold',
+      fontSize: 18,
+      marginLeft: 15,
+    },
+    message: {
+      paddingTop: 12,
+      paddingBottom: 12,
+      paddingRight: 20,
+      paddingLeft: 20,
+      borderRadius: 24,
+      alignItems: 'flex-end',
+      justifyContent: 'center',
+      maxWidth: '65%',
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 1,
+      },
+      shadowOpacity: 0.20,
+      shadowRadius: 6.41,
+      elevation: 1.2,
+    },
+    messageWrapper: {
+      alignItems: 'flex-end',
+      marginBottom: 20,
+    },
+    messageRecieved: {
+      alignSelf: 'flex-end',
+      alignItems: 'flex-end'
+    },
+    messageSent: {
+      alignSelf: 'flex-start',
+      alignItems: 'flex-start'
+    },
+    messageSentBg: {
+      backgroundColor: '#ffad99',
+    },
+    messageRecievedBg: {
+      backgroundColor: '#d6fff9'
+    },
+    whoSent: {
+      color: 'grey',
+      fontSize: 10,
+      fontWeight: '300'
+    },
+    messageText: {
+      color: '#506568',
+      fontWeight: '400',
+    },
+    messageAudio: {
+      alignItems: 'center'
+    },
+    timeText: {
+      color: '#506568',
+      opacity: 0.5,
+      fontSize: 10,
+      marginTop: 2,
+    },
+    inputContainer: {
+      width: '100%',
+      flexDirection: 'row',
+      justifyContent: 'center',
+      justifySelf: 'flex-end',
+      alignContent: 'flex-start',
+      marginBottom: 30,
+      marginTop: 'auto',
+      background: 'transparent',
+      paddingLeft: 20,
+      paddingRight: 20,
+    },
+    input: {
+      backgroundColor: '#f0f0f0',
+      width: '60%',
+      padding: 14,
+      borderRadius: 30,
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 1,
+      },
+      shadowOpacity: 0.20,
+      shadowRadius: 6.41,
+      elevation: 1.2,
+    },
+    recordButton: {
+      borderRadius: 50,
+      padding: 16,
+      backgroundColor: '#ff5c5c',
+      marginLeft: 12,
+      alignItems: 'center',
+      justifyContent: 'center',
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 1,
+      },
+      shadowOpacity: 0.20,
+      shadowRadius: 6.41,
+      elevation: 1.2,
+    },
+    sendButton: {
+      borderRadius: 50,
+      padding: 16,
+      backgroundColor: '#ffe099',
+      marginLeft: 12,
+      alignItems: 'center',
+      justifyContent: 'center',
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 1,
+      },
+      shadowOpacity: 0.20,
+      shadowRadius: 6.41,
+      elevation: 1.2,
+    },
+    buttonText: {
+      color: '#ffffff',
+      fontWeight: '800',
+      textTransform: 'uppercase'
+    },
+    scroller: {
+      paddingLeft: 20,
+      paddingRight: 20,
+    },
+  });

@@ -19,6 +19,7 @@ import StudentMenuScreen from '../screens/StudentMenuScreen';
 import StudentProfileScreen from '../screens/StudentProfileScreen';
 import VerificationScreen from '../screens/VerificationScreen';
 import BookScreen from '../screens/BookScreen';
+import CongratsScreen from '../screens/CongratsScreen'
 
 import { useSelector } from 'react-redux';
 
@@ -47,10 +48,11 @@ const TabNavigator = () => {
         } else if (route.name === 'Agenda') {
           iconName = 'calendar';
         }
+        
 
         return <FontAwesome name={iconName} size={size} color={color} />;
       },
-      tabBarActiveTintColor: '#F4A100',
+      tabBarActiveTintColor: '#FF711A',
       tabBarActiveBackgroundColor: "#FFF3DD",
       tabBarInactiveTintColor: isDarkMode ? "#FFF" : '#000',
       tabBarInactiveBackgroundColor: isDarkMode ? "#000" : "#FFF",
@@ -61,7 +63,6 @@ const TabNavigator = () => {
       <Tab.Screen name="Profil" component={isCoach ? CoachProfileScreen : StudentProfileScreen} />
       <Tab.Screen name="Menu" component={isCoach ? CoachMenuScreen : StudentMenuScreen} />
       <Tab.Screen name="Option" component={OptionScreen} />
-      <Tab.Screen name="Book" component={BookScreen} />
       <Tab.Screen name="Agenda" component={isCoach ? AgendaCoachScreen : CoachingStudentScreen} />
     </Tab.Navigator>
   );
@@ -85,6 +86,8 @@ const Navigation = () => {
             <Stack.Screen name="AddInfoStudent" component={AddInfoStudentScreen} />
             <Stack.Screen name="AddInfoCoach" component={AddInfoCoachScreen} />
             <Stack.Screen name='Verification' component={VerificationScreen} />
+            <Stack.Screen name="Book" component={BookScreen} />
+            <Stack.Screen name="Congrats" component={CongratsScreen} />
             <Stack.Screen name="TabNavigator" component={TabNavigator} />
           </Stack.Navigator>
         </NavigationContainer>

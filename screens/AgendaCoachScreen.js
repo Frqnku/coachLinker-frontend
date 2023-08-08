@@ -16,7 +16,7 @@ export default function AgendaScreen() {
   console.log(planning)
 
   const handleValidate = async () => {
-    const token = '123123'; // Replace this with your actual token retrieval logic
+    const token = user.value.token; // Replace this with your actual token retrieval logic
 
     // Fetch complete planning data from Redux store
     const completePlanningData = Object.keys(planning).map(day => {
@@ -63,16 +63,12 @@ export default function AgendaScreen() {
         >
     <ScrollView  contentContainerStyle={styles.scrollContainer}showsVerticalScrollIndicator={false}>
         
-    <View style={[styles.block, isDarkMode ? styles.darkIn : styles.lightIn]}>
+    <View style={[styles.block, isDarkMode ? styles.darkIn : styles.lightIn, styles.marginTop]}>
         <Text style={[styles.texte, isDarkMode ? styles.darkText : styles.lightText]}>Lundi</Text>
         <View style={[styles.blocks, isDarkMode ? styles.darkIn : styles.lightIn]}>
-{/*                 <Text style={[styles.Debut, isDarkMode ? styles.darkBlock: styles.lightBlock]}>Début :</Text> */}
                 <TimePicker name='Lundi'/>
             </View>
-{/*             <View style={[styles.blocks, isDarkMode ? styles.darkIn : styles.lightIn]}>
-                <Text style={[styles.Fin, isDarkMode ? styles.darkBlock : styles.lightBlock]}>Fin :</Text>
-                <TimePicker/>
-            </View> */}
+
        
     </View>
     <View style={[styles.block, isDarkMode ? styles.darkIn : styles.lightIn]}>
@@ -118,8 +114,8 @@ export default function AgendaScreen() {
            
         </View>
 
-        <TouchableOpacity onPress={handleValidate}>
-            <Text>Valider</Text>
+        <TouchableOpacity style={styles.btnValidate} onPress={handleValidate}>
+            <Text style={[styles.darkText, styles.fontWeight]}>Valider</Text>
         </TouchableOpacity>
     </ScrollView>
         </LinearGradient>
@@ -141,11 +137,25 @@ const styles = StyleSheet.create({
             alignItems:'center',
         },
         darkText :{
-            color :"#F4A100",
+            color :"#fff",
         },
         lightText :{
             color: '#505050',
         },
+        btnValidate: {
+            width: '80%',
+            marginVertical: 25,
+            padding: 15,
+            backgroundColor: '#FF711A',
+            borderRadius: 5,
+            alignItems: 'center'
+        },
+        fontWeight: {
+            fontWeight: 500
+          },
+          marginTop: {
+            marginTop: 60
+          },
     darkBg :{
         backgroundColor: 'black',
     },
@@ -168,42 +178,22 @@ const styles = StyleSheet.create({
        block: {
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginTop: "20%",
-        marginLeft: "2%",
+        marginTop: 20,
         width: "90%",
         backgroundColor:"#fff",
         borderRadius: 5,
-     
+        paddingTop: 10
     },
     blocks: {
         flexDirection: 'row',
-        marginTop: "10%",
+/*         marginTop: "10%",
         marginLeft: "5%",
-        width: "90%",
+        width: "90%", */
         backgroundColor:"#fff",
         borderRadius: 5,
     },
-
-   Debut: {
-        fontSize : 20,
-        width : "25%",
-        margin : "2%",
-        height: 30,
-        paddingLeft: 10,
-        borderRadius: 5,
-       
-    },
-    
-    Fin :{
-        fontSize : 20,
-        width : "25%",
-        margin : "2%",
-        height: 30,
-        paddingLeft: 25,
-        borderRadius: 5,
-    },
     texte: {
-        fontSize: 40,
+        fontSize: 20,
         
     },
 })

@@ -95,8 +95,8 @@ export default function StudentMenuScreen({ navigation }) {
     return days;
   };
 
-  const handleBook = (coachID) => {
-    dispatch(updateBookedCoach(coachID))
+  const handleBook = (coachID, coachingPlaces, teachedSport) => {
+    dispatch(updateBookedCoach({coachID: coachID, coachingPlaces: coachingPlaces, teachedSport: teachedSport}))
     navigation.navigate('Book')
   }
 
@@ -108,7 +108,7 @@ export default function StudentMenuScreen({ navigation }) {
     for (let i = 0; i < 5; i++) {
       let style = {};
       if (i < Math.floor(data.notes.reduce((acc, cur) => acc + cur, 0) / data.notes.length ) - 1) {
-        style = { 'color': '#F4A100' };
+        style = { 'color': '#FF711A' };
       } else {
         style = { 'color': '#AAAAAA' };
       }
@@ -121,7 +121,7 @@ export default function StudentMenuScreen({ navigation }) {
           <Image style={styles.leftCoach} source={{uri : data.image}}/>
           <View style={styles.midCoach}>
               <Text style={[styles.coachName, isDarkMode ? styles.darkText : styles.lightText]}>{data.firstname}</Text>
-              <Text style={[isDarkMode ? styles.darkText : styles.lightText]}>{data.teachedSport[0]}</Text>
+              <Text style={styles.sport}>{data.teachedSport[0]}</Text>
           </View>
           <View style={styles.rightCoach}>
               <Text style={[styles.star, isDarkMode ? styles.darkText : styles.lightText]}>{data.notes.length === 0 ? 'Pas de note' : `(${data.notes.length})`} {data.notes.length !== 0 && stars}</Text>
@@ -138,7 +138,7 @@ export default function StudentMenuScreen({ navigation }) {
             ))}
           </View>
           <View>
-            <TouchableOpacity onPress={() => handleBook(data._id)}>
+            <TouchableOpacity onPress={() => handleBook(data._id, data.coachingPlaces, data.teachedSport)}>
               <Text style={[styles.text, isDarkMode ? styles.darkText : styles.lightText]}>Réserver une séance</Text>
             </TouchableOpacity>
           </View>
@@ -227,122 +227,125 @@ export default function StudentMenuScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    paddingTop: 15
-  },
-  book: {
-    fontSize: 13,
-    width: 70,
-    height: 30,
-    textAlign: 'center',
-    textAlignVertical: 'center',
-    backgroundColor: '#FFDFA3',
-    marginHorizontal: 5,
-    marginVertical: 10,
-    borderRadius: 15
-  },
-  borderRadiusBottom: {
-    borderRadius: 5,
-  },
-  bottomScreen: {
-    width: '80%'
-  },
-  card: {
-    width: '100%',
-    borderTopEndRadius: 5,
-    borderTopStartRadius: 5,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 10,
-    marginTop: 15
-  },
-  coachName: {
-    fontSize: 22
-  },
-  displayCoaching: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    flexWrap: 'wrap',
-  },
-  input: {
-    height: 35,
-    backgroundColor: 'red',
-    width: '85%',
-    borderRadius: 5,
-    paddingLeft: 10
-  },
-  leftCoach: {
-    height: 80,
-    width: 80,
-    borderRadius: 5
-  },
-  midCoach: {
-    flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-    height: 80,
-    paddingLeft: 10,
-  },
-  planning: {
-    width: '100%',
-    borderBottomEndRadius: 5,
-    borderBottomStartRadius: 5,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 10,
-    borderTopColor: '#AAAAAA',
-    borderTopWidth: 1
-  },
-  rightCoach: {
-    justifyContent: 'space-between',
-    alignItems: 'flex-end',
-    height: 80,
-  },
-  searchLocation: {
-    width: '100%',
-    backgroundColor: 'yellow',
-    borderRadius: 5,
-    paddingHorizontal: 20,
-    paddingTop: 20,
-    paddingBottom: 10,
-    marginBottom: 20
-  },
-  text: {
-    fontSize: 18
-  },
-  btnSearch: {
-    paddingVertical: 5
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 5
-  },
-  darkBg: {
-    backgroundColor: '#000'
-  },
-  darkText: {
-    color: '#fff'
-  },
-  darkCard: {
-    backgroundColor: '#2E2E2E'
-  },
-  darkInput: {
-    backgroundColor: '#505050'
-  },
-  lightBg: {
-    backgroundColor: '#f2f2f2'
-  },
-  lightCard: {
-    backgroundColor: '#fff'
-  },
-  lightText: {
-    color: '#000'
-  },
-});
+    container: {
+        flex: 1,
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        paddingTop: 15
+    },
+    book: {
+        fontSize: 13,
+        width: 70,
+        height: 30,
+        textAlign: 'center',
+        textAlignVertical: 'center',
+        backgroundColor: '#FFDFA3',
+        marginHorizontal: 5,
+        marginVertical: 10,
+        borderRadius: 15
+    },
+    borderRadiusBottom: {
+        borderRadius: 5,
+    },
+    bottomScreen: {
+        width: '80%'
+    },
+    card: {
+        width: '100%',
+        borderTopEndRadius: 5,
+        borderTopStartRadius: 5,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: 10,
+        marginTop: 15
+    },
+    coachName: {
+        fontSize: 22
+    },
+    sport: {
+      color: '#FF711A',
+    },
+    displayCoaching: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        flexWrap: 'wrap',
+    },
+    input: {
+        height: 35,
+        backgroundColor: 'red',
+        width: '85%',
+        borderRadius: 5,
+        paddingLeft: 10
+    },
+    leftCoach: {
+        height: 80,
+        width: 80,
+        borderRadius: 5
+    },
+    midCoach: {
+        flex: 1,
+        justifyContent: 'flex-start',
+        alignItems: 'flex-start',
+        height: 80,
+        paddingLeft: 10,
+    },
+    planning: {
+        width: '100%',
+        borderBottomEndRadius: 5,
+        borderBottomStartRadius: 5,
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: 10,
+        borderTopColor: '#AAAAAA',
+        borderTopWidth: 1
+    },
+    rightCoach: {
+        justifyContent: 'space-between',
+        alignItems: 'flex-end',
+        height: 80,
+    },
+    searchLocation: {
+        width: '100%',
+        backgroundColor: 'yellow',
+        borderRadius: 5,
+        paddingHorizontal: 20,
+        paddingTop: 20,
+        paddingBottom: 10,
+        marginBottom: 20
+    },
+    text: {
+        fontSize: 18
+    },
+    btnSearch: {
+        paddingVertical: 5
+    },
+    row: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 5
+    },
+    darkBg: {
+        backgroundColor: '#000'
+    },
+    darkText: {
+        color: '#fff'
+    },
+    darkCard: {
+        backgroundColor: '#2E2E2E'
+    },
+    darkInput: {
+        backgroundColor: '#505050'
+    },
+    lightBg: {
+        backgroundColor: '#f2f2f2'
+    },
+    lightCard: {
+        backgroundColor: '#fff'
+    },
+    lightText: {
+        color: '#000'
+    },
+  })

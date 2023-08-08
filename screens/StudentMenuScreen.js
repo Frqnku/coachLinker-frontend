@@ -263,6 +263,9 @@ const styles = StyleSheet.create({
     coachName: {
         fontSize: 22
     },
+    sport: {
+      color: '#FF711A',
+    },
     displayCoaching: {
         flexDirection: 'row',
         justifyContent: 'space-around',

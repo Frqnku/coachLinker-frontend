@@ -25,6 +25,7 @@ export default function StudentProfileScreen({navigation}) {
     const [studentMyDescription, setStudentMyDescription] = useState('')
     const [studentImage, setStudentImage] = useState('')
     const [studentSports, setStudentSports] = useState([])
+    const [isEditing, setIsEditing] = useState(false);
 
     const [hasPermission, setHasPermission] = useState(false);
     const [type, setType] = useState(CameraType.back);
@@ -38,6 +39,7 @@ export default function StudentProfileScreen({navigation}) {
     const profilStudent = useSelector(state => state.users.value.signUp)
     console.log('profilStudent10', profilStudent)
  
+
     useEffect(() => {
       fetch(`${backend_address}/students/profil`, {
         method: 'POST',
@@ -47,7 +49,7 @@ export default function StudentProfileScreen({navigation}) {
         .then(response => response.json())
         .then(data => {
             console.log('student', data)
-            
+          setStudentMyDescription(data.data.myDescription);  
           dispatch(signUp({token:token, 
             name: data.data.name,
             firstname: data.data.firstname,
@@ -62,39 +64,35 @@ export default function StudentProfileScreen({navigation}) {
 
 
     const pickImage = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.All,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-      });
-  
-  
-      if (!result.canceled) {
-        const formData = new FormData();
-   
-        formData.append('photoFromFront',{
-          uri: result.assets[0].uri,
-          name: 'photo.jpg',
-          type: 'image/jpeg',
+      let result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.All,
+          allowsEditing: true,
+          aspect: [4, 3],
+          quality: 1,
         });
-       
-
-
-
-fetch(`${backend_address}/upload`, {
-  method: 'POST',
-  body: formData,
-}).then((response) => response.json())
-  .then((data) => { 
-    if (data.result) {
-      dispatch(signUp({image: data.url}))
-      dispatch(addPhoto(data.url));
-      setHasPermission(false);
-    } 
-  })
-}
-};
+  
+        if (!result.canceled) {
+          const formData = new FormData();
+  
+          formData.append('photoFromFront',{
+            uri: result.assets[0].uri,
+            name: 'photo.jpg',
+            type: 'image/jpeg',
+          });
+         
+          fetch(`${backend_address}/upload`, {
+            method: 'POST',
+            body: formData,
+          }).then((response) => response.json())
+            .then((data) => { 
+              if (data.result) {
+                dispatch(signUp({image: data.url}))
+                dispatch(addPhoto(data.url));
+                setHasPermission(false);
+              } 
+            })
+        }
+      };
   
 
 
@@ -133,9 +131,51 @@ fetch(`${backend_address}/upload`, {
         const LightStart = {x : 0.6, y : 0.4};
         const LightEnd = {x : 0.3, y : 0.1};
  
+        const toggleEditMode = () => {
+          setIsEditing(!isEditing);
+        };
+    
+ // Mettez à jour l'état local avec la nouvelle description 
+ const saveDescription = async () => {
+  dispatch(
+    signUp({
+      myDescription: studentMyDescription,
+    })
+  );
+
+  try {
+    const response = await fetch(`${backend_address}/students/update`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        token: token,
+        myDescription: studentMyDescription,
+        image: studentImage, // Ajoutez l'image mise à jour ici
+        favoriteSport: studentSports, // Ajoutez les sports préférés mis à jour ici
+      }),
+    });
+
+    const responseData = await response.json();
+
+    if (response.ok) {
+      console.log('Informations updated successfully');
+      toggleEditMode(); // Sortez du mode d'édition après l'enregistrement
+    } else {
+      console.error('Failed to update information:', responseData.error);
+      // Gérez les erreurs comme vous le souhaitez
+    }
+  } catch (error) {
+    console.error('Error updating information:', error);
+    // Gérez les erreurs comme vous le souhaitez
+  }
+};
 
     if (!hasPermission || !isFocused) {
-        
+ 
+      
        
   return (
 <KeyboardAvoidingView style={[styles.container, isDarkMode ? styles.darkBg : styles.lightBg]} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
@@ -160,15 +200,54 @@ fetch(`${backend_address}/upload`, {
    <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilStudent.name}</Text>
    <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilStudent.firstname}</Text>
    <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilStudent.dateOfBirth}</Text>
-   <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "white":"#7B7B7B"}]}>Sports favories et à propos </Text>
+   <View style={styles.View}>
+   <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "white":"#7B7B7B"}]}>Sports favoris </Text>
+   <TouchableOpacity onPress={() => {
+    if (isEditing) {
+      saveDescription(); // Appel de la fonction saveDescription ici
+    }
+    toggleEditMode();
+  }}>
+   <Image  style={styles.crayon} source={require('../assets/crayon.png')} />
+  </TouchableOpacity>
+  </View >
    <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilStudent.favoriteSport}</Text>
  </View>
 
+ <View style={styles.View}>
+   <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "white":"#7B7B7B"}]}>A propos de moi </Text>
+   <TouchableOpacity onPress={() => {
+    if (isEditing) {
+      saveDescription(); // Appel de la fonction saveDescription ici
+    }
+    toggleEditMode();
+  }}>
+   <Image  style={styles.crayon} source={require('../assets/crayon.png')} />
+  </TouchableOpacity>
+  </View>
+
  <View style={styles.cardAbout}>
-   <Text
-   multiline numberOfLines={4}  
-   style={[ isDarkMode ? styles.darkInputapropos : styles.lightInputapropos,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilStudent.myDescription} </Text>
- </View>
+
+
+
+  {isEditing ? (
+    <TextInput
+      value={studentMyDescription}
+      onChangeText={setStudentMyDescription}
+      selectionColor={'#FF6100'}
+      placeholderTextColor={isDarkMode ? "#AAAAAA" : "#7B7B7B"}
+      style={[isDarkMode ? styles.darkInputapropos : styles.lightInputapropos]}
+    />
+  ) : (
+    <Text
+      selectionColor={'#FF6100'}
+      placeholderTextColor={isDarkMode ? "#AAAAAA" : "#7B7B7B"}
+      style={[isDarkMode ? styles.darkInputapropos : styles.lightInputapropos]}
+    >
+      {profilStudent.myDescription}
+    </Text>
+  )}
+</View>
  
 </ScrollView>
 </LinearGradient>
@@ -204,6 +283,17 @@ fetch(`${backend_address}/upload`, {
 }
 
 const styles = StyleSheet.create({
+  View : {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '80%',
+    height:70,
+  }, 
+  crayon2 :{
+    width: 50,
+    height:50,
+    // paddingTop : 40,
+    },
   container: {
     flex:1,
     alignItems: 'center',

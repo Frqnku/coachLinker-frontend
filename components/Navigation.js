@@ -46,6 +46,7 @@ const TabNavigator = () => {
         } else if (route.name === 'Agenda') {
           iconName = 'calendar';
         }
+        
 
         return <FontAwesome name={iconName} size={size} color={color} />;
       },

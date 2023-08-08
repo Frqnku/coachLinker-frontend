@@ -90,7 +90,7 @@ export default function StudentMenuScreen() {
     for (let i = 0; i < 5; i++) {
       let style = {};
       if (i < Math.floor(data.notes.reduce((acc, cur) => acc + cur, 0) / data.notes.length ) - 1) {
-        style = { 'color': '#F4A100' };
+        style = { 'color': '#FF711A' };
       } else {
         style = { 'color': '#AAAAAA' };
       }
@@ -103,7 +103,7 @@ export default function StudentMenuScreen() {
           <Image style={styles.leftCoach} source={{uri : data.image}}/>
           <View style={styles.midCoach}>
               <Text style={[styles.coachName, isDarkMode ? styles.darkText : styles.lightText]}>{data.firstname}</Text>
-              <Text style={[isDarkMode ? styles.darkText : styles.lightText]}>{data.teachedSport[0]}</Text>
+              <Text style={styles.sport}>{data.teachedSport[0]}</Text>
           </View>
           <View style={styles.rightCoach}>
               <Text style={[styles.star, isDarkMode ? styles.darkText : styles.lightText]}>{data.notes.length === 0 ? 'Pas de note' : `(${data.notes.length})`} {data.notes.length !== 0 && stars}</Text>
@@ -245,6 +245,10 @@ const styles = StyleSheet.create({
     },
     coachName: {
         fontSize: 22
+    },
+    sport: {
+      fontSize: 13,
+      color: '#FF711A',
     },
     displayCoaching: {
         flexDirection: 'row',

@@ -1,7 +1,8 @@
+import { faTruckPlane } from '@fortawesome/free-solid-svg-icons';
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  value: false
+  value: true
 };
 
 export const darkModeSlice = createSlice({

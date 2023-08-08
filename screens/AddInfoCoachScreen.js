@@ -40,7 +40,7 @@ export default function AddInfoCoachScreen({ navigation }) {
   const [coachPlace, setCoachPlace] = useState('')
   const [coachProCard, setCoachProCard] = useState('')
   const [errorNew, setErrorNew] = useState('')
-  const [coachSports, setCoachSports] = useState([])
+  const [coachSports, setCoachSports] = useState('')
 
   // camera tel
   let cameraRef = useRef(null);
@@ -77,6 +77,7 @@ export default function AddInfoCoachScreen({ navigation }) {
     };
 
        
+    
     // sélection des sports
     const handleImageSelect = (image, imageName) => {
       if (selectedImages.length < 3 && !selectedImages.some((item) => item.image === image)) {
@@ -104,7 +105,7 @@ export default function AddInfoCoachScreen({ navigation }) {
   // sélection de la procard : à compléter
 
   const handleSubmit = async () => {
-    console.log(coachSports);
+ 
     try { 
       await dispatch(signUp({
         name: coachName, 
@@ -121,7 +122,8 @@ export default function AddInfoCoachScreen({ navigation }) {
         city : coachCity,
         coachingPlaces : coachPlace,
       }));
-  
+      console.log("dispatch", dispatch(signUp({coachSports}))); 
+
       const signUpData = {
         email: coach.signUp.email,
         password: coach.signUp.password,
@@ -140,6 +142,8 @@ export default function AddInfoCoachScreen({ navigation }) {
         coachingPlaces : coachPlace,
       };
       
+      console.log("test2", coachSports); 
+
       const response = await fetch(`${backend_address}/coachs/new`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

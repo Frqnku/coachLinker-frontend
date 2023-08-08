@@ -64,6 +64,7 @@ export default function CoachMenuScreen() {
               <ScrollView>
                 <View style={styles.bottomScreen}>
                   {newBookCoach}
+                  <Text style={styles.tutoText}>{!bookCoach[0] && 'Ajoute tes disponibilités dans ton agenda pour avoir une séance'}</Text>
                 </View>
               </ScrollView>
         </View>
@@ -85,6 +86,11 @@ const styles = StyleSheet.create({
   },
   bottomScreen: {
     width: 350,
+    alignItems: 'center'
+  },
+  tutoText: {
+    width: '80%',
+    textAlign: 'center'
   },
     left: {
     height: 80,

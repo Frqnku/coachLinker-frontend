@@ -16,7 +16,7 @@ export default function AgendaScreen() {
   console.log(planning)
 
   const handleValidate = async () => {
-    const token = '123123'; // Replace this with your actual token retrieval logic
+    const token = user.value.token; // Replace this with your actual token retrieval logic
 
     // Fetch complete planning data from Redux store
     const completePlanningData = Object.keys(planning).map(day => {

@@ -39,7 +39,7 @@ export default function CoachingStudentScreen() {
                   </View>
                   <View style={styles.mid2}>
                     <Text style={isDarkMode ? styles.darkDateTime : styles.lightDateTime}>
-                      {data.date} - {data.startTime}-{data.endTime}
+                      {data.date} - {data.startTime}
                     </Text>
                     <Text style={isDarkMode ? styles.darkPlace : styles.lightPlace}>
                       {data.coachingPlace}

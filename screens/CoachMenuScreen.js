@@ -49,7 +49,7 @@ export default function CoachMenuScreen() {
                   <Text style={styles.sport}>{data.selectedSport}</Text>
               </View>
               <View style={styles.mid2}>
-                  <Text style={isDarkMode ? styles.darkDateTime : styles.lightDateTime}>{data.date} - {data.startTime}-{data.endTime}</Text>
+                  <Text style={isDarkMode ? styles.darkDateTime : styles.lightDateTime}>{data.date} - {data.startTime}</Text>
                   <Text style={isDarkMode ? styles.darkPlace : styles.lightPlace}>{data.coachingPlace}</Text>
               </View>
             </View>
@@ -143,11 +143,11 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   lightFirstname: {
-    fontSize: 22,
+    fontSize: 21,
     color: '#000000',
   },
   darkFirstname: {
-    fontSize: 22,
+    fontSize: 21,
     color: '#FFFFFF',
   },
   sport: {

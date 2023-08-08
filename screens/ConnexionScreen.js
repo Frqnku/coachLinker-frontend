@@ -145,27 +145,27 @@ return (
       <ScrollView>
         <View style={styles.boximage}>
           <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={isDarkMode ? require('../assets/logodark.png') : require('../assets/logolight2.png')} />
-      
-          <TextInput selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.emailInp, isDarkMode ? styles.darkInput : styles.lightInput]}
+        <View style={styles.emailInp}>
+          <TextInput selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={isDarkMode ? styles.darkInput : styles.lightInput}
           placeholder="Email" onChangeText={(value) => setSignUpEmail(value)} value={signUpEmail}  />
-
-        <Text style={[styles.text, isDarkMode ? styles.darkText : styles.lightText]}>Le mot de passe doit contenir 8 caractères minimum, une majuscule, une minuscule, un chiffre et un caractère spécial</Text>
+        </View>
       <View style={styles.eye}>
             <TextInput selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.input, isDarkMode ? styles.darkInputMdp : styles.lightInputMdp]}
           placeholder="Mot de passe" onChangeText={(value) => setSignUpPassword(value)} value={signUpPassword} secureTextEntry={isPasswordSecure}/>
           <TouchableOpacity >
-             <Icon name={isPasswordSecure ? 'eye-slash': 'eye'} size={28} color='#F4A100'onPress={() => { isPasswordSecure ? setIsPasswordSecure(false) : setIsPasswordSecure(true) }}/>
+             <Icon name={isPasswordSecure ? 'eye-slash': 'eye'} size={20} color='#F4A100'onPress={() => { isPasswordSecure ? setIsPasswordSecure(false) : setIsPasswordSecure(true) }}/>
           </TouchableOpacity>
-         
       </View>
-    
+      <View style={styles.mdp}>
+      <Text style={[styles.text, isDarkMode ? styles.darkText : styles.lightText]}>Le mot de passe doit contenir 8 caractères minimum, une majuscule, une minuscule, un chiffre et un caractère spécial.</Text>
+      </View>
         <Text style={[styles.text, {color: pwdColor, textAlign: 'left', fontWeight: 600}]}>{pwdStrength}</Text>
       <View style={styles.eye}>
         <TextInput selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#7B7B7B":"#7B7B7B"} style={[styles.inputP2, isDarkMode ? styles.darkInputMdp : styles.lightInputMdp]}
           placeholder="Confirmer le mot de passe" onChangeText={(value) => setSignUpPassword2(value)} value={signUpPassword2} secureTextEntry={isPasswordSecure} />
         {errorSignup && <Text style={{color: "#fff"}}>{errorSignup}</Text>}
         <TouchableOpacity >
-             <Icon name={isPasswordSecure ? 'eye-slash': 'eye'} size={28} color='#F4A100'onPress={() => { isPasswordSecure ? setIsPasswordSecure(false) : setIsPasswordSecure(true) }}/>
+             <Icon name={isPasswordSecure ? 'eye-slash': 'eye'} size={20} color='#F4A100'onPress={() => { isPasswordSecure ? setIsPasswordSecure(false) : setIsPasswordSecure(true) }}/>
           </TouchableOpacity>
         </View>
          
@@ -230,7 +230,14 @@ lightText: {
 darkText: {
   color: '#ffffff'
 },
-
+emailInp: {
+  marginBottom: 30,
+  width : 380,
+  paddingLeft: 40,
+},
+inputP2: {
+fontStyle: 'italic'
+},
 darkInputMdp:{
   marginTop: 10,
   fontSize : 15,
@@ -241,11 +248,10 @@ darkInputMdp:{
   borderRadius: 13,
   paddingLeft: 15,
   marginBottom: 10,
-  fontStyle: 'italic',
   color: 'white',
 },
 lightInputMdp:{
-  marginTop: 20,
+  marginTop: 10,
   fontSize : 15,
   backgroundColor: '#E8E8E8',
   width : "65%",
@@ -253,7 +259,6 @@ lightInputMdp:{
   height: 40,
   borderRadius: 13,
   paddingLeft: 15,
-  fontStyle: 'italic',
   color: 'black', 
 },
 eye :{
@@ -264,12 +269,10 @@ text: {
   width: '80%',
   paddingTop: 10
 },
-input: { 
-},
 text: {
   width: '80%',
-  paddingTop: 10
-
+  paddingTop: 10,
+  fontSize: 10
 },
 input: { 
 },
@@ -461,5 +464,9 @@ background:{
     shadowColor: '#FF6100',
     shadowOffset: { width: 50, height: 5,},
     shadowOpacity: 0.0001,
+  },
+  mdp: {
+    width: '80%',
+    marginLeft: 40
   }
 })

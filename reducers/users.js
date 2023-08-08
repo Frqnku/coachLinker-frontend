@@ -21,6 +21,7 @@ const initialState = {
         firstname: '', 
         image: '', 
         myDescription: '',
+        dateOfBirth: '',        
         // infos coach
         teachedSport: [], 
         proCard: '', 
@@ -34,7 +35,6 @@ const initialState = {
         isCoach: false,
         isValidate: false,
         // infos student
-        dateOfBirth: '',
         favoriteSport: []
       },
 

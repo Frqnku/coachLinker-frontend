@@ -4,12 +4,11 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useDispatch, useSelector } from 'react-redux';
 import GoodMorning from '../components/GoodMorning';
 import { updateSearchLocation } from '../reducers/users';
-import { updateCoachsAround } from '../reducers/coachs';
+import { updateCoachsAround, updateBookedCoach } from '../reducers/coachs';
 
 import { backend_address } from '../backendAddress';
 
-
-export default function StudentMenuScreen() {
+export default function StudentMenuScreen({ navigation }) {
   const dispatch = useDispatch();
   const isDarkMode = useSelector(state => state.darkMode.value);
   
@@ -81,16 +80,35 @@ export default function StudentMenuScreen() {
     }
   };
 
+  const today = new Date();
+  const daysOfWeek = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
+  const months = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
+  const formattedDate = `${daysOfWeek[today.getDay()]} ${today.getDate().toString().padStart(2, '0')} ${months[today.getMonth()]}`;
 
-  
+  const getNextDays = (startDate, numberOfDays) => {
+    const days = [];
+    for (let i = 1; i <= numberOfDays; i++) {
+      const nextDay = new Date(startDate);
+      nextDay.setDate(startDate.getDate() + i);
+      days.push(nextDay);
+    }
+    return days;
+  };
+
+  const handleBook = (coachID) => {
+    dispatch(updateBookedCoach(coachID))
+    navigation.navigate('Book')
+  }
+
   const allCoachs = coachsAround.map((data, i) => {
-    console.log(data._id)
+    const sixNextDays = getNextDays(today, 3);
     const planningVisible = visibleCoachIndices.includes(i);
+
     const stars = [];
     for (let i = 0; i < 5; i++) {
       let style = {};
       if (i < Math.floor(data.notes.reduce((acc, cur) => acc + cur, 0) / data.notes.length ) - 1) {
-        style = { 'color': '#F4A100' };
+        style = { 'color': '#FF711A' };
       } else {
         style = { 'color': '#AAAAAA' };
       }
@@ -103,7 +121,7 @@ export default function StudentMenuScreen() {
           <Image style={styles.leftCoach} source={{uri : data.image}}/>
           <View style={styles.midCoach}>
               <Text style={[styles.coachName, isDarkMode ? styles.darkText : styles.lightText]}>{data.firstname}</Text>
-              <Text style={[isDarkMode ? styles.darkText : styles.lightText]}>{data.teachedSport[0]}</Text>
+              <Text style={styles.sport}>{data.teachedSport[0]}</Text>
           </View>
           <View style={styles.rightCoach}>
               <Text style={[styles.star, isDarkMode ? styles.darkText : styles.lightText]}>{data.notes.length === 0 ? 'Pas de note' : `(${data.notes.length})`} {data.notes.length !== 0 && stars}</Text>
@@ -113,12 +131,16 @@ export default function StudentMenuScreen() {
         {planningVisible && <View style={[styles.planning, isDarkMode ? styles.darkCard : styles.lightCard]}>
           <Text style={[isDarkMode ? styles.darkText : styles.lightText]}>Prochaines disponibilités</Text>
           <View style={styles.displayCoaching}>
-            <Text style={[styles.book, isDarkMode ? styles.darkText : styles.lightText]}>Jeu 03</Text>
-            <Text style={[styles.book, isDarkMode ? styles.darkText : styles.lightText]}>Jeu 03</Text>
-            <Text style={[styles.book, isDarkMode ? styles.darkText : styles.lightText]}>Jeu 03</Text>
-            <Text style={[styles.book, isDarkMode ? styles.darkText : styles.lightText]}>Jeu 03</Text>
-            <Text style={[styles.book, isDarkMode ? styles.darkText : styles.lightText]}>Jeu 03</Text>
-            <Text style={[styles.book, isDarkMode ? styles.darkText : styles.lightText]}>Jeu 03</Text>
+            {sixNextDays.map((nextDay, index) => (
+              <Text key={index} style={[styles.book, isDarkMode ? styles.darkText : styles.lightText]}>
+                {daysOfWeek[nextDay.getDay()].slice(0,3)} {nextDay.getDate().toString().padStart(2, '0')}
+              </Text>
+            ))}
+          </View>
+          <View>
+            <TouchableOpacity onPress={() => handleBook(data._id)}>
+              <Text style={[styles.text, isDarkMode ? styles.darkText : styles.lightText]}>Réserver une séance</Text>
+            </TouchableOpacity>
           </View>
         </View>}
       </View>
@@ -166,11 +188,6 @@ export default function StudentMenuScreen() {
     setCurrentCity('');
   };
 
-  const today = new Date();
-  const daysOfWeek = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
-  const months = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
-  const formattedDate = `${daysOfWeek[today.getDay()]} ${today.getDate().toString().padStart(2, '0')} ${months[today.getMonth()]}`;
-
   return (
     <KeyboardAvoidingView style={[styles.container, isDarkMode ? styles.darkBg : styles.lightBg]} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <GoodMorning />
@@ -185,7 +202,7 @@ export default function StudentMenuScreen() {
               onChangeText={value => setCity(value)}
               value={city}
             />
-            <TouchableOpacity onPress={handleSubmit} >
+            <TouchableOpacity onPress={handleSubmit}>
                 <FontAwesome name='search' size={24} color={isDarkMode ? '#AAAAAA' : '#7B7B7B'}/>
             </TouchableOpacity>
           </View>
@@ -245,6 +262,9 @@ const styles = StyleSheet.create({
     },
     coachName: {
         fontSize: 22
+    },
+    sport: {
+      color: '#FF711A',
     },
     displayCoaching: {
         flexDirection: 'row',
@@ -328,5 +348,4 @@ const styles = StyleSheet.create({
     lightText: {
         color: '#000'
     },
-
-})
+  })

@@ -4,11 +4,11 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useDispatch, useSelector } from 'react-redux';
 import GoodMorning from '../components/GoodMorning';
 import { updateSearchLocation } from '../reducers/users';
-import { updateCoachsAround } from '../reducers/coachs';
+import { updateCoachsAround, updateBookedCoach } from '../reducers/coachs';
 
 import { backend_address } from '../backendAddress';
 
-export default function StudentMenuScreen() {
+export default function StudentMenuScreen({ navigation }) {
   const dispatch = useDispatch();
   const isDarkMode = useSelector(state => state.darkMode.value);
   
@@ -95,35 +95,20 @@ export default function StudentMenuScreen() {
     return days;
   };
 
+  const handleBook = (coachID) => {
+    dispatch(updateBookedCoach(coachID))
+    navigation.navigate('Book')
+  }
+
   const allCoachs = coachsAround.map((data, i) => {
     const sixNextDays = getNextDays(today, 3);
     const planningVisible = visibleCoachIndices.includes(i);
-
-    if (planningVisible) {
-      fetch(`${backend_address}/plannings/`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ coachID: data._id }),
-      })
-      .then(response => response.json())
-      .then(planning => {
-        const availabilityTexts = planning.data.days.map((availability) => (
-          <Text key={availability._id} style={[styles.book, isDarkMode ? styles.darkText : styles.lightText]}>
-            {/* Display your availability text here */}
-          </Text>
-        ));
-        // TODO: Set the availabilityTexts to your state to render in your component
-      })
-      .catch(error => {
-        console.error("Erreur lors de la récupération des disponibilités :", error);
-      });
-    }
 
     const stars = [];
     for (let i = 0; i < 5; i++) {
       let style = {};
       if (i < Math.floor(data.notes.reduce((acc, cur) => acc + cur, 0) / data.notes.length ) - 1) {
-        style = { 'color': '#F4A100' };
+        style = { 'color': '#FF711A' };
       } else {
         style = { 'color': '#AAAAAA' };
       }
@@ -136,7 +121,7 @@ export default function StudentMenuScreen() {
           <Image style={styles.leftCoach} source={{uri : data.image}}/>
           <View style={styles.midCoach}>
               <Text style={[styles.coachName, isDarkMode ? styles.darkText : styles.lightText]}>{data.firstname}</Text>
-              <Text style={[isDarkMode ? styles.darkText : styles.lightText]}>{data.teachedSport[0]}</Text>
+              <Text style={styles.sport}>{data.teachedSport[0]}</Text>
           </View>
           <View style={styles.rightCoach}>
               <Text style={[styles.star, isDarkMode ? styles.darkText : styles.lightText]}>{data.notes.length === 0 ? 'Pas de note' : `(${data.notes.length})`} {data.notes.length !== 0 && stars}</Text>
@@ -148,9 +133,14 @@ export default function StudentMenuScreen() {
           <View style={styles.displayCoaching}>
             {sixNextDays.map((nextDay, index) => (
               <Text key={index} style={[styles.book, isDarkMode ? styles.darkText : styles.lightText]}>
-                {daysOfWeek[nextDay.getDay()]} {nextDay.getDate().toString().padStart(2, '0')} {months[nextDay.getMonth()]}
+                {daysOfWeek[nextDay.getDay()].slice(0,3)} {nextDay.getDate().toString().padStart(2, '0')}
               </Text>
             ))}
+          </View>
+          <View>
+            <TouchableOpacity onPress={() => handleBook(data._id)}>
+              <Text style={[styles.text, isDarkMode ? styles.darkText : styles.lightText]}>Réserver une séance</Text>
+            </TouchableOpacity>
           </View>
         </View>}
       </View>
@@ -212,7 +202,7 @@ export default function StudentMenuScreen() {
               onChangeText={value => setCity(value)}
               value={city}
             />
-            <TouchableOpacity onPress={handleSubmit} >
+            <TouchableOpacity onPress={handleSubmit}>
                 <FontAwesome name='search' size={24} color={isDarkMode ? '#AAAAAA' : '#7B7B7B'}/>
             </TouchableOpacity>
           </View>
@@ -272,6 +262,9 @@ const styles = StyleSheet.create({
     },
     coachName: {
         fontSize: 22
+    },
+    sport: {
+      color: '#FF711A',
     },
     displayCoaching: {
         flexDirection: 'row',
@@ -355,5 +348,4 @@ const styles = StyleSheet.create({
     lightText: {
         color: '#000'
     },
-
-})
+  })

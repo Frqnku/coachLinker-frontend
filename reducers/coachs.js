@@ -39,7 +39,8 @@ const initialState = {
           start: '',
           end: '',
         },
-      }
+      },
+      bookedCoach: null
     }
 };
 
@@ -57,9 +58,12 @@ export const coachSlice = createSlice({
         state.value.planning[day].start = start;
         state.value.planning[day].end = end;
       }
-    }
+    },
+    updateBookedCoach: (state, action) => {
+      state.value.bookedCoach = action.payload;
+    },
   },
 });
 
-export const { updateCoachsAround, updatePlanning } = coachSlice.actions;
+export const { updateCoachsAround, updatePlanning, updateBookedCoach } = coachSlice.actions;
 export default coachSlice.reducer;

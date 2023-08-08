@@ -8,7 +8,7 @@ export default function GoodMorning() {
   
     return (
     <View style={styles.container}>
-        <Image style={styles.image} source={require('../assets/utilisateur.png')}/>
+        <Image style={styles.image} source={require('../assets/ImgDefault.png')}/>
         <Text style={isDarkMode ? styles.darkText : styles.lightText}>Good morning {username} !</Text>
     </View>
   )

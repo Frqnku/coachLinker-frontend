@@ -5,7 +5,7 @@ import { backend_address } from '../backendAddress';
 
 export default function BookScreen({ navigation }) {
     const bookedCoach = useSelector(state => state.coachs.value.bookedCoach)
-    const [planningCoach, setPlanningCoach] = useState({})
+    const [planningCoach, setPlanningCoach] = useState([])
 
     useEffect(() => {
         fetch(`${backend_address}/plannings`, {

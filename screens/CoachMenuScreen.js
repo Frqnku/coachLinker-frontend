@@ -18,7 +18,7 @@ export default function CoachMenuScreen() {
 
     console.log('test bookCoach', bookCoach)
     useEffect(() => {
-        fetch(`${backend_address}/bookings/coachs`, {
+        fetch(`${backend_address}/bookings/coach`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({token: token})

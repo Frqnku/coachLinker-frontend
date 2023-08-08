@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View, Image} from 'react-native'
+import { StyleSheet, Text, View, Image, ScrollView} from 'react-native'
 import GoodMorning from '../components/GoodMorning';
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,24 +9,25 @@ import { backend_address } from '../backendAddress';
 
 
 export default function CoachingStudentScreen() {
+  const isDarkMode = useSelector(state => state.darkMode.value);
   const dispatch = useDispatch();
   
   const token = useSelector(state => state.users.value.token)
   const bookStudent = useSelector(state => state.booking.value.bookings)
   //const [booking, setBooking] = useState([])
   
-  // console.log('testtoken', token)
-  // console.log('test book', bookStudent)
+  console.log('testtoken', token)
+  console.log('test book', bookStudent)
 
   useEffect(() => {
-    fetch(`${backend_address}/bookings/students`, {
+    fetch(`${backend_address}/bookings/student`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({token: token})
     })
       .then(response => response.json())
       .then(data => {
-          // console.log('bookings', data.bookings)
+          console.log('bookings', data.bookings)
           
         dispatch(addBooking({token: token, bookings: data.bookings}))
         // console.log('testbooking', dispatch(addBooking({token: token, bookings: data.bookings})))
@@ -37,23 +38,34 @@ export default function CoachingStudentScreen() {
   const newBookStudent = bookStudent.map((data, i) => {
     return(
         <View key={i}>
-          <Image source={{uri:data.coachID.image}} style={styles.image}/>
-          <Text>{data.coachID.firstname}</Text>
-          <Text>{data.coachID.price}</Text>
-          <Text>{data.coachingPlace}</Text>
-          <Text>{data.date}</Text>
-          <Text>{data.startTime}</Text>
-          <Text>{data.endTime}</Text>
-          <Text>{data.selectedSport}</Text>
+          <View style={[styles.general, isDarkMode ? styles.darkGeneral : styles.lightGeneral]}>
+            <Image source={{uri:data.coachID.image}} style={styles.left}/>
+            <View style={styles.generalMid}>
+              <View style={styles.mid1}>
+                  <Text style={isDarkMode ? styles.darkFirstname : styles.lightFirstname}>{data.coachID.firstname}</Text>
+                  <Text style={styles.sport}>{data.selectedSport}</Text>
+              </View>
+              <View style={styles.mid2}>
+                  <Text style={isDarkMode ? styles.darkDateTime : styles.lightDateTime}>{data.date} - {data.startTime}-{data.endTime}</Text>
+                  <Text style={isDarkMode ? styles.darkPlace : styles.lightPlace}>{data.coachingPlace}</Text>
+              </View>
+            </View>
+            <View style={styles.right}>
+              <Text style={isDarkMode ? styles.darkPrice : styles.lightPrice}>{data.coachID.price}€ / h</Text>
+            </View>
+          </View>          
         </View>
     )
   })
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, isDarkMode ? styles.darkBg : styles.lightBg]}>
       <GoodMorning/>
-          <Text>CoachingStudentScreen</Text>
-          <View>{newBookStudent}</View>
+        <ScrollView>
+          <View style={styles.bottomScreen}>
+            {newBookStudent}
+          </View>
+        </ScrollView>
         {/* afficher les coaching à venir et coaching passés */}
     </View>
   )
@@ -66,8 +78,97 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 15
   },
-  image: {
-    height: 20,
-    width: 20
-  }
+  darkBg: {
+    backgroundColor: '#000'
+  },
+  lightBg: {
+    backgroundColor: '#f2f2f2'
+  },
+  bottomScreen: {
+    width: 350,
+  },
+    left: {
+    height: 80,
+    width: 80,
+    borderRadius: 5
+  },
+  general: {
+    width: '100%',
+    borderRadius: 5,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 10, 
+    marginTop: 15,
+  },
+  darkGeneral: {
+    backgroundColor: '#2E2E2E'
+  },
+  lightGeneral: {
+    backgroundColor: '#ffffff'
+  },
+  generalMid: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    height: 80,
+    paddingLeft: 10,
+  },
+  mid1: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    height: 80,
+    paddingLeft: 10,
+    marginBottom: 22
+  },
+  mid2: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    height: 80,
+    paddingLeft: 10,
+    marginBottom: 12
+  },
+  right: {
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
+    height: 80,
+  },
+  lightFirstname: {
+    fontSize: 22,
+    color: '#000000',
+  },
+  darkFirstname: {
+    fontSize: 22,
+    color: '#FFFFFF',
+  },
+  sport: {
+    fontSize: 13,
+    color: '#FF711A',
+  },
+  lightDateTime: {
+    fontSize: 15,
+    color: '#000000',
+  },
+  darkDateTime: {
+    fontSize: 15,
+    color: '#FFFFFF',
+  },
+  lightPlace: {
+    fontSize: 15,
+    color: '#000000',
+  },
+  darkPlace: {
+    fontSize: 15,
+    color: '#FFFFFF',
+  },
+  lightPrice: {
+    fontSize: 18,
+    color: '#000000',
+  },
+  darkPrice: {
+    fontSize: 18,
+    color: '#FFFFFF',
+  },
 })

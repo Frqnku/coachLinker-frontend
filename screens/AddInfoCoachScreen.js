@@ -84,6 +84,7 @@ export default function AddInfoCoachScreen({ navigation }) {
         setCoachSports((prevSports) => [...prevSports, imageName]); // Met à jour cochSports directement
       }
     };
+    console.log(coachSports)
   
     const handleImageRemove = (index) => {
       setSelectedImages((prevImages) => {

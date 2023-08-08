@@ -146,12 +146,12 @@ return (
         <View style={styles.boximage}>
           <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={isDarkMode ? require('../assets/logodark.png') : require('../assets/logolight2.png')} />
       
-          <TextInput selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[ isDarkMode ? styles.darkInput : styles.lightInput]}
+          <TextInput selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.emailInp, isDarkMode ? styles.darkInput : styles.lightInput]}
           placeholder="Email" onChangeText={(value) => setSignUpEmail(value)} value={signUpEmail}  />
 
         <Text style={[styles.text, isDarkMode ? styles.darkText : styles.lightText]}>Le mot de passe doit contenir 8 caractères minimum, une majuscule, une minuscule, un chiffre et un caractère spécial</Text>
       <View style={styles.eye}>
-            <TextInput selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput]}
+            <TextInput selectionColor={'#FF6100'} placeholderTextColor={isDarkMode ? "#AAAAAA":"#7B7B7B"} style={[styles.input, isDarkMode ? styles.darkInputMdp : styles.lightInputMdp]}
           placeholder="Mot de passe" onChangeText={(value) => setSignUpPassword(value)} value={signUpPassword} secureTextEntry={isPasswordSecure}/>
           <TouchableOpacity >
              <Icon name={isPasswordSecure ? 'eye-slash': 'eye'} size={28} color='#F4A100'onPress={() => { isPasswordSecure ? setIsPasswordSecure(false) : setIsPasswordSecure(true) }}/>
@@ -235,7 +235,7 @@ darkInputMdp:{
   marginTop: 10,
   fontSize : 15,
   backgroundColor: '#2E2E2E',
-  width : "70%",
+  width : "65%",
   margin : "3%",
   height: 40,
   borderRadius: 13,
@@ -248,7 +248,7 @@ lightInputMdp:{
   marginTop: 20,
   fontSize : 15,
   backgroundColor: '#E8E8E8',
-  width : "70%",
+  width : "65%",
   margin : "3%",
   height: 40,
   borderRadius: 13,
@@ -277,7 +277,7 @@ darkInput:{
   marginTop: 10,
   fontSize : 15,
   backgroundColor: '#2E2E2E',
-  width : "70%",
+  width : "75%",
   margin : "3%",
   height: 40,
   borderRadius: 13,
@@ -289,7 +289,7 @@ lightInput:{
   marginTop: 20,
   fontSize : 15,
   backgroundColor: '#E8E8E8',
-  width : "70%",
+  width : "75%",
   margin : "3%",
   height: 40,
   borderRadius: 13,

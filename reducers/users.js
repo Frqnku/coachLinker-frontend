@@ -35,7 +35,6 @@ const initialState = {
         isCoach: false,
         isValidate: false,
         // infos student
-
         favoriteSport: []
       },
 

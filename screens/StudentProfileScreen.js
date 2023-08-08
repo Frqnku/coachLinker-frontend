@@ -13,127 +13,126 @@ import {StyleSheet, KeyboardAvoidingView, Image, TextInput, View, Text, ScrollVi
 
 import { backend_address } from '../backendAddress';
 
-
 export default function StudentProfileScreen({navigation}) {
     const dispatch = useDispatch()
     const isFocused = useIsFocused();
     const isDarkMode = useSelector(state => state.darkMode.value)
     const user = useSelector((state) => state.users.value); 
 
-        
-    const [selectedImages, setSelectedImages] = useState([]);
-    const [studentMyDescription, setStudentMyDescription] = useState('')
-    const [studentImage, setStudentImage] = useState('')
-    const [studentSports, setStudentSports] = useState([])
-    const [isEditing, setIsEditing] = useState(false);
-
-    const [hasPermission, setHasPermission] = useState(false);
-    const [type, setType] = useState(CameraType.back);
-    const [flashMode, setFlashMode] = useState(FlashMode.off);
-  
-    let cameraRef = useRef(null);
     
-    const student = useSelector((state) => state.users.value) 
-    const token = useSelector(state => state.users.value.token)
-    console.log('student10', student)
-    const profilStudent = useSelector(state => state.users.value.signUp)
-    console.log('profilStudent10', profilStudent)
+const [selectedImages, setSelectedImages] = useState([]);
+const [studentMyDescription, setStudentMyDescription] = useState('')
+const [studentImage, setStudentImage] = useState('')
+const [studentSports, setStudentSports] = useState('')
+const [isEditing, setIsEditing] = useState(false);
+
+const [hasPermission, setHasPermission] = useState(false);
+const [type, setType] = useState(CameraType.back);
+const [flashMode, setFlashMode] = useState(FlashMode.off);
+  
+let cameraRef = useRef(null);
+
+const student = useSelector((state) => state.users.value) 
+const token = useSelector(state => state.users.value.token)
+console.log('student10', student)
+const profilStudent = useSelector(state => state.users.value.signUp)
+console.log('profilStudent10', profilStudent)
  
 
-    useEffect(() => {
-      fetch(`${backend_address}/students/profil`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({token: token})
-      })
-        .then(response => response.json())
-        .then(data => {
-            console.log('student', data)
-          setStudentMyDescription(data.data.myDescription);  
-          dispatch(signUp({token:token, 
-            name: data.data.name,
-            firstname: data.data.firstname,
-            myDescription:data.data.myDescription,
-            dateOfBirth:data.data.dateOfBirth,
-            image: user.photo,
-            favoriteSport: data.data.favoriteSport,
-           }))
-            
-        });
-    }, []);
-
-
-    const pickImage = async () => {
-      let result = await ImagePicker.launchImageLibraryAsync({
-          mediaTypes: ImagePicker.MediaTypeOptions.All,
-          allowsEditing: true,
-          aspect: [4, 3],
-          quality: 1,
-        });
-  
-        if (!result.canceled) {
-          const formData = new FormData();
-  
-          formData.append('photoFromFront',{
-            uri: result.assets[0].uri,
-            name: 'photo.jpg',
-            type: 'image/jpeg',
-          });
-         
-          fetch(`${backend_address}/upload`, {
-            method: 'POST',
-            body: formData,
-          }).then((response) => response.json())
-            .then((data) => { 
-              if (data.result) {
-                dispatch(signUp({image: data.url}))
-                dispatch(addPhoto(data.url));
-                setHasPermission(false);
-              } 
-            })
-        }
-      };
-  
-
-
-    const requestCameraPermission = async () => { 
-      const { status } = await Camera.requestCameraPermissionsAsync();
-      setHasPermission(status === 'granted');
-    };
-    const takePicture = async () => {
-        const photo = await cameraRef.takePictureAsync({ quality: 0.3 });
-        const formData = new FormData();
-   
-    formData.append('photoFromFront',{
-      uri: photo.uri,
-      name: 'photo.jpg',
-      type: 'image/jpeg',
+useEffect(() => {
+  fetch(`${backend_address}/students/profil`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({token: token})
+  })
+    .then(response => response.json())
+    .then(data => {
+        console.log('student', data)
+      setStudentMyDescription(data.data.myDescription);  
+      dispatch(signUp({token:token, 
+        name: data.data.name,
+        firstname: data.data.firstname,
+        myDescription:data.data.myDescription,
+        dateOfBirth:data.data.dateOfBirth,
+        image: user.photo,
+        favoriteSport: data.data.favoriteSport,
+       }))
+        
     });
+}, []);
+
+
+const pickImage = async () => {
+  let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+  
+    if (!result.canceled) {
+      const formData = new FormData();
+  
+      formData.append('photoFromFront',{
+        uri: result.assets[0].uri,
+        name: 'photo.jpg',
+        type: 'image/jpeg',
+      });
+     
+      fetch(`${backend_address}/upload`, {
+        method: 'POST',
+        body: formData,
+      }).then((response) => response.json())
+        .then((data) => { 
+          if (data.result) {
+            dispatch(signUp({image: data.url}))
+            dispatch(addPhoto(data.url));
+            setHasPermission(false);
+          } 
+        })
+    }
+  };
+  
+
+
+const requestCameraPermission = async () => { 
+  const { status } = await Camera.requestCameraPermissionsAsync();
+  setHasPermission(status === 'granted');
+};
+const takePicture = async () => {
+    const photo = await cameraRef.takePictureAsync({ quality: 0.3 });
+    const formData = new FormData();
+   
+formData.append('photoFromFront',{
+  uri: photo.uri,
+  name: 'photo.jpg',
+  type: 'image/jpeg',
+});
    
 
-        fetch(`${backend_address}/upload`, { // fetch modifié comme sur AddinfStudentScreen
-          method: 'POST',
-          body: formData,
-        }).then((response) => response.json())
-          .then((data) => { 
-            if (data.result) {
-              dispatch(signUp({image: data.url}))
-              dispatch(addPhoto(data.url));
-              setHasPermission(false);
-            } 
-          })
+    fetch(`${backend_address}/upload`, { // fetch modifié comme sur AddinfStudentScreen
+      method: 'POST',
+      body: formData,
+    }).then((response) => response.json())
+      .then((data) => { 
+        if (data.result) {
+          dispatch(signUp({image: data.url}))
+          dispatch(addPhoto(data.url));
+          setHasPermission(false);
+        } 
+      })
    }
 
-        const DARK_COLORS = ["black", "#FF6100"];
-        const LIGHT_COLORS = ["#FFF8EB", "#FF6100"];
-        const DarkStart = {x : 0.4, y : 0.4};
-        const DarkEnd = {x : -0.3, y : -0.3};
-        const LightStart = {x : 0.6, y : 0.4};
-        const LightEnd = {x : 0.3, y : 0.1};
- 
-        const toggleEditMode = () => {
-          setIsEditing(!isEditing);
-        };
+   const DARK_COLORS = ["black", "#FF6100"];
+   const LIGHT_COLORS = ["#FFF8EB", "#FF6100"];
+   const DarkStart = {x : 0.4, y : 0.4};
+   const DarkEnd = {x : -0.3, y : -0.3};
+   const LightStart = {x : 0.6, y : 0.4};
+   const LightEnd = {x : 0.3, y : 0.1};
+
+   const toggleEditMode = () => {
+     setIsEditing(!isEditing);
+   };
     
  // Mettez à jour l'état local avec la nouvelle description 
  const saveDescription = async () => {
@@ -148,7 +147,7 @@ export default function StudentProfileScreen({navigation}) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
+        Authorization:` Bearer ${token}`,
       },
       body: JSON.stringify({
         token: token,
@@ -158,6 +157,7 @@ export default function StudentProfileScreen({navigation}) {
       }),
     });
 
+
     const responseData = await response.json();
 
     if (response.ok) {
@@ -165,7 +165,6 @@ export default function StudentProfileScreen({navigation}) {
       toggleEditMode(); // Sortez du mode d'édition après l'enregistrement
     } else {
       console.error('Failed to update information:', responseData.error);
-      // Gérez les erreurs comme vous le souhaitez
     }
   } catch (error) {
     console.error('Error updating information:', error);
@@ -192,7 +191,7 @@ export default function StudentProfileScreen({navigation}) {
                   </TouchableOpacity>
                   <Text style={[ isDarkMode ? styles.darksignin : styles.lightsignin]}>Good morning {profilStudent.firstname}!</Text>
           </View>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>  
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
  
  <View style={styles.inputView}>
 
@@ -202,14 +201,6 @@ export default function StudentProfileScreen({navigation}) {
    <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilStudent.dateOfBirth}</Text>
    <View style={styles.View}>
    <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "white":"#7B7B7B"}]}>Sports favoris </Text>
-   <TouchableOpacity onPress={() => {
-    if (isEditing) {
-      saveDescription(); // Appel de la fonction saveDescription ici
-    }
-    toggleEditMode();
-  }}>
-   <Image  style={styles.crayon} source={require('../assets/crayon.png')} />
-  </TouchableOpacity>
   </View >
    <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilStudent.favoriteSport}</Text>
  </View>
@@ -217,14 +208,15 @@ export default function StudentProfileScreen({navigation}) {
  <View style={styles.View}>
    <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "white":"#7B7B7B"}]}>A propos de moi </Text>
    <TouchableOpacity onPress={() => {
-    if (isEditing) {
-      saveDescription(); // Appel de la fonction saveDescription ici
-    }
-    toggleEditMode();
-  }}>
-   <Image  style={styles.crayon} source={require('../assets/crayon.png')} />
-  </TouchableOpacity>
+        if (isEditing) {
+          saveDescription();
+        }
+        toggleEditMode();
+      }} style={[ isDarkMode ? styles.darkbutton : styles.lightbutton]}>
+        <Text style={[ isDarkMode ? styles.darkTextButton : styles.lightTextButton]}>{isEditing ? 'Enregistrer' : 'Modifier'}</Text>
+      </TouchableOpacity>
   </View>
+
 
  <View style={styles.cardAbout}>
 
@@ -600,11 +592,13 @@ const styles = StyleSheet.create({
   darkbutton: {
     justifyContent: 'center',
     alignItems: 'center',
-    width: 150,
-    height: 50,
+    width: 80,
+    height: 20,
+    marginTop: 15,
+    marginLeft : 70,
     borderRadius: 25,
-    marginTop: 20,
-    marginBottom: 40,
+    // marginTop: 20,
+    // marginBottom: 40,
     elevation: 15,
     backgroundColor: '#BF5000',
     shadowColor: '#FF6100',

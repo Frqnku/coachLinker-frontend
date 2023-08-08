@@ -38,7 +38,29 @@ export default function StudentProfileScreen({navigation}) {
     const profilStudent = useSelector(state => state.users.value.signUp)
     console.log('profilStudent10', profilStudent)
  
-    
+    useEffect(() => {
+      fetch(`${backend_address}/students/profil`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({token: token})
+      })
+        .then(response => response.json())
+        .then(data => {
+            console.log('student', data)
+            
+          dispatch(signUp({token:token, 
+            name: data.data.name,
+            firstname: data.data.firstname,
+            myDescription:data.data.myDescription,
+            dateOfBirth:data.data.dateOfBirth,
+            image: user.photo,
+            favoriteSport: data.data.favoriteSport,
+           }))
+            
+        });
+    }, []);
+
+
     const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -111,27 +133,6 @@ fetch(`${backend_address}/upload`, {
         const LightStart = {x : 0.6, y : 0.4};
         const LightEnd = {x : 0.3, y : 0.1};
  
-        useEffect(() => {
-          fetch(`${backend_address}/students/profil`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({token: token})
-          })
-            .then(response => response.json())
-            .then(data => {
-                console.log('student', data)
-                
-              dispatch(signUp({token:token, 
-                name: data.data.name,
-                firstname: data.data.firstname,
-                myDescription:data.data.myDescription,
-                dateOfBirth:data.data.dateOfBirth,
-                image: data.data.image,
-                favoriteSport: data.data.favoriteSport,
-               }))
-                
-            });
-        }, []);
 
     if (!hasPermission || !isFocused) {
         
@@ -145,7 +146,7 @@ fetch(`${backend_address}/upload`, {
         style={styles.background}
         >
            <View style={styles.picture}>
-                  <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={{uri:profilStudent.image}} />
+                  <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={{uri:user.photo}} />
                   <TouchableOpacity onPress={() => requestCameraPermission() && pickImage()} >
                   <Image  style={styles.crayon} source={require('../assets/crayon.png')} />
                   </TouchableOpacity>
@@ -160,7 +161,7 @@ fetch(`${backend_address}/upload`, {
    <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilStudent.firstname}</Text>
    <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilStudent.dateOfBirth}</Text>
    <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "white":"#7B7B7B"}]}>Sports favories et à propos </Text>
-   <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilStudent.favoriteSportSport}</Text>
+   <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilStudent.favoriteSport}</Text>
  </View>
 
  <View style={styles.cardAbout}>
@@ -531,238 +532,4 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 })
-    // darkBg :{
-    //     backgroundColor: 'black',
-    // },
-    // lightBg:{
-    //     // backgroundColor: '#E8E8E8',
-    // },
-    // darkReturn:{
-    //     backgroundColor:"#2E2E2E",
-    // },
-    // lightReturn :{
-    //     backgroundColor: '#fff',
-    // },
-    // darkPicture:{
-    //     backgroundColor:"#2E2E2E",
-    // },
-    // lightPicture:{
-    //     backgroundColor: '#fff',
-    // },
-    // darkInput:{
-    //     backgroundColor: '#505050',
-    //     borderColor: "#505050",
-        
-    // },
-    // lightInput:{
-    //     backgroundColor: '#E8E8E8',
-    //     borderColor: "#E8E8E8",
-        
-    // },
-    // darkImg:{
-    //     backgroundColor: 'black',
-    //     borderColor: "#F4A100",
-    // },
-    // lightImg:{
-    //     backgroundColor: '#FFF8EB',
-    //     borderColor: "#E8E8E8",
-    // },
-    // darkIn:{
-    //  backgroundColor: '#2E2E2E',
-    // },
-    // lightIn:{
-    // backgroundColor: '#fff',
-    // },
-    // container : {
-    //     flex :1 ,
-    //    justifyContent: "space-evenly",
-       
-    // },
-    // background:{
-    // width: "100%",
-    // height: "100%",
-    // },
-    // scrollContainer:{
-    //     alignItems:'center',
-    // },
-    // return :{
-    //     width:40,
-    //     height:40,
-    //     marginRight: "80%",
-    //     marginTop: "15%",
-    //     borderRadius: 50,
-    // },
-   
-    // picture : {
-    //     justifyContent: "center",
-    //     flexDirection: 'row',
-    //     marginTop: "2%",
-        
-    // },
-    // image :{
-    //     width:100,
-    //     height:100,
-    //     backgroundColor: "#fff",
-    //     borderRadius: 50,
-    // },
-    // crayon :{
-    //     width:20,
-    //     height:20,
-    // },
-    // inputs: {
-    //     justifyContent: 'space-between',
-    //     alignItems: 'center',
-    //     marginTop: "8%",
-    //     marginLeft: "5%",
-    //     width: "90%",
-    //     backgroundColor:"#fff",
-    //     borderRadius: 5,
-     
-    // },
-    // inputNom: {
-    //     fontSize : 20,
-    //     borderColor: "#E8E8E8",
-    //     borderWidth: 2,
-    //     width : "80%",
-    //     margin : "4%",
-    //     height: 40,
-    //     paddingLeft: 5,
-    //     borderRadius: 5,
-       
-    // },
     
-    // inputPrenom :{
-    //     fontSize : 20,
-    //     borderColor: "#E8E8E8",
-    //     borderWidth: 2,
-    //     width : "80%",
-    //     margin : "4%",
-    //     height: 40,
-    //     paddingLeft: 5,
-    //     borderRadius: 5,
-    // },
-    // inputDate :{
-    //     fontSize : 20,
-    //     borderColor: "#E8E8E8",
-    //     borderWidth: 2,
-    //     width : "80%",
-    //     margin : "4%",
-    //     height: 40,
-    //     paddingLeft: 5,
-    //     borderRadius: 5,
-    // },
-    // description :{
-    //     alignItems: 'center',
-    //     marginTop: "8%",
-    //     marginLeft: "5%",
-    //     width: "90%",
-    //     backgroundColor:"#fff",
-    //     borderRadius: 5,
-        
-    // },
-    // inputMoi :{
-    //     fontSize : 20,
-    //     alignItems:'flex-start',
-    //     borderColor: "#E8E8E8",
-    //     borderWidth: 2,
-    //     width : "80%",
-    //     margin : "4%",
-    //     height: 150,
-    //     paddingLeft: 5,
-    //     borderRadius: 5,
-    //     paddingBottom: 100,
-    // },
-    // favoris :{
-    //     fontSize:20,
-    //     marginTop: "8%",
-    //     paddingLeft: 20,
-    //     color: "#7B7B7B",
-    // },
-   
-    // scroll:{
-    //     marginLeft: 40,
-    //     marginRight : 40,
-    //     marginTop: "15%",
-    // },
-    // logos :{
-    //   margin: 20,
-    //   height:70,
-    //   width :90,
-    //   alignItems: 'center',
-    //   justifyContent: 'center',
-    //   paddingBottom: 50,
-      
-    // },
-    // sportIcon: {
-    //     width:60,
-    //     height:60,
-    // },
-    // sports: {
-    //   display: 'none',
-    // },
-    // selectedImageContainer: {
-    //     flexDirection: 'row',
-    //     alignItems: 'center',
-    //     marginVertical: 5,
-    //   },
-    //   selectedImagesContainer: {
-    //     marginVertical: 10,
-    //     alignItems: 'center',
-    //     backgroundColor: '#FFFFFF',
-    //     width: "90%",
-    //     marginLeft: "5%",
-    //   },
-    //   itemName: {
-    //     fontWeight: 'bold',
-    //     marginRight: 100,
-    //   },
-    //   removeButton: {
-    //     color: 'black',
-    //     fontWeight: 'bold',
-    //     marginLeft: 10,
-    //     fontSize: 16,
-    //   },
-    // camera: {
-    //     flex: 1,
-    //   },
-    //   buttonsContainer: {
-    //     flex: 0.1,
-    //     flexDirection: 'row',
-    //     alignItems: 'flex-end',
-    //     justifyContent: 'space-between',
-    //     paddingTop: 20,
-    //     paddingLeft: 20,
-    //     paddingRight: 20,
-    //   },
-    //   button: {
-    //     width: 44,
-    //     height: 44,
-    //     alignItems: 'center',
-    //     justifyContent: 'center',
-    //     backgroundColor: 'rgba(0, 0, 0, 0.2)',
-    //     borderRadius: 50,
-    //   },
-    //   snapContainer: {
-    //     flex: 1,
-    //     alignItems: 'center',
-    //     justifyContent: 'flex-end',
-    //     paddingBottom: 25,
-    //   },
-    //   input2: {
-    //     fontSize : 20,
-    //     backgroundColor: "#F2F2F2",
-    //     width : 200,
-    //     margin : "4%",
-    //     height: 40,
-    //     borderRadius: 5,
-    //     paddingLeft: 5
-    //   },
-    //   button2: {
-    //     justifyContent: 'center',
-    //     alignItems: 'center',
-    //     width: 150,
-    //     height: 50,
-    //     backgroundColor: '#FF7C00',
-    //     borderRadius: 5,
-    //     marginTop: 15
-

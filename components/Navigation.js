@@ -61,7 +61,6 @@ const TabNavigator = () => {
       <Tab.Screen name="Profil" component={isCoach ? CoachProfileScreen : StudentProfileScreen} />
       <Tab.Screen name="Menu" component={isCoach ? CoachMenuScreen : StudentMenuScreen} />
       <Tab.Screen name="Option" component={OptionScreen} />
-      <Tab.Screen name="Book" component={BookScreen} />
       <Tab.Screen name="Agenda" component={isCoach ? AgendaCoachScreen : CoachingStudentScreen} />
     </Tab.Navigator>
   );
@@ -85,6 +84,7 @@ const Navigation = () => {
             <Stack.Screen name="AddInfoStudent" component={AddInfoStudentScreen} />
             <Stack.Screen name="AddInfoCoach" component={AddInfoCoachScreen} />
             <Stack.Screen name='Verification' component={VerificationScreen} />
+            <Stack.Screen name="Book" component={BookScreen} />
             <Stack.Screen name="TabNavigator" component={TabNavigator} />
           </Stack.Navigator>
         </NavigationContainer>

@@ -40,7 +40,7 @@ const initialState = {
           end: '',
         },
       },
-      bookedCoach: null
+      bookedCoach: {}
     }
 };
 

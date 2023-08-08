@@ -125,7 +125,7 @@ const handleModal = () => {
         console.log(data)
                 if (data.result) {
                     dispatch(addToken(data.token));
-                    dispatch(signUp({isCoach: data.isCoach, isValidate: data.isValidate}))
+                    dispatch(signUp({isCoach: data.isCoach, isValidate: data.isValidate, name: data.name , firstname: data.firstname}))
                     setSignInEmail('');
                     setSignInPassword('');
                     navigation.navigate('Home')

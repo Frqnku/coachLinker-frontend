@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
-import { StyleSheet, Text, View, Pressable, SafeAreaView} from 'react-native'
+import { StyleSheet, SafeAreaView } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux';
-import { updateCurrentLocation, updateSearchLocation, updateStatus } from '../reducers/users';
+import { updateCurrentLocation, updateSearchLocation } from '../reducers/users';
 import * as Location from 'expo-location';
 
 export default function ActivateLocationScreen({ navigation }) {

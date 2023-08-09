@@ -35,7 +35,7 @@ export default function CoachingStudentScreen() {
   }, []);
 
 
-  const newBookStudent = bookStudent.map((data, i) => {
+  const newBookStudent = bookStudent?.map((data, i) => {
     return(
         <View key={i}>
           <View style={[styles.general, isDarkMode ? styles.darkGeneral : styles.lightGeneral]}>

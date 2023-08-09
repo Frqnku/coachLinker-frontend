@@ -20,6 +20,7 @@ import StudentProfileScreen from '../screens/StudentProfileScreen';
 import VerificationScreen from '../screens/VerificationScreen';
 import BookScreen from '../screens/BookScreen';
 import CongratsScreen from '../screens/CongratsScreen'
+import ChatListScreen from '../screens/ChatListScreen';
 
 import { useSelector } from 'react-redux';
 
@@ -59,7 +60,7 @@ const TabNavigator = () => {
       tabBarStyle: { borderTopWidth: 0 },
       headerShown: false,
     })}>
-      <Tab.Screen name="Message" component={MessageScreen} />
+      <Tab.Screen name="Message" component={ChatListScreen} />
       <Tab.Screen name="Profil" component={isCoach ? CoachProfileScreen : StudentProfileScreen} />
       <Tab.Screen name="Menu" component={isCoach ? CoachMenuScreen : StudentMenuScreen} />
       <Tab.Screen name="Option" component={OptionScreen} />
@@ -89,6 +90,7 @@ const Navigation = () => {
             <Stack.Screen name="Book" component={BookScreen} />
             <Stack.Screen name="Congrats" component={CongratsScreen} />
             <Stack.Screen name="TabNavigator" component={TabNavigator} />
+            <Stack.Screen name="MessageScreen" component={MessageScreen} />
           </Stack.Navigator>
         </NavigationContainer>
     )

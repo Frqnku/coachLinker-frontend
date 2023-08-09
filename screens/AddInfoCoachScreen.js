@@ -40,7 +40,7 @@ export default function AddInfoCoachScreen({ navigation }) {
   const [coachPlace, setCoachPlace] = useState('')
   const [coachProCard, setCoachProCard] = useState('')
   const [errorNew, setErrorNew] = useState('')
-  const [coachSports, setCoachSports] = useState([])
+  const [coachSports, setCoachSports] = useState('')
 
   // camera tel
   let cameraRef = useRef(null);

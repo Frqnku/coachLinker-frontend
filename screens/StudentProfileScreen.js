@@ -152,7 +152,7 @@ fetch(`${backend_address}/upload`, {
                   </TouchableOpacity>
                   <Text style={[ isDarkMode ? styles.darksignin : styles.lightsignin]}>Good morning {profilStudent.firstname}!</Text>
           </View>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>  
+      <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>  
  
  <View style={styles.inputView}>
 

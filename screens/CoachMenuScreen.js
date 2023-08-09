@@ -12,11 +12,14 @@ export default function CoachMenuScreen() {
     const dispatch = useDispatch();
     const token = useSelector(state => state.users.value.token)
     // console.log('coach', token)
-    const bookCoach = useSelector(state => state.booking.value.bookings)
+    const bookCoach = useSelector(state => {
+      console.log("state booking => ",state.booking.value.bookings);
+    return  state.booking.value.bookings
+    })
+
+console.log("bookCoach",bookCoach.bookings);
 
 
-
-    console.log('test bookCoach', bookCoach)
     useEffect(() => {
         fetch(`${backend_address}/bookings/coach`, {
           method: 'POST',
@@ -32,8 +35,8 @@ export default function CoachMenuScreen() {
           });
       }, []);
 
-      const newBookCoach = bookCoach.map((data, i) => {
-        console.log('aurelie', data.studentID.firstname)
+      const newBookCoach = bookCoach?.bookings?.map((data, i) => {
+       
         return(
             <View key={i}>
               <Image source={{uri:data.studentID.image}} style={styles.image}/>

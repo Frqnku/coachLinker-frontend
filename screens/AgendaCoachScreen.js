@@ -14,9 +14,9 @@ export default function AgendaScreen() {
     const planning = useSelector(state => state.coachs.value.planning)
   /*   const user = use */
   console.log(planning)
-
+const token =useSelector((state) => state.users.value.token) 
   const handleValidate = async () => {
-    const token = user.value.token; // Replace this with your actual token retrieval logic
+     // Replace this with your actual token retrieval logic
 
     // Fetch complete planning data from Redux store
     const completePlanningData = Object.keys(planning).map(day => {

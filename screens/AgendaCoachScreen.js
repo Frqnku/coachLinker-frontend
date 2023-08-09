@@ -6,17 +6,19 @@ import { updatePlanning } from '../reducers/coachs';
 import GoodMorning from '../components/GoodMorning';
 import {StyleSheet, Pressable, KeyboardAvoidingView, Image, TextInput, View, Text, ScrollView, TouchableOpacity} from 'react-native';
 
+import GoodMorning from '../components/GoodMorning';
+
 import { backend_address } from '../backendAddress';
 
 
 export default function AgendaScreen() {
     const isDarkMode = useSelector(state => state.darkMode.value)
     const planning = useSelector(state => state.coachs.value.planning)
+    const token = useSelector(state => state.users.value.token);
   /*   const user = use */
   console.log(planning)
 
   const handleValidate = async () => {
-    const token = user.value.token; // Replace this with your actual token retrieval logic
 
     // Fetch complete planning data from Redux store
     const completePlanningData = Object.keys(planning).map(day => {
@@ -61,6 +63,7 @@ export default function AgendaScreen() {
           end={isDarkMode ? DarkEnd : LightEnd}
         style={styles.background}
         >
+            <GoodMorning/>
     <ScrollView  contentContainerStyle={styles.scrollContainer}showsVerticalScrollIndicator={false}>
         
     <View style={[styles.block, isDarkMode ? styles.darkIn : styles.lightIn, styles.marginTop]}>

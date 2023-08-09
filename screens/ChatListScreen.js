@@ -39,10 +39,13 @@ export default function ChatListScreen  ({ navigation })  {
             style={[styles.chatItem, isDarkMode ? styles.darkChat : styles.lightChat]}
             onPress={() => navigation.navigate('MessageScreen', { id: chat._id })}
           >
-        
+          <View style={styles.picture}>
             <Image style={styles.image} source={{uri:chat.coachID.image ?chat.coachID.image : chat.studentID.image }} />
-            <Text style={[styles.chatName, isDarkMode ? styles.darkName : styles.lightName]}>{chat.coachID.name ?chat.coachID.name : chat.studentID.name  }</Text>
-            <Text style={[styles.chatName, isDarkMode ? styles.darkName : styles.lightName]}>{chat.coachID.firstname ?chat.coachID.firstname : chat.studentID.firstname  }</Text>
+          </View>
+          <View style={styles.name}>
+           <Text style={[styles.chatName, isDarkMode ? styles.darkName : styles.lightName]}>{chat.coachID.name ?chat.coachID.name : chat.studentID.name  }</Text>
+           <Text style={[styles.chatName, isDarkMode ? styles.darkName : styles.lightName]}>{chat.coachID.firstname ?chat.coachID.firstname : chat.studentID.firstname  }</Text>
+          </View>
           </TouchableOpacity>
         ))}
       </ScrollView>
@@ -85,7 +88,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 15,
-    height: '25%',
+    height: 120,
     backgroundColor:'#fff',
     marginTop: 20,
     borderRadius: 30,
@@ -94,25 +97,28 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 20,
     marginLeft: 1,
-    paddingLeft: 4,
+    paddingLeft: 6,
     marginTop: "8%",
     paddingBottom: 20,
   },
   image :{
     width:60,
     height:60,
-    backgroundColor: "#fff",
     borderRadius: 50,
-    marginLeft : 20,
-    marginTop : 40,
-    marginBottom: 20,
-    paddingBottom: 60,
+    marginLeft : 30,
     },
     title:{
     fontSize: 40,
-    marginTop: "20%",
-    marginLeft: "25%",
+    marginTop: 80,
+    marginLeft: 100,
        
+    },
+    picture :{
+      justifyContent: 'center',
+    },
+    name:{
+      flexDirection:'row',
+      justifyContent: 'center',
     },
 });
 

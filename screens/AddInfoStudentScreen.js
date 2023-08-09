@@ -134,7 +134,13 @@ const handleValidate = async () => {
     // Gérer les erreurs
   }
 }
+<<<<<<< HEAD
 
+=======
+  
+    
+    
+>>>>>>> 7e07d1cb1114859ede69eba900a99df26b90d0c2
         const requestCameraPermission = async () => { 
           const { status } = await Camera.requestCameraPermissionsAsync();
           setHasPermission(status === 'granted');
@@ -557,6 +563,172 @@ lightsignin: {
   textShadowOffset: { width: 0.5, height: 0.5 }, // Décalage de l'ombre (effet relief)
   textShadowRadius: 1, // Rayon de l'ombre (effet relief)
   },
+<<<<<<< HEAD
+=======
+darkPicture:{
+  backgroundColor:"#505050",
+  },
+lightPicture:{
+  backgroundColor: '#fff',
+  },
+picture : {
+  flexDirection: 'row',
+  justifyContent: 'center',
+  alignItems: 'center',
+  width: '80%',
+  marginVertical: 10
+  },
+crayon :{
+  width:20,
+  height:20,
+  },
+inputView: {
+  justifyContent: 'center',
+  alignItems: 'center',
+  width : "80%",
+  margin: 10,
+  borderRadius: 20,
+  },
+input: {
+  },
+darkInput:{
+  marginTop: 10,
+  fontSize : 15,
+  backgroundColor: '#2E2E2E',
+  width : "80%",
+  margin : "3%",
+  height: 40,
+  borderRadius: 13,
+  paddingLeft: 15,
+  marginBottom: 10, 
+  color: 'white',
+
+},
+lightInput:{
+  marginTop: 20,
+  fontSize : 15,
+  backgroundColor: '#E8E8E8',
+  width : "80%",
+  margin : "3%",
+  height: 40,
+  borderRadius: 13,
+  paddingLeft: 15,
+  marginBottom: 10, 
+  color: 'black', 
+},
+cardAbout: {
+  width: 350,
+  height: 150,
+  justifyContent: 'center',
+  alignItems: 'center',
+  margin: 10,
+  },
+darkInputapropos :{
+  marginTop: 30,
+  fontSize : 15,
+  backgroundColor: '#2E2E2E',
+  width : "85%",
+  margin : "3%",
+  height: 150,
+  borderRadius: 13,
+  paddingLeft: 15,
+  marginBottom: 50, 
+  color: 'white',
+},
+lightInputapropos:{
+  marginTop: 20,
+  fontSize : 15,
+  backgroundColor: '#E8E8E8',
+width : "85%",
+  margin : "3%",
+  height: 200,
+  borderRadius: 13,
+  paddingLeft: 15,
+  marginBottom: 10, 
+  color: 'black', 
+  },
+favoris :{
+  fontSize:20,
+  marginTop: "8%",
+  paddingLeft: 20,
+  color: "#7B7B7B",
+  },
+logos :{
+  margin: 20,
+  height:70,
+  width :90,
+  alignItems: 'center',
+  justifyContent: 'center',
+  },
+sportIcon: {
+  width:60,
+  height:60,
+  },
+sports: {
+display: 'none'
+  },
+itemName: {
+  fontWeight: 'bold',
+  marginRight: 100,
+  fontSize: 20,
+  },
+darkItemName: {
+  color: '#FF6100'
+  },
+lightItemName: {
+  color: 'black'
+  },
+darkRemoveButton: {
+  color: '#FF6100',
+  textShadowColor: 'white',  //'rgba(255, 165, 0, 1)', Couleur de l'ombre (noir avec opacité 0.75)
+  textShadowOffset: { width: 0.5, height: 1 }, // Décalage de l'ombre (effet relief)
+  textShadowRadius: 20,
+  },
+lightRemoveButton: {
+  color: 'black'
+  }, 
+selectedImageContainer: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  marginVertical: 5,
+  },
+selectedImagesContainer: {
+  marginVertical: 10,
+  alignItems: 'center',
+  width: 300,
+  marginBottom: 60,
+  },
+darkSelectedImagesContainer: {
+  // backgroundColor: '#2E2E2E'
+  },
+lightSelectedImagesContainer: {
+  // backgroundColor: '#FFFFFF'
+  },
+removeButton: {
+  color: 'black',
+  fontWeight: 'bold',
+  marginLeft: 10,
+  fontSize: 16,
+  },
+darkbutton: {
+  justifyContent: 'center',
+  alignItems: 'center',
+  width: 150,
+  height: 50,
+  borderRadius: 25,
+  marginBottom: 40,
+  elevation: 15,
+  backgroundColor: '#BF5000',
+  shadowColor: '#FF6100',
+  shadowOffset: { width: 50, height: 5,},
+  shadowOpacity: 0.0001,
+  },
+lightTextButton: {
+  fontSize : 15,
+  color: 'white',
+  fontWeight: 'bold',
+  },
+>>>>>>> 7e07d1cb1114859ede69eba900a99df26b90d0c2
 darkTextButton: {
   fontSize : 15,
   color: '#2E2E2E',

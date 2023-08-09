@@ -61,6 +61,7 @@ export default function AgendaScreen() {
           end={isDarkMode ? DarkEnd : LightEnd}
         style={styles.background}
         >
+            <GoodMorning/>
     <ScrollView  contentContainerStyle={styles.scrollContainer}showsVerticalScrollIndicator={false}>
         
     <View style={[styles.block, isDarkMode ? styles.darkIn : styles.lightIn, styles.marginTop]}>

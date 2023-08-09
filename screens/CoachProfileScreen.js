@@ -29,19 +29,6 @@ export default function CoachProfileScreen() {
   const [type, setType] = useState(CameraType.back);
   const [flashMode, setFlashMode] = useState(FlashMode.off);
 
-  const [coachAbout, setCoachAbout] = useState('')
-  const [siretNumber, setSiretNumber] = useState('')
-  const [ibanNumber, setIbanNumber] = useState('')
-  const [bicNumber, setBicNumber] = useState('')
-  const [selectedImages, setSelectedImages] = useState([])
-  const [coachPrice, setCoachPrice] = useState('')
-  const [coachCity, setCoachCity] = useState('')
-  const [coachPlace, setCoachPlace] = useState('')
-  const [coachProCard, setCoachProCard] = useState('')
-
-  const [coachSports, setCoachSports] = useState([])
-
-
   // camera tel
   let cameraRef = useRef(null);
 
@@ -76,51 +63,7 @@ export default function CoachProfileScreen() {
       }
     };
 
- //modif des données existantes     
-    const saveCoachDescription = async () => {
-      dispatch(
-        signUp({
-          myDescription: coachAbout,
-        })
-      );
-    
-      try {
-        const response = await fetch(`${backend_address}/coachs/update`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            token: token,
-            myDescription: coachAbout,
-            siret: siretNumber,
-            price: coachPrice,
-            city: coachCity,
-            proCard: coachProCard, // Ajoutez la valeur de la carte professionnelle ici
-            iban: ibanNumber, // Ajoutez le numéro IBAN ici
-            bic: bicNumber, // Ajoutez le numéro BIC ici
-            coachingPlaces: [coachPlace], // Mettez le lieu de coaching dans un tableau s'il s'agit d'une liste
-            teachedSport: coachSports, // Utilisez le tableau coachSports pour les sports enseignés
-          }),
-        });
-    
-        const responseData = await response.json();
-    
-        if (response.ok) {
-          console.log('Informations updated successfully');
-          toggleEditMode(); // Sortez du mode d'édition après l'enregistrement
-        } else {
-          console.error('Failed to update information:', responseData.error);
-        }
-      } catch (error) {
-        console.error('Error updating information:', error);
-        // Gérez les erreurs comme vous le souhaitez
-      }
-    }; 
-
-
-
+ 
 const requestCameraPermission = async () => { 
   const { status } = await Camera.requestCameraPermissionsAsync();
   setHasPermission(status === 'granted');
@@ -187,6 +130,7 @@ useEffect(() => {
     });
 }, []);
 
+
 if (!hasPermission || !isFocused) {
 
   return (
@@ -205,41 +149,42 @@ if (!hasPermission || !isFocused) {
                   <Text style={[ isDarkMode ? styles.darksignin : styles.lightsignin]}>Good morning {profilCoach.firstname}!</Text>
           </View>
     
-      <ScrollView contentContainerStyle={styles.scrollContainer}>  
+      <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>  
  
       <View style={styles.inputView}>
 
-      <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "white":"#7B7B7B"}]}>Informations générales </Text>
-        <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilCoach.name}</Text>
-        <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilCoach.firstname}</Text>
-        <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilCoach.dateOfBirth}</Text>
-        <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "white":"#7B7B7B"}]}>Sports enseignés et à propos </Text>
-        <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilCoach.teachedSport}</Text>
+        <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "#FF711A":"black"}]}>Informations générales </Text>
+        <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"black"}]}>{profilCoach.name}</Text>
+        <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"black"}]}>{profilCoach.firstname}</Text>
+        <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"black"}]}>{profilCoach.dateOfBirth}</Text>
+        <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "#FF711A":"black"}]}>Sports enseignés et à propos </Text>
+        <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"white"}]}>{profilCoach.teachedSport}</Text>
+      
       </View>
      
       <View style={styles.cardAbout}>
         <Text
         multiline numberOfLines={4}  
-        style={[ isDarkMode ? styles.darkInputapropos : styles.lightInputapropos,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilCoach.myDescription} </Text>
+        style={[ isDarkMode ? styles.darkInputapropos : styles.lightInputapropos,{color:isDarkMode ? "white":"black"}]}>{profilCoach.myDescription} </Text>
       </View>
 
-         <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "white":"#7B7B7B"}]} >City et lieu de coaching</Text>
-          <Text style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilCoach.city}</Text>
-          <Text style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilCoach.coachingPlaces} </Text>
+         <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "#FF711A":"#FF711A"}]} >City et lieu de coaching</Text>
+          <Text style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"black"}]}>{profilCoach.city}</Text>
+          <Text style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"black"}]}>{profilCoach.coachingPlaces} </Text>
        
 
-        <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "white":"#7B7B7B"}]}> Informations professionnelles </Text>
-          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>Cart Pro. : {profilCoach.proCard}</Text>
+        <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "#FF711A":"#FF711A"}]}> Informations professionnelles </Text>
+          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"black"}]}>Cart Pro. : {profilCoach.proCard}</Text>
 
-          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>Taux horaire :{profilCoach.price} €</Text>
+          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"black"}]}>Taux horaire :{profilCoach.price} €</Text>
 
-          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>Siret : 
+          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"black"}]}>Siret : 
           </Text>
     
-        <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "white":"#7B7B7B"}]}>Informations de paiements</Text>
-          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>IBAN :{profilCoach.iban} </Text>
+        <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "#FF711A":"#FF711A"}]}>Informations de paiements</Text>
+          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"black"}]}>IBAN :{profilCoach.iban} </Text>
 
-          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>BIC : {profilCoach.bic} </Text>
+          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"black"}]}>BIC : {profilCoach.bic} </Text>
       
     </ScrollView>
     </LinearGradient>
@@ -311,7 +256,6 @@ const styles = StyleSheet.create({
     },
   scrollContainer: {
     alignItems: 'center',
-    marginTop: 5,
     },
   aPropos: {
     height: 100,
@@ -351,11 +295,11 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     },
   cardAbout: {
-    width: 350,
+    width: '80%',
     height: 150,
     justifyContent: 'center',
     alignItems: 'center',
-    margin: 10,
+    marginTop: 20,
     },
   camera: {
     flex: 1
@@ -388,7 +332,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width : "100%",
-    margin: 10,
     borderRadius: 20,
     },
   itemName: {
@@ -461,6 +404,7 @@ const styles = StyleSheet.create({
     },
   darkInput:{
     marginTop: 10,
+    textAlignVertical: 'center',
     fontSize : 15,
     backgroundColor: '#2E2E2E',
     width : "80%",
@@ -468,12 +412,11 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 13,
     paddingLeft: 15,
-    marginBottom: 10, 
-    color: 'white',
     justifyContent: "center",
     },
   lightInput:{
-    marginTop: 20,
+    marginTop: 10,
+    textAlignVertical: 'center',
     fontSize : 15,
     backgroundColor: '#E8E8E8',
     width : "80%",
@@ -481,32 +424,29 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 13,
     paddingLeft: 15,
-    marginBottom: 10, 
-    color: 'black', 
+    justifyContent: "center",
     },
   darkInputapropos:{
     marginTop: 30,
     fontSize : 15,
     backgroundColor: '#2E2E2E',
-    width : "80%",
+    width : "100%",
     margin : "3%",
     height: 150,
     borderRadius: 13,
     paddingLeft: 15,
     marginBottom: 50, 
-    color: 'white',
     },
   lightInputapropos:{
-    marginTop: 20,
+    marginTop: 30,
     fontSize : 15,
     backgroundColor: '#E8E8E8',
-    width : "80%",
+    width : "100%",
     margin : "3%",
-    height: 200,
+    height: 150,
     borderRadius: 13,
     paddingLeft: 15,
-    marginBottom: 10, 
-    color: 'black', 
+    marginBottom: 50, 
     },
   darkImg:{
     borderColor: "#FF6100",
@@ -556,6 +496,7 @@ const styles = StyleSheet.create({
     },
   lightsignin: {
     width : "80%",
+    alignItems: 'center',
     justifyContent: 'center',
     fontSize : 15,
     marginTop: 30,

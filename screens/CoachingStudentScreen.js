@@ -7,68 +7,70 @@ import { addBooking } from '../reducers/booking';
 
 import { backend_address } from '../backendAddress';
 
-
 export default function CoachingStudentScreen() {
   const isDarkMode = useSelector(state => state.darkMode.value);
   const dispatch = useDispatch();
-  
-  const token = useSelector(state => state.users.value.token)
-  const bookStudent = useSelector(state => state.booking.value.bookings)
-  //const [booking, setBooking] = useState([])
-  
-  console.log('testtoken', token)
-  console.log('test book', bookStudent)
+
+  const token = useSelector(state => state.users.value.token);
+  const bookStudent = useSelector(state => state.booking.value.bookings);
+  const [myBookings, setMyBookings] = useState([]);
 
   useEffect(() => {
     fetch(`${backend_address}/bookings/student`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({token: token})
+      body: JSON.stringify({ token: token })
     })
       .then(response => response.json())
       .then(data => {
-          console.log('bookings', data.bookings)
-          
-        dispatch(addBooking({token: token, bookings: data.bookings}))
-        // console.log('testbooking', dispatch(addBooking({token: token, bookings: data.bookings})))
+        dispatch(addBooking({ token: token, bookings: data.bookings }));
+
+        const newBookStudent = data.bookings.map((data, i) => {
+          return (
+            <View key={i}>
+              <View style={[styles.general, isDarkMode ? styles.darkGeneral : styles.lightGeneral]}>
+                <Image source={{ uri: data.coachID.image }} style={styles.left} />
+                <View style={styles.generalMid}>
+                  <View style={styles.mid1}>
+                    <Text style={isDarkMode ? styles.darkFirstname : styles.lightFirstname}>
+                      {data.coachID.firstname}
+                    </Text>
+                    <Text style={styles.sport}>{data.selectedSport}</Text>
+                  </View>
+                  <View style={styles.mid2}>
+                    <Text style={isDarkMode ? styles.darkDateTime : styles.lightDateTime}>
+                      {data.date} - {data.startTime}
+                    </Text>
+                    <Text style={isDarkMode ? styles.darkPlace : styles.lightPlace}>
+                      {data.coachingPlace}
+                    </Text>
+                  </View>
+                </View>
+                <View style={styles.right}>
+                  <Text style={isDarkMode ? styles.darkPrice : styles.lightPrice}>
+                    {data.coachID.price}€ / h
+                  </Text>
+                </View>
+              </View>
+            </View>
+          );
+        });
+
+        setMyBookings(newBookStudent);
       });
-  }, []);
-
-
-  const newBookStudent = bookStudent?.map((data, i) => {
-    return(
-        <View key={i}>
-          <View style={[styles.general, isDarkMode ? styles.darkGeneral : styles.lightGeneral]}>
-            <Image source={{uri:data.coachID.image}} style={styles.left}/>
-            <View style={styles.generalMid}>
-              <View style={styles.mid1}>
-                  <Text style={isDarkMode ? styles.darkFirstname : styles.lightFirstname}>{data.coachID.firstname}</Text>
-                  <Text style={styles.sport}>{data.selectedSport}</Text>
-              </View>
-              <View style={styles.mid2}>
-                  <Text style={isDarkMode ? styles.darkDateTime : styles.lightDateTime}>{data.date} - {data.startTime}-{data.endTime}</Text>
-                  <Text style={isDarkMode ? styles.darkPlace : styles.lightPlace}>{data.coachingPlace}</Text>
-              </View>
-            </View>
-            <View style={styles.right}>
-              <Text style={isDarkMode ? styles.darkPrice : styles.lightPrice}>{data.coachID.price}€ / h</Text>
-            </View>
-          </View>          
-        </View>
-    )
-  })
+  }, [dispatch, isDarkMode, token]);
 
   return (
     <View style={[styles.container, isDarkMode ? styles.darkBg : styles.lightBg]}>
-      <GoodMorning/>
-        <ScrollView>
-          <View style={styles.bottomScreen}>
-            {newBookStudent}
-          </View>
-        </ScrollView>
-        {/* afficher les coaching à venir et coaching passés */}
+      <GoodMorning />
+      <ScrollView>
+        <View style={styles.bottomScreen}>
+          {myBookings[0] ? myBookings : <Text style={[styles.text, isDarkMode ? styles.darkText : styles.lightText]}>Vous n'avez pas de séance prévue</Text>}
+        </View>
+      </ScrollView>
+      {/* afficher les coaching à venir et coaching passés */}
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -86,6 +88,7 @@ const styles = StyleSheet.create({
   },
   bottomScreen: {
     width: 350,
+    alignItems: 'center'
   },
     left: {
     height: 80,
@@ -107,6 +110,24 @@ const styles = StyleSheet.create({
   lightGeneral: {
     backgroundColor: '#ffffff'
   },
+  darkText: {
+    color: '#fff'
+},
+darkCard: {
+    backgroundColor: '#2E2E2E'
+},
+greyText: {
+    color: 'grey'
+},
+lightBg: {
+    backgroundColor: '#f2f2f2'
+},
+lightCard: {
+    backgroundColor: '#fff'
+},
+lightText: {
+    color: '#000'
+},
   generalMid: {
     flex: 1,
     justifyContent: 'flex-start',

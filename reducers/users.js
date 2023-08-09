@@ -19,7 +19,7 @@ const initialState = {
         password: '',
         name: '',
         firstname: '', 
-        image: '', 
+        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/510px-Default_pfp.svg.png?20220226140232', 
         myDescription: '',
         dateOfBirth: '',        
         // infos coach

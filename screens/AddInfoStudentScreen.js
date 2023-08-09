@@ -28,7 +28,7 @@ export default function AddInfoStudentScreen({navigation}) {
   const [studentFirstname, setStudentFirstname] = useState('')
   const [studentDateOfBirth, setStudentDateOfBirth] = useState('')
   const [studentMyDescription, setStudentMyDescription] = useState('')
-  const [studentSports, setStudentSports] = useState([])
+  const [studentSports, setStudentSports] = useState('')
   const [selectedImages, setSelectedImages] = useState([]);
   const [errorNew, setErrorNew] = useState('')
 

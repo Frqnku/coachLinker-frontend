@@ -9,6 +9,8 @@ import { signUp, addProcard, addPhoto, addToken } from '../reducers/users'
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
 
+import GoodMorning from '../components/GoodMorning';
+
 import { backend_address } from '../backendAddress';
 
 

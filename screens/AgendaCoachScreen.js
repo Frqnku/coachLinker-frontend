@@ -12,11 +12,11 @@ import { backend_address } from '../backendAddress';
 export default function AgendaScreen() {
     const isDarkMode = useSelector(state => state.darkMode.value)
     const planning = useSelector(state => state.coachs.value.planning)
+    const token = useSelector(state => state.users.value.token);
   /*   const user = use */
   console.log(planning)
-const token =useSelector((state) => state.users.value.token) 
+
   const handleValidate = async () => {
-     // Replace this with your actual token retrieval logic
 
     // Fetch complete planning data from Redux store
     const completePlanningData = Object.keys(planning).map(day => {
@@ -61,6 +61,10 @@ const token =useSelector((state) => state.users.value.token)
           end={isDarkMode ? DarkEnd : LightEnd}
         style={styles.background}
         >
+            <View style={styles.marginLeft}>
+
+            <GoodMorning />
+            </View>
     <ScrollView  contentContainerStyle={styles.scrollContainer}showsVerticalScrollIndicator={false}>
         
     <View style={[styles.block, isDarkMode ? styles.darkIn : styles.lightIn, styles.marginTop]}>
@@ -155,6 +159,9 @@ const styles = StyleSheet.create({
           },
           marginTop: {
             marginTop: 60
+          },
+          marginLeft: {
+            marginLeft: 25
           },
     darkBg :{
         backgroundColor: 'black',

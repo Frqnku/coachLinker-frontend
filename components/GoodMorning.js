@@ -3,13 +3,14 @@ import {View, Text, Image, StyleSheet} from 'react-native'
 import { useSelector } from 'react-redux'
 
 export default function GoodMorning() {
-    const username = useSelector(state => state.users.value.name)
+    const user = useSelector(state => state.users.value.signUp)
     const isDarkMode = useSelector(state => state.darkMode.value)
+    console.log(user.image)
   
     return (
     <View style={styles.container}>
-        <Image style={styles.image} source={require('../assets/ImgDefault.png')}/>
-        <Text style={isDarkMode ? styles.darkText : styles.lightText}>Good morning {username} !</Text>
+        <Image style={styles.image} source={{uri: user.image}}/>
+        <Text style={isDarkMode ? styles.darkText : styles.lightText}>Good morning {user.firstname} !</Text>
     </View>
   )
 }

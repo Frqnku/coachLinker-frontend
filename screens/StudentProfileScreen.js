@@ -116,6 +116,11 @@ formData.append('photoFromFront',{
     }).then((response) => response.json())
       .then((data) => { 
         if (data.result) {
+          fetch(`${backend_address}/students/update`, { // fetch modifié comme sur AddinfStudentScreen
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({image: data.url}),
+          }).then((response) => response.json())
           dispatch(signUp({image: data.url}))
           dispatch(addPhoto(data.url));
           setHasPermission(false);

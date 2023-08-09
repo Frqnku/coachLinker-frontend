@@ -6,6 +6,7 @@ import { signUp, addToken} from '../reducers/users';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { backend_address } from '../backendAddress';
+import { addBooking } from '../reducers/booking';
 
 
 
@@ -122,9 +123,10 @@ const handleModal = () => {
             body: JSON.stringify({ email: signInEmail, password: signInPassword }),
         }).then(response => response.json())
             .then(data => {
-        console.log(data)
+        console.log("DATAAAAAAA",data)
                 if (data.result) {
                     dispatch(addToken(data.token));
+                    dispatch(addBooking({bookings : data.books, token : data.token}))
                     dispatch(signUp({isCoach: data.isCoach, isValidate: data.isValidate, name: data.name , firstname: data.firstname, image: data.data.image}))
                     setSignInEmail('');
                     setSignInPassword('');

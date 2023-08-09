@@ -26,11 +26,11 @@ export default function ChooseRoleScreen({ navigation }) {
             </View>
             
             <View style={styles.bottom}>
-              <Pressable style={styles.btnLocation} onPress={chooseStudent}>
+              <Pressable style={[ isDarkMode ? styles.darkbutton : styles.lightbutton]} onPress={chooseStudent}>
                 <Text style={[styles.text, styles.darkText]}>Je recherche un coach</Text>
               </Pressable>
   
-              <Pressable style={styles.btnLocation} onPress={chooseCoach}>
+              <Pressable style={[ isDarkMode ? styles.darkbutton : styles.lightbutton]} onPress={chooseCoach}>
                 <Text style={[styles.text, styles.darkText]}>Je suis coach</Text>
               </Pressable>
             </View>
@@ -50,7 +50,11 @@ const styles = StyleSheet.create({
       paddingVertical: 25,
       justifyContent: 'space-between',
       alignItems: 'center',
-      borderRadius: 5
+      borderRadius: 5,
+      elevation: 15,
+      shadowColor: '#FF6100',
+      shadowOffset: { width: 50, height: 15 },
+      shadowOpacity: 0.0001,
     },
     bottom: {
       justifyContent: 'space-around',
@@ -92,6 +96,32 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 20,
         fontWeight: 600
+    },
+    lightbutton: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: '70%',
+      height: 40,
+      backgroundColor: '#FF711A',
+      borderRadius: 25,
+      marginTop: 10,
+      elevation: 15,
+      shadowColor: '#FF6100',
+      shadowOffset: { width: 50, height: 5 },
+      shadowOpacity: 0.0001,
+    },
+    darkbutton: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: '30%',
+      height: 40,
+      backgroundColor: '#BF5000',
+      borderRadius: 25,
+      marginTop: 10,
+      elevation: 15,
+      shadowColor: '#FF6100',
+      shadowOffset: { width: 50, height: 5 },
+      shadowOpacity: 0.0001,
     },
 })
 

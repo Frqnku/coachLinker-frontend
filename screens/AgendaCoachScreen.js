@@ -61,6 +61,10 @@ export default function AgendaScreen() {
           end={isDarkMode ? DarkEnd : LightEnd}
         style={styles.background}
         >
+            <View style={styles.marginLeft}>
+
+            <GoodMorning />
+            </View>
     <ScrollView  contentContainerStyle={styles.scrollContainer}showsVerticalScrollIndicator={false}>
         
     <View style={[styles.block, isDarkMode ? styles.darkIn : styles.lightIn, styles.marginTop]}>
@@ -155,6 +159,9 @@ const styles = StyleSheet.create({
           },
           marginTop: {
             marginTop: 60
+          },
+          marginLeft: {
+            marginLeft: 25
           },
     darkBg :{
         backgroundColor: 'black',

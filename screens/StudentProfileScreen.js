@@ -4,9 +4,7 @@ import { Camera, CameraType, FlashMode } from 'expo-camera';
 import { useIsFocused } from "@react-navigation/native";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useSelector, useDispatch } from 'react-redux';
-import { switchMode } from '../reducers/darkMode';
 import { signUp, addPhoto } from '../reducers/users'
-import { updateStudent} from '../reducers/student';
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
 import {StyleSheet, KeyboardAvoidingView, Image, TextInput, View, Text, ScrollView, TouchableOpacity} from 'react-native';
@@ -14,16 +12,12 @@ import {StyleSheet, KeyboardAvoidingView, Image, TextInput, View, Text, ScrollVi
 import { backend_address } from '../backendAddress';
 
 export default function StudentProfileScreen({navigation}) {
-    const dispatch = useDispatch()
-    const isFocused = useIsFocused();
-    const isDarkMode = useSelector(state => state.darkMode.value)
-    const user = useSelector((state) => state.users.value); 
+  const dispatch = useDispatch()
+  const isFocused = useIsFocused();
+  const isDarkMode = useSelector(state => state.darkMode.value)
+  const user = useSelector(state => state.users.value.signUp)
 
-    
-const [selectedImages, setSelectedImages] = useState([]);
 const [studentMyDescription, setStudentMyDescription] = useState('')
-const [studentImage, setStudentImage] = useState('')
-const [studentSports, setStudentSports] = useState('')
 const [isEditing, setIsEditing] = useState(false);
 
 const [hasPermission, setHasPermission] = useState(false);
@@ -116,6 +110,11 @@ formData.append('photoFromFront',{
     }).then((response) => response.json())
       .then((data) => { 
         if (data.result) {
+          fetch(`${backend_address}/students/update`, { // fetch modifié comme sur AddinfStudentScreen
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({image: data.url}),
+          }).then((response) => response.json())
           dispatch(signUp({image: data.url}))
           dispatch(addPhoto(data.url));
           setHasPermission(false);
@@ -191,7 +190,7 @@ formData.append('photoFromFront',{
                   </TouchableOpacity>
                   <Text style={[ isDarkMode ? styles.darksignin : styles.lightsignin]}>Good morning {profilStudent.firstname}!</Text>
           </View>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>  
  
  <View style={styles.inputView}>
 

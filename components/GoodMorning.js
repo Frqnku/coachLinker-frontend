@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux'
 export default function GoodMorning() {
     const user = useSelector(state => state.users.value.signUp)
     const isDarkMode = useSelector(state => state.darkMode.value)
+    console.log(user.image)
   
     return (
     <View style={styles.container}>

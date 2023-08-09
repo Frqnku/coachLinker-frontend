@@ -11,7 +11,7 @@ export default function BookScreen({ navigation }) {
     const [bookPlace, setBookPlace] = useState('Parc')
     const [selectedSport, setSelectedSport] = useState('Boxe')
     const token = useSelector((state) => state.users.value.token);
-    console.log(token, bookedCoach)
+    console.log(token, bookedCoach, booking)
     
 
     useEffect(() => {
@@ -99,7 +99,7 @@ export default function BookScreen({ navigation }) {
                 startTime: booking.start,
                 coachingPlace: bookedCoach.coachingPlaces[0], // pouvoir séléctionner l'endroit'
                 coachID: bookedCoach.coachID,
-                selectedSport: bookedCoach.teachedSport[0], // pouvoir séléctionner le sport 
+                selectedSport: bookedCoach.teachedSport[0][0], // pouvoir séléctionner le sport 
             })
         })
         .then(response => response.json())

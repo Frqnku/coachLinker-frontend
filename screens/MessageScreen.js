@@ -13,15 +13,18 @@ import {
   import React, { useState, useEffect } from 'react';
   import socketIOClient from "socket.io-client";
 import { useSelector } from 'react-redux';
+import booking from '../reducers/booking';
+import backend_address from "../backendAddress"
 
-  const socket = socketIOClient("http://192.168.10.126:3000")
-  
-  export default function MessageScreen(params) {
+  const socket = socketIOClient("http://192.168.10.113:3000")
+ 
+  export default function MessageScreen(params, {navigation}) { console.log("PARAAAAAAMSSSS",params.route.params.id);
     const [message, setMessage] = useState([])
     const [myMessage, setMyMessage] = useState('')
     const user = useSelector((state) => state.users.value)
-    const id = useSelector((state) => state.booking.value)
-    
+    const bookings = useSelector((state) => state.booking.value)
+    console.log("OOOOOOOOOOOOOOOOO",bookings)
+     const id = params.route.params.id
 
 
   console.log(user)
@@ -33,10 +36,6 @@ import { useSelector } from 'react-redux';
         if (myMessage === newMessage) {
           return
         }
-
-        // if (id !== newMessage.id) {
-        //     return
-        //   }
   
         setMessage([...message, newMessage]);
       });
@@ -85,13 +84,13 @@ import { useSelector } from 'react-redux';
     .then(response => response.json())
     .then(data => {
       console.log(data)
-      socket.emit('sendMessage', {message: data.url, user: user.signUp.firstname, time: timeNow, id : id})
+      socket.emit('sendMessage', {message: data.url, user: user.signUp.firstname, time: timeNow, id})
       setMyMessage('audio Message') ;
     }) 
   } else if(!newRecord && myMessage.trim() !== '') {
    
     socket.emit('sendMessage', {message: myMessage, user: user.signUp.firstname, time: timeNow, token : user.token}, id)  
-     setMessage([...message, { user: user.signUp.firstname, message: myMessage, time: timeNow, token : user.token , id : id}]); 
+     setMessage([...message, { user: user.signUp.firstname, message: myMessage, time: timeNow, token : user.token , id}]); 
   } setMyMessage('')
 } 
     const [recording, setRecording] = useState(undefined);
@@ -186,8 +185,8 @@ import { useSelector } from 'react-redux';
     return (
       <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <View style={styles.banner}>
-          <MaterialIcons name="keyboard-backspace" color="#ffffff" size={24} onPress={() => navigation.goBack()} />
-          <Text style={styles.greetingText}>Welcome {params.name}</Text>
+          <MaterialIcons name="keyboard-backspace" color="#ffffff" size={24} onPress={() => goBack()} />
+          <Text style={styles.greetingText}>Welcome {user.signUp.firstname}</Text>
         </View>
   
     <View style={styles.inset}>
@@ -196,10 +195,7 @@ import { useSelector } from 'react-redux';
       </ScrollView>
   
       <View style={styles.inputContainer}>
-        <TextInput style={styles.input} onChangeText={(!isRecording && !newRecord) && (value => setMyMessage(value))} value={myMessage}/>
-        <TouchableOpacity onPress={() => handleRecording()} style={styles.recordButton}>
-          <MaterialIcons name="mic" color="#ffffff" size={24} />
-        </TouchableOpacity>
+        <TextInput style={styles.input} onChangeText={ (value => setMyMessage(value))} value={myMessage}/>
         <TouchableOpacity style={styles.sendButton} onPress={() => sendMessage()}>
           <MaterialIcons name="send" color="#ffffff" size={24} />
         </TouchableOpacity>

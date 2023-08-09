@@ -76,90 +76,48 @@ export default function CoachProfileScreen() {
       }
     };
 
-      
-    // sélection des sports
-    // const handleImageSelect = (image, imageName) => {
-    //   if (selectedImages.length < 3 && !selectedImages.some((item) => item.image === image)) {
-    //     setSelectedImages((prevImages) => [...prevImages, { image, name: imageName }]);
-    //     setCoachSports((prevSports) => [...prevSports, imageName]); // Met à jour studentSports directement
-    //   }
-    // };
-  
-    // const handleImageRemove = (index) => {
-    //   setSelectedImages((prevImages) => {
-    //     const updatedImages = [...prevImages];
-    //     const removedImage = updatedImages.splice(index, 1)[0];
-    //     return updatedImages;
-    //   });
-    //   setCoachSports((prevSports) => {
-    //     const updatedSports = [...prevSports];
-    //     updatedSports.splice(index, 1); // Retire le sport de la liste
-    //     return updatedSports;
-    //   });
-    // };  
+ //modif des données existantes     
+    const saveCoachDescription = async () => {
+      dispatch(
+        signUp({
+          myDescription: coachAbout,
+        })
+      );
     
-
-      
-  // sélection de la procard : à compléter
-
-  // const handleSubmit = async () => {
-  //   console.log(coachSports);
-  //   try { 
-  //     await dispatch(signUp({
-  //       name: coachName, 
-  //       firstname: coachFirstname,
-  //       dateOfBirth: coachBirthDate,
-  //       myDescription: coachAbout,
-  //       image: user.photo,
-  //       teachedSport: coachSports,
-  //       proCard : coachProCard,
-  //       siret : siretNumber, 
-  //       iban : ibanNumber,
-  //       bic : bicNumber, 
-  //       price : coachPrice,
-  //       city : coachCity,
-  //       coachingPlaces : coachPlace,
-  //     }));
-  
-  //     const signUpData = {
-  //       email: coach.signUp.email,
-  //       password: coach.signUp.password,
-  //       name: coachName, 
-  //       firstname: coachFirstname,
-  //       dateOfBirth: coachBirthDate,
-  //       myDescription: coachAbout,
-  //       image: user.photo,
-  //       teachedSport: coachSports,
-  //       proCard : coachProCard,
-  //       siret : siretNumber, 
-  //       iban : ibanNumber,
-  //       bic : bicNumber, 
-  //       price : coachPrice,
-  //       city : coachCity,
-  //       coachingPlaces : coachPlace,
-  //     };
-      
-  //     const response = await fetch(`${backend_address}/coachs/new`, {
-  //       method: 'POST',
-  //       headers: { 'Content-Type': 'application/json' },
-  //       body: JSON.stringify(signUpData),
-  //     });
-  
-  //     const responseBody = await response.text();
-  //     console.log('Response from server:', responseBody);
-  
-  //     const data = JSON.parse(responseBody);
-  //     console.log('dataresult', data);
-  
-  //     if (data.result) { 
-  //       console.log("salut");
-  //       navigation.navigate("TabNavigator", { screen: "Menu" });
-  //     }
-  //   } catch (error) {
-  //     console.error('Error:', error);
-  //     // Gérer les erreurs
-  //   }
-  // }
+      try {
+        const response = await fetch(`${backend_address}/coachs/update`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            token: token,
+            myDescription: coachAbout,
+            siret: siretNumber,
+            price: coachPrice,
+            city: coachCity,
+            proCard: coachProCard, // Ajoutez la valeur de la carte professionnelle ici
+            iban: ibanNumber, // Ajoutez le numéro IBAN ici
+            bic: bicNumber, // Ajoutez le numéro BIC ici
+            coachingPlaces: [coachPlace], // Mettez le lieu de coaching dans un tableau s'il s'agit d'une liste
+            teachedSport: coachSports, // Utilisez le tableau coachSports pour les sports enseignés
+          }),
+        });
+    
+        const responseData = await response.json();
+    
+        if (response.ok) {
+          console.log('Informations updated successfully');
+          toggleEditMode(); // Sortez du mode d'édition après l'enregistrement
+        } else {
+          console.error('Failed to update information:', responseData.error);
+        }
+      } catch (error) {
+        console.error('Error updating information:', error);
+        // Gérez les erreurs comme vous le souhaitez
+      }
+    }; 
 
 
 

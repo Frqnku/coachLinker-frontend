@@ -612,7 +612,6 @@ const styles = StyleSheet.create({
     borderColor: "#FF6100",
     },
   lightImg:{
-    backgroundColor: '#fff',
     borderColor: "#E8E8E8",
     },
   darkText: {

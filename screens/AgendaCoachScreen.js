@@ -12,11 +12,11 @@ import { backend_address } from '../backendAddress';
 export default function AgendaScreen() {
     const isDarkMode = useSelector(state => state.darkMode.value)
     const planning = useSelector(state => state.coachs.value.planning)
+    const token = useSelector(state => state.users.value.token);
   /*   const user = use */
   console.log(planning)
 
   const handleValidate = async () => {
-    const token = user.value.token; // Replace this with your actual token retrieval logic
 
     // Fetch complete planning data from Redux store
     const completePlanningData = Object.keys(planning).map(day => {

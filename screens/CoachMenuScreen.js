@@ -49,7 +49,7 @@ export default function CoachMenuScreen() {
                   <Text style={styles.sport}>{data.selectedSport}</Text>
               </View>
               <View style={styles.mid2}>
-                  <Text style={isDarkMode ? styles.darkDateTime : styles.lightDateTime}>{data.date} - {data.startTime}-{data.endTime}</Text>
+                  <Text style={isDarkMode ? styles.darkDateTime : styles.lightDateTime}>{data.date} - {data.startTime}</Text>
                   <Text style={isDarkMode ? styles.darkPlace : styles.lightPlace}>{data.coachingPlace}</Text>
               </View>
             </View>
@@ -64,6 +64,7 @@ export default function CoachMenuScreen() {
               <ScrollView>
                 <View style={styles.bottomScreen}>
                   {newBookCoach}
+                  <Text style={styles.tutoText}>{!bookCoach[0] && 'Ajoute tes disponibilités dans ton agenda pour avoir une séance'}</Text>
                 </View>
               </ScrollView>
         </View>
@@ -85,6 +86,11 @@ const styles = StyleSheet.create({
   },
   bottomScreen: {
     width: 350,
+    alignItems: 'center'
+  },
+  tutoText: {
+    width: '80%',
+    textAlign: 'center'
   },
     left: {
     height: 80,
@@ -143,11 +149,11 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   lightFirstname: {
-    fontSize: 22,
+    fontSize: 21,
     color: '#000000',
   },
   darkFirstname: {
-    fontSize: 22,
+    fontSize: 21,
     color: '#FFFFFF',
   },
   sport: {

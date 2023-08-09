@@ -5,7 +5,7 @@ import { Camera, CameraType, FlashMode } from 'expo-camera';
 import { useIsFocused } from "@react-navigation/native";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useSelector,useDispatch } from 'react-redux';
-import { signUp, addProcard, addPhoto, addToken } from '../reducers/users'
+import { signUp, addPhoto } from '../reducers/users'
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -19,9 +19,7 @@ export default function CoachProfileScreen() {
   const isDarkMode = useSelector(state => state.darkMode.value)
   const coach = useSelector((state) => state.coachs.value); 
   const token = useSelector(state => state.users.value.token)
-  console.log('coach10', token)
   const profilCoach = useSelector(state => state.users.value.signUp)
-  console.log('profilCoach10', profilCoach)
   
   // les useStates
   // const camera : 
@@ -243,12 +241,6 @@ const styles = StyleSheet.create({
     marginTop: "8%",
     borderRadius: 100,
     },
-  darkReturn:{
-    backgroundColor:"#2E2E2E",
-    },
-  lightReturn :{
-    backgroundColor: '#fff',
-    },
   scroll:{
     marginLeft: 40,
     marginRight : 40,
@@ -262,28 +254,6 @@ const styles = StyleSheet.create({
     width: 350,
     backgroundColor: '#F2F2F2',
     borderRadius: 13
-    },
-  btnPhoto: {
-    height: 60,
-    width: 100,
-    backgroundColor: "#BF5000",
-    margin: 10,
-    justifyContent:'center',
-    alignItems: 'center',
-    borderRadius: 25,
-    },
-  btnValidate: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '30%',
-    height: 40,
-    backgroundColor: '#BF5000',
-    borderRadius: 25,
-    marginTop: 30,
-    elevation: 15,
-    shadowColor: '#FF6100',
-    shadowOffset: { width: 50, height: 5 },
-    shadowOpacity: 0.0001,
     },
   buttonsContainer: {
     flex: 0.1,
@@ -332,30 +302,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width : "100%",
+    margin: 10,
     borderRadius: 20,
-    },
-  itemName: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginRight: 100,
-    },
-  logos :{
-    margin: 20,
-    height:70,
-    width :90,
-    alignItems: 'center',
-    justifyContent: 'center',
     },
   removeButton: {
     color: 'black',
     fontWeight: 'bold',
     marginLeft: 10,
     fontSize: 16,
-    },
-  selectedImageContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 5,
     },
   selectedImagesContainer: {
     marginVertical: 10,
@@ -368,16 +322,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-end',
     paddingBottom: 25,
-    },
-  snapContainer2: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    paddingBottom: 25,
-    },
-  sportIcon: {
-    width:60,
-    height:60,
     },
   sports: {
     display: 'none'
@@ -448,38 +392,10 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     marginBottom: 50, 
     },
-  darkImg:{
-    borderColor: "#FF6100",
-    },
-  lightImg:{
-    backgroundColor: '#fff',
-    borderColor: "#E8E8E8",
-    },
   darkText: {
     color: '#FFFFFF'
     },
   lightText: {
-    color: 'black'
-    },
-  darkSelectedImagesContainer: {
-    // backgroundColor: '#2E2E2E'
-    },
-  lightSelectedImagesContainer: {
-    // backgroundColor: '#FFFFFF'
-    },
-  darkItemName: {
-    color: '#FF6100'
-    },
-  lightItemName: {
-    color: 'black'
-    },
-  darkRemoveButton: {
-    color: '#FF6100',
-    textShadowColor: 'white',  //'rgba(255, 165, 0, 1)', Couleur de l'ombre (noir avec opacité 0.75)
-    textShadowOffset: { width: 0.5, height: 1 }, // Décalage de l'ombre (effet relief)
-    textShadowRadius: 20,
-    },
-  lightRemoveButton: {
     color: 'black'
     },
   darksignin: {
@@ -533,16 +449,6 @@ const styles = StyleSheet.create({
     shadowColor: '#FF6100',
     shadowOffset: { width: 50, height: 5,},
     shadowOpacity: 0.0001,
-    },
-  lightTextButton: {
-    fontSize : 15,
-    color: 'white',
-    fontWeight: 'bold',
-    },
-  darkTextButton: {
-    fontSize : 15,
-    color: '#2E2E2E',
-    fontWeight: 'bold',
     },
 })
 

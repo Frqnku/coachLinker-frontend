@@ -85,15 +85,7 @@ export default function StudentMenuScreen({ navigation }) {
   const months = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
   const formattedDate = `${daysOfWeek[today.getDay()]} ${today.getDate().toString().padStart(2, '0')} ${months[today.getMonth()]}`;
 
-  const getNextDays = (startDate, numberOfDays) => {
-    const days = [];
-    for (let i = 1; i <= numberOfDays; i++) {
-      const nextDay = new Date(startDate);
-      nextDay.setDate(startDate.getDate() + i);
-      days.push(nextDay);
-    }
-    return days;
-  };
+
 
   const handleBook = (coachID, coachingPlaces, teachedSport) => {
     dispatch(updateBookedCoach({coachID: coachID, coachingPlaces: coachingPlaces, teachedSport: teachedSport}))
@@ -101,7 +93,7 @@ export default function StudentMenuScreen({ navigation }) {
   }
 
   const allCoachs = coachsAround.map((data, i) => {
-    const sixNextDays = getNextDays(today, 3);
+
     const planningVisible = visibleCoachIndices.includes(i);
 
     const stars = [];
@@ -130,17 +122,9 @@ export default function StudentMenuScreen({ navigation }) {
           </View>
         </Pressable>
         {planningVisible && <View style={[styles.planning, isDarkMode ? styles.darkCard : styles.lightCard]}>
-          <Text style={[isDarkMode ? styles.darkText : styles.lightText]}>Prochaines disponibilités</Text>
-          <View style={styles.displayCoaching}>
-            {sixNextDays.map((nextDay, index) => (
-              <Text key={index} style={[styles.book, isDarkMode ? styles.darkText : styles.lightText]}>
-                {daysOfWeek[nextDay.getDay()].slice(0,3)} {nextDay.getDate().toString().padStart(2, '0')}
-              </Text>
-            ))}
-          </View>
           <View>
-            <TouchableOpacity onPress={() => handleBook(data._id, data.coachingPlaces, data.teachedSport)}>
-              <Text style={[styles.text, isDarkMode ? styles.darkText : styles.lightText]}>Réserver une séance</Text>
+            <TouchableOpacity onPress={() => handleBook(data._id, data.coachingPlaces, data.teachedSport)} style={styles.btnBook}>
+              <Text style={[styles.textBook, isDarkMode ? styles.darkText : styles.lightText]}>Réserver une séance</Text>
             </TouchableOpacity>
           </View>
         </View>}
@@ -234,22 +218,19 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingTop: 15
     },
-    book: {
-        fontSize: 13,
-        width: 70,
-        height: 30,
-        textAlign: 'center',
-        textAlignVertical: 'center',
-        backgroundColor: '#FFDFA3',
-        marginHorizontal: 5,
-        marginVertical: 10,
-        borderRadius: 15
-    },
     borderRadiusBottom: {
         borderRadius: 5,
     },
     bottomScreen: {
         width: '80%'
+    },
+    btnBook: {
+        backgroundColor: '#FF711A',
+        height: 50,
+        width: 150,
+        borderRadius: 5,
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     card: {
         width: '100%',
@@ -318,6 +299,9 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 18
+    },
+    textBook: {
+        textAlign: 'center'
     },
     btnSearch: {
         paddingVertical: 5

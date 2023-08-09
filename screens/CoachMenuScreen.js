@@ -13,16 +13,13 @@ export default function CoachMenuScreen() {
     const isDarkMode = useSelector(state => state.darkMode.value);
     const dispatch = useDispatch();
     const token = useSelector(state => state.users.value.token)
-    console.log('coach', token)
+    // console.log('coach', token)
     const bookCoach = useSelector(state => state.booking.value.bookings)
+    // console.log('test bookCoach', bookCoach)
 
-    console.log('test bookCoach', bookCoach)
-    useEffect(() => {
-      const dateNaissanceStr = "21/08/1980"; // Date de naissance en tant que chaîne de caractères
-      const dateNaissance = moment(dateNaissanceStr, "DD/MM/YYYY"); // Convertir la chaîne en objet de date à l'aide de moment
-      const dateAujourdhui = moment(); // Obtenir la date d'aujourd'hui
-      const age = dateAujourdhui.diff(dateNaissance, 'years'); // Calculer la différence entre les deux dates pour obtenir l'âge
-      console.log('lâge est', age)  
+  
+    
+    useEffect(() => {  
       fetch(`${backend_address}/bookings/coach`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -38,6 +35,11 @@ export default function CoachMenuScreen() {
       }, []);
 
       const newBookCoach = bookCoach.map((data, i) => {
+        const dateNaissanceStr = data.studentID.dateOfBirth; // Date de naissance en tant que chaîne de caractères
+        const dateNaissance = moment(dateNaissanceStr, "DD/MM/YYYY"); // Convertir la chaîne en objet de date à l'aide de moment
+        const dateAujourdhui = moment(); // Obtenir la date d'aujourd'hui
+        const age = dateAujourdhui.diff(dateNaissance, 'years'); // Calculer la différence entre les deux dates pour obtenir l'âge
+        console.log('lâge est', age)
         console.log('aurelie', data.studentID.firstname)
         return(
         <View key={i}>
@@ -45,7 +47,7 @@ export default function CoachMenuScreen() {
             <Image source={{uri:data.studentID.image}} style={styles.left}/>
             <View style={styles.generalMid}>
               <View style={styles.mid1}>
-                  <Text style={isDarkMode ? styles.darkFirstname : styles.lightFirstname}>{data.studentID.firstname}, <Text style={isDarkMode ? styles.darkAge : styles.lightAge}>{data.studentID.dateOfBirth}</Text> </Text>
+                  <Text style={isDarkMode ? styles.darkFirstname : styles.lightFirstname}>{data.studentID.firstname}, <Text style={isDarkMode ? styles.darkAge : styles.lightAge}>{age} ans</Text> </Text>
                   <Text style={styles.sport}>{data.selectedSport}</Text>
               </View>
               <View style={styles.mid2}>

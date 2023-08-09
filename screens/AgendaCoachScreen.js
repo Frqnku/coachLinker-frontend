@@ -6,8 +6,6 @@ import { updatePlanning } from '../reducers/coachs';
 import GoodMorning from '../components/GoodMorning';
 import {StyleSheet, Pressable, KeyboardAvoidingView, Image, TextInput, View, Text, ScrollView, TouchableOpacity} from 'react-native';
 
-import GoodMorning from '../components/GoodMorning';
-
 import { backend_address } from '../backendAddress';
 
 

@@ -9,16 +9,14 @@ import { signUp, addProcard, addPhoto, addToken } from '../reducers/users'
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
 
-import GoodMorning from '../components/GoodMorning';
-
 import { backend_address } from '../backendAddress';
 
 
 export default function CoachProfileScreen() {
+  const user = useSelector(state => state.users.value.signUp)
   const dispatch = useDispatch()
   const isFocused = useIsFocused();
   const isDarkMode = useSelector(state => state.darkMode.value)
-  const user = useSelector((state) => state.users.value);
   const coach = useSelector((state) => state.coachs.value); 
   const token = useSelector(state => state.users.value.token)
   console.log('coach10', token)
@@ -144,11 +142,11 @@ if (!hasPermission || !isFocused) {
         style={styles.background}
         >
        <View style={styles.picture}>
-                  <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={{uri:profilCoach.image}} />
+                  <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]}  source={{uri: user.image}} />
                   <TouchableOpacity onPress={() => requestCameraPermission() && pickImage()} >
                   <Image  style={styles.crayon} source={require('../assets/crayon.png')} />
                   </TouchableOpacity>
-                  <Text style={[ isDarkMode ? styles.darksignin : styles.lightsignin]}>Good morning {profilCoach.firstname}!</Text>
+                  <Text style={[ isDarkMode ? styles.darksignin : styles.lightsignin]}>       Good morning {profilCoach.firstname}!</Text>
           </View>
     
       <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>  
@@ -156,37 +154,37 @@ if (!hasPermission || !isFocused) {
       <View style={styles.inputView}>
 
         <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "#FF711A":"black"}]}>Informations générales </Text>
-        <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"black"}]}>{profilCoach.name}</Text>
-        <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"black"}]}>{profilCoach.firstname}</Text>
-        <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"black"}]}>{profilCoach.dateOfBirth}</Text>
+        <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"#7B7B7B"}]}>{profilCoach.name}</Text>
+        <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"#7B7B7B"}]}>{profilCoach.firstname}</Text>
+        <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"#7B7B7B"}]}>{profilCoach.dateOfBirth}</Text>
         <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "#FF711A":"black"}]}>Sports enseignés et à propos </Text>
-        <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"white"}]}>{profilCoach.teachedSport}</Text>
+        <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"#7B7B7B"}]}>{profilCoach.teachedSport}</Text>
       
       </View>
      
       <View style={styles.cardAbout}>
         <Text
         multiline numberOfLines={4}  
-        style={[ isDarkMode ? styles.darkInputapropos : styles.lightInputapropos,{color:isDarkMode ? "white":"black"}]}>{profilCoach.myDescription} </Text>
+        style={[ isDarkMode ? styles.darkInputapropos : styles.lightInputapropos,{color:isDarkMode ? "white":"#7B7B7B"}]}>{profilCoach.myDescription} </Text>
       </View>
 
-         <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "#FF711A":"#FF711A"}]} >City et lieu de coaching</Text>
-          <Text style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"black"}]}>{profilCoach.city}</Text>
-          <Text style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"black"}]}>{profilCoach.coachingPlaces} </Text>
+         <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "#FF711A":"black"}]} >Ville et lieu de coaching</Text>
+          <Text style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"#7B7B7B"}]}>{profilCoach.city}</Text>
+          <Text style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"#7B7B7B"}]}>{profilCoach.coachingPlaces} </Text>
        
 
-        <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "#FF711A":"#FF711A"}]}> Informations professionnelles </Text>
-          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"black"}]}>Cart Pro. : {profilCoach.proCard}</Text>
+        <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "#FF711A":"black"}]}> Informations professionnelles </Text>
+          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"#7B7B7B"}]}>Cart Pro. : {profilCoach.proCard}</Text>
 
-          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"black"}]}>Taux horaire :{profilCoach.price} €</Text>
+          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"#7B7B7B"}]}>Taux horaire :{profilCoach.price} €</Text>
 
-          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"black"}]}>Siret : 
+          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"#7B7B7B"}]}>Siret : 
           </Text>
     
-        <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "#FF711A":"#FF711A"}]}>Informations de paiements</Text>
-          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"black"}]}>IBAN :{profilCoach.iban} </Text>
+        <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "#FF711A":"black"}]}>Informations de paiements</Text>
+          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"#7B7B7B"}]}>IBAN :{profilCoach.iban} </Text>
 
-          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"black"}]}>BIC : {profilCoach.bic} </Text>
+          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"#7B7B7B"}]}>BIC : {profilCoach.bic} </Text>
       
     </ScrollView>
     </LinearGradient>
@@ -311,7 +309,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: '80%',
-    marginVertical: 10,
+    marginVertical: 25,
     marginLeft: 40,
     marginRight : 40,
     },
@@ -420,7 +418,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     textAlignVertical: 'center',
     fontSize : 15,
-    backgroundColor: '#E8E8E8',
+    backgroundColor: 'white',
     width : "80%",
     margin : "3%",
     height: 40,
@@ -442,7 +440,7 @@ const styles = StyleSheet.create({
   lightInputapropos:{
     marginTop: 30,
     fontSize : 15,
-    backgroundColor: '#E8E8E8',
+    backgroundColor: 'white',
     width : "100%",
     margin : "3%",
     height: 150,

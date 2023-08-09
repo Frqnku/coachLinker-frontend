@@ -114,6 +114,7 @@ export default function StudentMenuScreen({ navigation }) {
       }
       stars.push(<FontAwesome key={i} name='star' style={style} />);
     }
+    console.log(data._id)
 
     return (
       <View key={i}>

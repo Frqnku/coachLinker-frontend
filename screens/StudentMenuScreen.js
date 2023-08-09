@@ -115,8 +115,6 @@ export default function StudentMenuScreen({ navigation }) {
       stars.push(<FontAwesome key={i} name='star' style={style} />);
     }
 
-    console.log(data.notes, Math.floor(data.notes.reduce((acc, cur) => acc + cur, 0) / data.notes.length ))
-
     return (
       <View key={i}>
         <Pressable style={[styles.card, isDarkMode ? styles.darkCard : styles.lightCard, !planningVisible && styles.borderRadiusBottom]} onPress={() => togglePlanningVisibility(i)}>

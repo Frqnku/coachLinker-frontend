@@ -1,13 +1,11 @@
 import React from 'react'
 import {StyleSheet, KeyboardAvoidingView, Image, TextInput, View, Text, ScrollView, TouchableOpacity} from 'react-native';
-import GoodMorning from '../components/GoodMorning';
 import { useState, useRef } from 'react';
 import { Camera, CameraType, FlashMode } from 'expo-camera';
 import { useIsFocused } from "@react-navigation/native";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useSelector, useDispatch } from 'react-redux';
 import { addPhoto} from '../reducers/users';
-import { updateStudent,updateSport} from '../reducers/student';
 import { signUp } from '../reducers/users'
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -142,8 +140,7 @@ const handleValidate = async () => {
     // Gérer les erreurs
   }
 }
-
-    
+  
     
     
         const requestCameraPermission = async () => { 
@@ -557,7 +554,6 @@ darkbutton: {
   width: 150,
   height: 50,
   borderRadius: 25,
-  marginTop: 20,
   marginBottom: 40,
   elevation: 15,
   backgroundColor: '#BF5000',

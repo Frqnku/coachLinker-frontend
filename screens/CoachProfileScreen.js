@@ -5,44 +5,27 @@ import { Camera, CameraType, FlashMode } from 'expo-camera';
 import { useIsFocused } from "@react-navigation/native";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useSelector,useDispatch } from 'react-redux';
-import { signUp, addProcard, addPhoto, addToken } from '../reducers/users'
+import { signUp, addPhoto } from '../reducers/users'
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
-
-import GoodMorning from '../components/GoodMorning';
 
 import { backend_address } from '../backendAddress';
 
 
 export default function CoachProfileScreen() {
+  const user = useSelector(state => state.users.value.signUp)
   const dispatch = useDispatch()
   const isFocused = useIsFocused();
   const isDarkMode = useSelector(state => state.darkMode.value)
-  const user = useSelector((state) => state.users.value);
   const coach = useSelector((state) => state.coachs.value); 
   const token = useSelector(state => state.users.value.token)
-  console.log('coach10', token)
   const profilCoach = useSelector(state => state.users.value.signUp)
-  console.log('profilCoach10', profilCoach)
   
   // les useStates
   // const camera : 
   const [hasPermission, setHasPermission] = useState(false);
   const [type, setType] = useState(CameraType.back);
   const [flashMode, setFlashMode] = useState(FlashMode.off);
-
-  const [coachAbout, setCoachAbout] = useState('')
-  const [siretNumber, setSiretNumber] = useState('')
-  const [ibanNumber, setIbanNumber] = useState('')
-  const [bicNumber, setBicNumber] = useState('')
-  const [selectedImages, setSelectedImages] = useState([])
-  const [coachPrice, setCoachPrice] = useState('')
-  const [coachCity, setCoachCity] = useState('')
-  const [coachPlace, setCoachPlace] = useState('')
-  const [coachProCard, setCoachProCard] = useState('')
-
-  const [coachSports, setCoachSports] = useState([])
-
 
   // camera tel
   let cameraRef = useRef(null);
@@ -78,93 +61,7 @@ export default function CoachProfileScreen() {
       }
     };
 
-      
-    // sélection des sports
-    // const handleImageSelect = (image, imageName) => {
-    //   if (selectedImages.length < 3 && !selectedImages.some((item) => item.image === image)) {
-    //     setSelectedImages((prevImages) => [...prevImages, { image, name: imageName }]);
-    //     setCoachSports((prevSports) => [...prevSports, imageName]); // Met à jour studentSports directement
-    //   }
-    // };
-  
-    // const handleImageRemove = (index) => {
-    //   setSelectedImages((prevImages) => {
-    //     const updatedImages = [...prevImages];
-    //     const removedImage = updatedImages.splice(index, 1)[0];
-    //     return updatedImages;
-    //   });
-    //   setCoachSports((prevSports) => {
-    //     const updatedSports = [...prevSports];
-    //     updatedSports.splice(index, 1); // Retire le sport de la liste
-    //     return updatedSports;
-    //   });
-    // };  
-    
-
-      
-  // sélection de la procard : à compléter
-
-  // const handleSubmit = async () => {
-  //   console.log(coachSports);
-  //   try { 
-  //     await dispatch(signUp({
-  //       name: coachName, 
-  //       firstname: coachFirstname,
-  //       dateOfBirth: coachBirthDate,
-  //       myDescription: coachAbout,
-  //       image: user.photo,
-  //       teachedSport: coachSports,
-  //       proCard : coachProCard,
-  //       siret : siretNumber, 
-  //       iban : ibanNumber,
-  //       bic : bicNumber, 
-  //       price : coachPrice,
-  //       city : coachCity,
-  //       coachingPlaces : coachPlace,
-  //     }));
-  
-  //     const signUpData = {
-  //       email: coach.signUp.email,
-  //       password: coach.signUp.password,
-  //       name: coachName, 
-  //       firstname: coachFirstname,
-  //       dateOfBirth: coachBirthDate,
-  //       myDescription: coachAbout,
-  //       image: user.photo,
-  //       teachedSport: coachSports,
-  //       proCard : coachProCard,
-  //       siret : siretNumber, 
-  //       iban : ibanNumber,
-  //       bic : bicNumber, 
-  //       price : coachPrice,
-  //       city : coachCity,
-  //       coachingPlaces : coachPlace,
-  //     };
-      
-  //     const response = await fetch(`${backend_address}/coachs/new`, {
-  //       method: 'POST',
-  //       headers: { 'Content-Type': 'application/json' },
-  //       body: JSON.stringify(signUpData),
-  //     });
-  
-  //     const responseBody = await response.text();
-  //     console.log('Response from server:', responseBody);
-  
-  //     const data = JSON.parse(responseBody);
-  //     console.log('dataresult', data);
-  
-  //     if (data.result) { 
-  //       console.log("salut");
-  //       navigation.navigate("TabNavigator", { screen: "Menu" });
-  //     }
-  //   } catch (error) {
-  //     console.error('Error:', error);
-  //     // Gérer les erreurs
-  //   }
-  // }
-
-
-
+ 
 const requestCameraPermission = async () => { 
   const { status } = await Camera.requestCameraPermissionsAsync();
   setHasPermission(status === 'granted');
@@ -231,6 +128,7 @@ useEffect(() => {
     });
 }, []);
 
+
 if (!hasPermission || !isFocused) {
 
   return (
@@ -242,48 +140,49 @@ if (!hasPermission || !isFocused) {
         style={styles.background}
         >
        <View style={styles.picture}>
-                  <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={{uri:profilCoach.image}} />
+                  <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]}  source={{uri: user.image}} />
                   <TouchableOpacity onPress={() => requestCameraPermission() && pickImage()} >
                   <Image  style={styles.crayon} source={require('../assets/crayon.png')} />
                   </TouchableOpacity>
-                  <Text style={[ isDarkMode ? styles.darksignin : styles.lightsignin]}>Good morning {profilCoach.firstname}!</Text>
+                  <Text style={[ isDarkMode ? styles.darksignin : styles.lightsignin]}>       Good morning {profilCoach.firstname}!</Text>
           </View>
     
-      <ScrollView contentContainerStyle={styles.scrollContainer}>  
+      <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>  
  
       <View style={styles.inputView}>
 
-      <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "white":"#7B7B7B"}]}>Informations générales </Text>
-        <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilCoach.name}</Text>
-        <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilCoach.firstname}</Text>
-        <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilCoach.dateOfBirth}</Text>
-        <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "white":"#7B7B7B"}]}>Sports enseignés et à propos </Text>
-        <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilCoach.teachedSport}</Text>
+        <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "#FF711A":"black"}]}>Informations générales </Text>
+        <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"#7B7B7B"}]}>{profilCoach.name}</Text>
+        <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"#7B7B7B"}]}>{profilCoach.firstname}</Text>
+        <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"#7B7B7B"}]}>{profilCoach.dateOfBirth}</Text>
+        <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "#FF711A":"black"}]}>Sports enseignés et à propos </Text>
+        <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"#7B7B7B"}]}>{profilCoach.teachedSport}</Text>
+      
       </View>
      
       <View style={styles.cardAbout}>
         <Text
         multiline numberOfLines={4}  
-        style={[ isDarkMode ? styles.darkInputapropos : styles.lightInputapropos,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilCoach.myDescription} </Text>
+        style={[ isDarkMode ? styles.darkInputapropos : styles.lightInputapropos,{color:isDarkMode ? "white":"#7B7B7B"}]}>{profilCoach.myDescription} </Text>
       </View>
 
-         <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "white":"#7B7B7B"}]} >City et lieu de coaching</Text>
-          <Text style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilCoach.city}</Text>
-          <Text style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilCoach.coachingPlaces} </Text>
+         <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "#FF711A":"black"}]} >Ville et lieu de coaching</Text>
+          <Text style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"#7B7B7B"}]}>{profilCoach.city}</Text>
+          <Text style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"#7B7B7B"}]}>{profilCoach.coachingPlaces} </Text>
        
 
-        <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "white":"#7B7B7B"}]}> Informations professionnelles </Text>
-          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>Cart Pro. : {profilCoach.proCard}</Text>
+        <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "#FF711A":"black"}]}> Informations professionnelles </Text>
+          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"#7B7B7B"}]}>Cart Pro. : {profilCoach.proCard}</Text>
 
-          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>Taux horaire :{profilCoach.price} €</Text>
+          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"#7B7B7B"}]}>Taux horaire :{profilCoach.price} €</Text>
 
-          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>Siret : 
+          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"#7B7B7B"}]}>Siret : 
           </Text>
     
-        <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "white":"#7B7B7B"}]}>Informations de paiements</Text>
-          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>IBAN :{profilCoach.iban} </Text>
+        <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "#FF711A":"black"}]}>Informations de paiements</Text>
+          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"#7B7B7B"}]}>IBAN :{profilCoach.iban} </Text>
 
-          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>BIC : {profilCoach.bic} </Text>
+          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"#7B7B7B"}]}>BIC : {profilCoach.bic} </Text>
       
     </ScrollView>
     </LinearGradient>
@@ -342,12 +241,6 @@ const styles = StyleSheet.create({
     marginTop: "8%",
     borderRadius: 100,
     },
-  darkReturn:{
-    backgroundColor:"#2E2E2E",
-    },
-  lightReturn :{
-    backgroundColor: '#fff',
-    },
   scroll:{
     marginLeft: 40,
     marginRight : 40,
@@ -355,35 +248,12 @@ const styles = StyleSheet.create({
     },
   scrollContainer: {
     alignItems: 'center',
-    marginTop: 5,
     },
   aPropos: {
     height: 100,
     width: 350,
     backgroundColor: '#F2F2F2',
     borderRadius: 13
-    },
-  btnPhoto: {
-    height: 60,
-    width: 100,
-    backgroundColor: "#BF5000",
-    margin: 10,
-    justifyContent:'center',
-    alignItems: 'center',
-    borderRadius: 25,
-    },
-  btnValidate: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '30%',
-    height: 40,
-    backgroundColor: '#BF5000',
-    borderRadius: 25,
-    marginTop: 30,
-    elevation: 15,
-    shadowColor: '#FF6100',
-    shadowOffset: { width: 50, height: 5 },
-    shadowOpacity: 0.0001,
     },
   buttonsContainer: {
     flex: 0.1,
@@ -395,11 +265,11 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     },
   cardAbout: {
-    width: 350,
+    width: '80%',
     height: 150,
     justifyContent: 'center',
     alignItems: 'center',
-    margin: 10,
+    marginTop: 20,
     },
   camera: {
     flex: 1
@@ -409,7 +279,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: '80%',
-    marginVertical: 10,
+    marginVertical: 25,
     marginLeft: 40,
     marginRight : 40,
     },
@@ -435,28 +305,11 @@ const styles = StyleSheet.create({
     margin: 10,
     borderRadius: 20,
     },
-  itemName: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginRight: 100,
-    },
-  logos :{
-    margin: 20,
-    height:70,
-    width :90,
-    alignItems: 'center',
-    justifyContent: 'center',
-    },
   removeButton: {
     color: 'black',
     fontWeight: 'bold',
     marginLeft: 10,
     fontSize: 16,
-    },
-  selectedImageContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 5,
     },
   selectedImagesContainer: {
     marginVertical: 10,
@@ -469,16 +322,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-end',
     paddingBottom: 25,
-    },
-  snapContainer2: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    paddingBottom: 25,
-    },
-  sportIcon: {
-    width:60,
-    height:60,
     },
   sports: {
     display: 'none'
@@ -505,6 +348,7 @@ const styles = StyleSheet.create({
     },
   darkInput:{
     marginTop: 10,
+    textAlignVertical: 'center',
     fontSize : 15,
     backgroundColor: '#2E2E2E',
     width : "80%",
@@ -512,78 +356,46 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 13,
     paddingLeft: 15,
-    marginBottom: 10, 
-    color: 'white',
     justifyContent: "center",
     },
   lightInput:{
-    marginTop: 20,
+    marginTop: 10,
+    textAlignVertical: 'center',
     fontSize : 15,
-    backgroundColor: '#E8E8E8',
+    backgroundColor: 'white',
     width : "80%",
     margin : "3%",
     height: 40,
     borderRadius: 13,
     paddingLeft: 15,
-    marginBottom: 10, 
-    color: 'black', 
+    justifyContent: "center",
     },
   darkInputapropos:{
     marginTop: 30,
     fontSize : 15,
     backgroundColor: '#2E2E2E',
-    width : "80%",
+    width : "100%",
     margin : "3%",
     height: 150,
     borderRadius: 13,
     paddingLeft: 15,
     marginBottom: 50, 
-    color: 'white',
     },
   lightInputapropos:{
-    marginTop: 20,
+    marginTop: 30,
     fontSize : 15,
-    backgroundColor: '#E8E8E8',
-    width : "80%",
+    backgroundColor: 'white',
+    width : "100%",
     margin : "3%",
-    height: 200,
+    height: 150,
     borderRadius: 13,
     paddingLeft: 15,
-    marginBottom: 10, 
-    color: 'black', 
-    },
-  darkImg:{
-    borderColor: "#FF6100",
-    },
-  lightImg:{
-    backgroundColor: '#fff',
-    borderColor: "#E8E8E8",
+    marginBottom: 50, 
     },
   darkText: {
     color: '#FFFFFF'
     },
   lightText: {
-    color: 'black'
-    },
-  darkSelectedImagesContainer: {
-    // backgroundColor: '#2E2E2E'
-    },
-  lightSelectedImagesContainer: {
-    // backgroundColor: '#FFFFFF'
-    },
-  darkItemName: {
-    color: '#FF6100'
-    },
-  lightItemName: {
-    color: 'black'
-    },
-  darkRemoveButton: {
-    color: '#FF6100',
-    textShadowColor: 'white',  //'rgba(255, 165, 0, 1)', Couleur de l'ombre (noir avec opacité 0.75)
-    textShadowOffset: { width: 0.5, height: 1 }, // Décalage de l'ombre (effet relief)
-    textShadowRadius: 20,
-    },
-  lightRemoveButton: {
     color: 'black'
     },
   darksignin: {
@@ -600,6 +412,7 @@ const styles = StyleSheet.create({
     },
   lightsignin: {
     width : "80%",
+    alignItems: 'center',
     justifyContent: 'center',
     fontSize : 15,
     marginTop: 30,
@@ -636,16 +449,6 @@ const styles = StyleSheet.create({
     shadowColor: '#FF6100',
     shadowOffset: { width: 50, height: 5,},
     shadowOpacity: 0.0001,
-    },
-  lightTextButton: {
-    fontSize : 15,
-    color: 'white',
-    fontWeight: 'bold',
-    },
-  darkTextButton: {
-    fontSize : 15,
-    color: '#2E2E2E',
-    fontWeight: 'bold',
     },
 })
 

@@ -122,6 +122,7 @@ export default function BookScreen({ navigation }) {
                 <Text>Réserver ma séance</Text>
             {booking.date && bookPlace && <Text>{booking.date} à {booking.start}</Text>}
             </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Congrats')}><Text>CONFETTIS</Text></TouchableOpacity>
         </ScrollView>
         
     </View>

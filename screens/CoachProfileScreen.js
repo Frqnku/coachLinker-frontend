@@ -31,19 +31,6 @@ export default function CoachProfileScreen() {
   const [type, setType] = useState(CameraType.back);
   const [flashMode, setFlashMode] = useState(FlashMode.off);
 
-  const [coachAbout, setCoachAbout] = useState('')
-  const [siretNumber, setSiretNumber] = useState('')
-  const [ibanNumber, setIbanNumber] = useState('')
-  const [bicNumber, setBicNumber] = useState('')
-  const [selectedImages, setSelectedImages] = useState([])
-  const [coachPrice, setCoachPrice] = useState('')
-  const [coachCity, setCoachCity] = useState('')
-  const [coachPlace, setCoachPlace] = useState('')
-  const [coachProCard, setCoachProCard] = useState('')
-
-  const [coachSports, setCoachSports] = useState([])
-
-
   // camera tel
   let cameraRef = useRef(null);
 
@@ -78,93 +65,7 @@ export default function CoachProfileScreen() {
       }
     };
 
-      
-    // sélection des sports
-    // const handleImageSelect = (image, imageName) => {
-    //   if (selectedImages.length < 3 && !selectedImages.some((item) => item.image === image)) {
-    //     setSelectedImages((prevImages) => [...prevImages, { image, name: imageName }]);
-    //     setCoachSports((prevSports) => [...prevSports, imageName]); // Met à jour studentSports directement
-    //   }
-    // };
-  
-    // const handleImageRemove = (index) => {
-    //   setSelectedImages((prevImages) => {
-    //     const updatedImages = [...prevImages];
-    //     const removedImage = updatedImages.splice(index, 1)[0];
-    //     return updatedImages;
-    //   });
-    //   setCoachSports((prevSports) => {
-    //     const updatedSports = [...prevSports];
-    //     updatedSports.splice(index, 1); // Retire le sport de la liste
-    //     return updatedSports;
-    //   });
-    // };  
-    
-
-      
-  // sélection de la procard : à compléter
-
-  // const handleSubmit = async () => {
-  //   console.log(coachSports);
-  //   try { 
-  //     await dispatch(signUp({
-  //       name: coachName, 
-  //       firstname: coachFirstname,
-  //       dateOfBirth: coachBirthDate,
-  //       myDescription: coachAbout,
-  //       image: user.photo,
-  //       teachedSport: coachSports,
-  //       proCard : coachProCard,
-  //       siret : siretNumber, 
-  //       iban : ibanNumber,
-  //       bic : bicNumber, 
-  //       price : coachPrice,
-  //       city : coachCity,
-  //       coachingPlaces : coachPlace,
-  //     }));
-  
-  //     const signUpData = {
-  //       email: coach.signUp.email,
-  //       password: coach.signUp.password,
-  //       name: coachName, 
-  //       firstname: coachFirstname,
-  //       dateOfBirth: coachBirthDate,
-  //       myDescription: coachAbout,
-  //       image: user.photo,
-  //       teachedSport: coachSports,
-  //       proCard : coachProCard,
-  //       siret : siretNumber, 
-  //       iban : ibanNumber,
-  //       bic : bicNumber, 
-  //       price : coachPrice,
-  //       city : coachCity,
-  //       coachingPlaces : coachPlace,
-  //     };
-      
-  //     const response = await fetch(`${backend_address}/coachs/new`, {
-  //       method: 'POST',
-  //       headers: { 'Content-Type': 'application/json' },
-  //       body: JSON.stringify(signUpData),
-  //     });
-  
-  //     const responseBody = await response.text();
-  //     console.log('Response from server:', responseBody);
-  
-  //     const data = JSON.parse(responseBody);
-  //     console.log('dataresult', data);
-  
-  //     if (data.result) { 
-  //       console.log("salut");
-  //       navigation.navigate("TabNavigator", { screen: "Menu" });
-  //     }
-  //   } catch (error) {
-  //     console.error('Error:', error);
-  //     // Gérer les erreurs
-  //   }
-  // }
-
-
-
+ 
 const requestCameraPermission = async () => { 
   const { status } = await Camera.requestCameraPermissionsAsync();
   setHasPermission(status === 'granted');
@@ -231,6 +132,7 @@ useEffect(() => {
     });
 }, []);
 
+
 if (!hasPermission || !isFocused) {
 
   return (
@@ -249,41 +151,42 @@ if (!hasPermission || !isFocused) {
                   <Text style={[ isDarkMode ? styles.darksignin : styles.lightsignin]}>Good morning {profilCoach.firstname}!</Text>
           </View>
     
-      <ScrollView contentContainerStyle={styles.scrollContainer}>  
+      <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>  
  
       <View style={styles.inputView}>
 
-      <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "white":"#7B7B7B"}]}>Informations générales </Text>
-        <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilCoach.name}</Text>
-        <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilCoach.firstname}</Text>
-        <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilCoach.dateOfBirth}</Text>
-        <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "white":"#7B7B7B"}]}>Sports enseignés et à propos </Text>
-        <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilCoach.teachedSport}</Text>
+        <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "#FF711A":"black"}]}>Informations générales </Text>
+        <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"black"}]}>{profilCoach.name}</Text>
+        <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"black"}]}>{profilCoach.firstname}</Text>
+        <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"black"}]}>{profilCoach.dateOfBirth}</Text>
+        <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "#FF711A":"black"}]}>Sports enseignés et à propos </Text>
+        <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"white"}]}>{profilCoach.teachedSport}</Text>
+      
       </View>
      
       <View style={styles.cardAbout}>
         <Text
         multiline numberOfLines={4}  
-        style={[ isDarkMode ? styles.darkInputapropos : styles.lightInputapropos,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilCoach.myDescription} </Text>
+        style={[ isDarkMode ? styles.darkInputapropos : styles.lightInputapropos,{color:isDarkMode ? "white":"black"}]}>{profilCoach.myDescription} </Text>
       </View>
 
-         <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "white":"#7B7B7B"}]} >City et lieu de coaching</Text>
-          <Text style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilCoach.city}</Text>
-          <Text style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilCoach.coachingPlaces} </Text>
+         <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "#FF711A":"#FF711A"}]} >City et lieu de coaching</Text>
+          <Text style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"black"}]}>{profilCoach.city}</Text>
+          <Text style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"black"}]}>{profilCoach.coachingPlaces} </Text>
        
 
-        <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "white":"#7B7B7B"}]}> Informations professionnelles </Text>
-          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>Cart Pro. : {profilCoach.proCard}</Text>
+        <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "#FF711A":"#FF711A"}]}> Informations professionnelles </Text>
+          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"black"}]}>Cart Pro. : {profilCoach.proCard}</Text>
 
-          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>Taux horaire :{profilCoach.price} €</Text>
+          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"black"}]}>Taux horaire :{profilCoach.price} €</Text>
 
-          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>Siret : 
+          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"black"}]}>Siret : 
           </Text>
     
-        <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "white":"#7B7B7B"}]}>Informations de paiements</Text>
-          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>IBAN :{profilCoach.iban} </Text>
+        <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "#FF711A":"#FF711A"}]}>Informations de paiements</Text>
+          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"black"}]}>IBAN :{profilCoach.iban} </Text>
 
-          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>BIC : {profilCoach.bic} </Text>
+          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"black"}]}>BIC : {profilCoach.bic} </Text>
       
     </ScrollView>
     </LinearGradient>
@@ -355,7 +258,6 @@ const styles = StyleSheet.create({
     },
   scrollContainer: {
     alignItems: 'center',
-    marginTop: 5,
     },
   aPropos: {
     height: 100,
@@ -395,11 +297,11 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     },
   cardAbout: {
-    width: 350,
+    width: '80%',
     height: 150,
     justifyContent: 'center',
     alignItems: 'center',
-    margin: 10,
+    marginTop: 20,
     },
   camera: {
     flex: 1
@@ -432,7 +334,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width : "100%",
-    margin: 10,
     borderRadius: 20,
     },
   itemName: {
@@ -505,6 +406,7 @@ const styles = StyleSheet.create({
     },
   darkInput:{
     marginTop: 10,
+    textAlignVertical: 'center',
     fontSize : 15,
     backgroundColor: '#2E2E2E',
     width : "80%",
@@ -512,12 +414,11 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 13,
     paddingLeft: 15,
-    marginBottom: 10, 
-    color: 'white',
     justifyContent: "center",
     },
   lightInput:{
-    marginTop: 20,
+    marginTop: 10,
+    textAlignVertical: 'center',
     fontSize : 15,
     backgroundColor: '#E8E8E8',
     width : "80%",
@@ -525,32 +426,29 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 13,
     paddingLeft: 15,
-    marginBottom: 10, 
-    color: 'black', 
+    justifyContent: "center",
     },
   darkInputapropos:{
     marginTop: 30,
     fontSize : 15,
     backgroundColor: '#2E2E2E',
-    width : "80%",
+    width : "100%",
     margin : "3%",
     height: 150,
     borderRadius: 13,
     paddingLeft: 15,
     marginBottom: 50, 
-    color: 'white',
     },
   lightInputapropos:{
-    marginTop: 20,
+    marginTop: 30,
     fontSize : 15,
     backgroundColor: '#E8E8E8',
-    width : "80%",
+    width : "100%",
     margin : "3%",
-    height: 200,
+    height: 150,
     borderRadius: 13,
     paddingLeft: 15,
-    marginBottom: 10, 
-    color: 'black', 
+    marginBottom: 50, 
     },
   darkImg:{
     borderColor: "#FF6100",
@@ -600,6 +498,7 @@ const styles = StyleSheet.create({
     },
   lightsignin: {
     width : "80%",
+    alignItems: 'center',
     justifyContent: 'center',
     fontSize : 15,
     marginTop: 30,

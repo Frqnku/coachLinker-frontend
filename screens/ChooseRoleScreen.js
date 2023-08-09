@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     darkbutton: {
       justifyContent: 'center',
       alignItems: 'center',
-      width: '30%',
+      width: '70%',
       height: 40,
       backgroundColor: '#BF5000',
       borderRadius: 25,

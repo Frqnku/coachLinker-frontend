@@ -140,17 +140,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingTop: 15
         },
-    bookExist : {
-        color: 'grey',
-        backgroundColor:'red',
-    },
-    container: {
-        flex: 1,
+    scrollView: {
         width: '100%',
         height: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginBottom: 20
+        flex: 1,
+        marginTop: 50,
+        justifyContent: 'flex-start',
         },
     bttnBookText: {
         fontSize : 15,

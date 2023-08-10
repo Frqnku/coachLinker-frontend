@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
         borderRadius: 100,
         backgroundColor: 'grey'
     },
+    // darkmode
     darkText: {
         color : '#AAAAAA',
         fontWeight: 'bold',
@@ -39,7 +40,6 @@ const styles = StyleSheet.create({
     lightText: {
         color : 'black',
         fontWeight: 'bold',
-        // backgroundColor: '#58FD0B',
         textShadowColor: 'rgba(255, 100, 0, 0.5)',  //'rgba(255, 165, 0, 1)', Couleur de l'ombre (noir avec opacité 0.75)
         textShadowOffset: { width: 0.5, height: 0.5 }, // Décalage de l'ombre (effet relief)
         textShadowRadius: 1, // Rayon de l'ombre (effet relief)

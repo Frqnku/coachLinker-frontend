@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { updatePlanning } from '../reducers/coachs';
@@ -104,34 +104,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 15
-  },
+    },
   btnValidate: {
     marginVertical: 15,
     padding: 10,
     backgroundColor: '#FF711A',
     borderRadius: 5
-  },
-  darkBlock:{
-    backgroundColor: '#505050',
-    borderColor: "#505050",
-    
-  },
-  lightBlock:{
-      backgroundColor: '#E8E8E8',
-      borderColor: "#E8E8E8",
-  },
-  fontWeight: {
-    fontWeight: 500
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-  },
+    },
   center: {
     justifyContent: 'center',
     alignItems: 'center',
-  },
+    },
+  fontWeight: {
+    fontWeight: 500
+    },
   input: {
     borderWidth: 1,
     borderColor: 'gray',
@@ -140,19 +126,33 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 5,
     marginRight: 10
-  },
-  pickerContainer: {
-    marginTop: 10,
-    borderWidth: 1,
-    borderColor: 'gray',
-    width: '80%',
-  },
+    },
   option: {
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: 'gray',
     alignItems: 'center',
-  },
+    },
+  pickerContainer: {
+    marginTop: 10,
+    borderWidth: 1,
+    borderColor: 'gray',
+    width: '80%',
+    },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    },
+    // darkmode
+  darkBlock:{
+    backgroundColor: '#505050',
+    borderColor: "#505050",
+    },
+  lightBlock:{
+    backgroundColor: '#E8E8E8',
+    borderColor: "#E8E8E8",
+    },
   darkText: {
     color: '#fff'
   },

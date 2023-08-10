@@ -2,9 +2,8 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { LinearGradient } from 'expo-linear-gradient';
 import TimePicker from '../components/TimePicker';
-import { updatePlanning } from '../reducers/coachs';
 import GoodMorning from '../components/GoodMorning';
-import {StyleSheet, Pressable, KeyboardAvoidingView, Image, TextInput, View, Text, ScrollView, TouchableOpacity} from 'react-native';
+import {StyleSheet, KeyboardAvoidingView, View, Text, ScrollView, TouchableOpacity} from 'react-native';
 
 import { backend_address } from '../backendAddress';
 
@@ -13,8 +12,6 @@ export default function AgendaScreen() {
     const isDarkMode = useSelector(state => state.darkMode.value)
     const planning = useSelector(state => state.coachs.value.planning)
     const token = useSelector(state => state.users.value.token);
-  /*   const user = use */
-  console.log(planning)
 
   const handleValidate = async () => {
 
@@ -32,7 +29,6 @@ export default function AgendaScreen() {
       token: token,
       planning: completePlanningData
     };
-
 
       // Send data to backend
       const response = await fetch(`${backend_address}/plannings/new`, {
@@ -124,7 +120,6 @@ export default function AgendaScreen() {
     </ScrollView>
         </LinearGradient>
 </KeyboardAvoidingView>
-      
     );
 }
 
@@ -137,52 +132,7 @@ const styles = StyleSheet.create({
         width: "100%",
         height: "100%",
         },
-        scrollContainer:{
-            alignItems:'center',
-        },
-        darkText :{
-            color :"#fff",
-        },
-        lightText :{
-            color: '#505050',
-        },
-        btnValidate: {
-            width: '80%',
-            marginVertical: 25,
-            padding: 15,
-            backgroundColor: '#FF711A',
-            borderRadius: 5,
-            alignItems: 'center'
-        },
-        fontWeight: {
-            fontWeight: 500
-          },
-          marginTop: {
-            marginTop: 60
-          },
-          marginLeft: {
-            marginLeft: 25
-          },
-    darkBg :{
-        backgroundColor: 'black',
-    },
-    darkBlock:{
-        backgroundColor: '#505050',
-        borderColor: "#505050",
-        
-    },
-    lightBlock:{
-        backgroundColor: '#E8E8E8',
-        borderColor: "#E8E8E8",
-        
-    },
-    darkIn:{
-        backgroundColor: '#2E2E2E',
-       },
-       lightIn:{
-       backgroundColor: '#fff',
-       },
-       block: {
+    block: {
         justifyContent: 'space-between',
         alignItems: 'center',
         marginTop: 20,
@@ -190,17 +140,60 @@ const styles = StyleSheet.create({
         backgroundColor:"#fff",
         borderRadius: 5,
         paddingTop: 10
-    },
+        },
     blocks: {
         flexDirection: 'row',
-/*         marginTop: "10%",
+    /*  marginTop: "10%",
         marginLeft: "5%",
         width: "90%", */
         backgroundColor:"#fff",
         borderRadius: 5,
-    },
+        },
+    btnValidate: {
+        width: '80%',
+        marginVertical: 25,
+        padding: 15,
+        backgroundColor: '#FF711A',
+        borderRadius: 5,
+        alignItems: 'center'
+        },
+    fontWeight: {
+        fontWeight: 500
+        },
+    marginLeft: {
+        marginLeft: 25
+        },
+    marginTop: {
+        marginTop: 60
+        },
+    scrollContainer:{
+        alignItems:'center',
+        },
     texte: {
-        fontSize: 20,
-        
-    },
+        fontSize: 20,  
+        },
+    // darkmode     
+    darkBg :{
+        backgroundColor: 'black',
+        },
+    darkBlock:{
+        backgroundColor: '#505050',
+        borderColor: "#505050", 
+        },
+    lightBlock:{
+        backgroundColor: '#E8E8E8',
+        borderColor: "#E8E8E8",
+        },
+    darkIn:{
+        backgroundColor: '#2E2E2E',
+       },
+    lightIn:{
+       backgroundColor: '#fff',
+       },
+    darkText :{
+        color :"#fff",
+        },
+    lightText :{
+        color: '#505050',
+        },
 })

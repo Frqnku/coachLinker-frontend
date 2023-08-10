@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, View, KeyboardAvoidingView, ScrollView, TextInput, Pressable, ActivityIndicator, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Pressable, TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux';
 import { backend_address } from '../backendAddress';
 
@@ -44,7 +44,6 @@ export default function BookScreen({ navigation }) {
         navigation.navigate('TabNavigator', {screen: 'Menu'})
     }
 
-    
     function generateHoursBetween(startHour, endHour) {
         const start = parseInt(startHour.split(":")[0]);
         const end = parseInt(endHour.split(":")[0]);
@@ -53,7 +52,6 @@ export default function BookScreen({ navigation }) {
         for (let i = start; i <= end; i++) {
             hours.push(`${i.toString().padStart(2, "0")}:00`);
         }
-    
         return hours;
     }
 
@@ -64,6 +62,7 @@ export default function BookScreen({ navigation }) {
     const planning = planningCoach.map((day, i ) => {
         if (day.startDay) {
             const hoursBetween = generateHoursBetween(day.startDay, day.endDay);
+            
             return (
                 <View key={i} style={styles.containTotal}>
                     <View style={styles.dayWeek}>
@@ -133,6 +132,14 @@ export default function BookScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingTop: 15
+        },
     bookExist : {
         color: 'grey',
         backgroundColor:'red',
@@ -143,15 +150,25 @@ const styles = StyleSheet.create({
         height: '100%',
         justifyContent: 'center',
         alignItems: 'center',
-        paddingTop: 15
-    },
-    scrollView: {
-        width: 400,
-        height: '100%',
+        marginBottom: 20
+        },
+    bttnBookText: {
+        fontSize : 15,
+        color: 'white',
+        fontWeight: 'bold',
+        },
+    contain: {
         flex: 1,
-        marginTop: 50,
-        justifyContent: 'flex-start',
-    },
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        paddingTop: 15,
+        },
+    containHour: {
+        flex: 1,
+        marginLeft: 40,
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        },
     containTotal: {
         width: 350,
         height: '40%',
@@ -159,30 +176,18 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         marginTop: 20,
         borderRadius: 15
-    },
-    contain: {
-        flex: 1,
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        paddingTop: 15,
-    },
+        },
+    dayText: {
+        fontSize : 15,
+        color: 'white',
+        },
     dayWeek: {
         marginBottom: 20,
         padding: 5,
         backgroundColor: '#FF711A',
         borderTopEndRadius: 15,
         borderTopStartRadius: 15,
-    },
-    dayText: {
-        fontSize : 15,
-        color: 'white',
-    },
-    containHour: {
-        flex: 1,
-        marginLeft: 40,
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-    },
+        },
     hour: {
         width: 75,
         flexDirection: 'row',
@@ -217,7 +222,7 @@ const styles = StyleSheet.create({
     lightTextButton: {
         fontSize : 15,
         color: 'white',
-      },
+        },
     darkTextButton: {
         fontSize : 15,
         color: '#2E2E2E',

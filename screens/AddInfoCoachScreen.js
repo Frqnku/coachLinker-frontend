@@ -96,7 +96,6 @@ export default function AddInfoCoachScreen({ navigation }) {
       });
     };  
     
-  // sélection de la procard : à compléter
   const handleSubmit = async () => {
     try { 
       await dispatch(signUp({
@@ -114,7 +113,7 @@ export default function AddInfoCoachScreen({ navigation }) {
         city : coachCity,
         coachingPlaces : coachPlace,
       }));
-      // console.log("dispatch", dispatch(signUp({coachSports}))); 
+
 
       const signUpData = {
         email: coach.signUp.email,

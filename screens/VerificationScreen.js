@@ -8,13 +8,13 @@ export default function VerificationScreen() {
 
 const isDarkMode = useSelector(state => state.darkMode.value)
 
-return (
-<View style={styles.container}>
- <ConfettiCannon count={400} origin={{x: -10, y: 0}} colors={['orange', '#ffd359', 'cream', '#FF711A']} fallSpeed={4000} explosionSpeed={100}/>
-    <Text style={[styles.text1, isDarkMode ? styles.darkText1 : styles.lightText1]}>Félicitations</Text>
-    <Text style={[styles.text2, isDarkMode ? styles.darkText : styles.lightText]}>Nous procédons à une vérification de vos qualifications</Text>
-    <Text style={[styles.text3, isDarkMode ? styles.darkText : styles.lightText]}>Vous recevrez un mail d'ici 5 jours ouvrés</Text>
-</View>
+  return (
+    <View style={styles.container}>
+      <ConfettiCannon count={400} origin={{x: -10, y: 0}} colors={['orange', '#ffd359', 'cream', '#FF711A']} fallSpeed={4000} explosionSpeed={100} fadeOut={true}/>
+        <Text style={[styles.text1, isDarkMode ? styles.darkText1 : styles.lightText1]}>Félicitations</Text>
+        <Text style={[styles.text2, isDarkMode ? styles.darkText : styles.lightText]}>Nous procédons à une vérification de vos qualifications</Text>
+        <Text style={[styles.text3, isDarkMode ? styles.darkText : styles.lightText]}>Vous recevrez un mail d'ici 5 jours ouvrés</Text>
+    </View>
   )
 }
 

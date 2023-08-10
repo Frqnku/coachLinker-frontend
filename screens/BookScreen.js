@@ -79,7 +79,6 @@ export default function BookScreen({ navigation }) {
                                 </TouchableOpacity>}
                                 {bookingExist && <Pressable>
                                     <Text key={index} style={{color: 'grey'}}>{hour}</Text>
-                                    <Text key={index} style={{color: 'grey'}}>{hour}</Text>
                                 </Pressable>}
                                 </View>
                             )

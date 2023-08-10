@@ -154,7 +154,7 @@ return (
           </TouchableOpacity>
       </View>
       <View style={styles.mdp}>
-      <Text style={[styles.text, isDarkMode ? styles.darkText : styles.lightText]}>Le mot de passe doit contenir 8 caractères minimum, une majuscule, une minuscule, un chiffre et un caractère spécial.</Text>
+      <Text style={[styles.textPWD, isDarkMode ? styles.darkText : styles.lightText]}>Le mot de passe doit contenir 8 caractères minimum, une majuscule, une minuscule, un chiffre et un caractère spécial.</Text>
       </View>
         <Text style={[styles.text, {color: pwdColor, textAlign: 'left', fontWeight: 600}]}>{pwdStrength}</Text>
       <View style={styles.eye}>

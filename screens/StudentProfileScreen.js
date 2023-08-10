@@ -220,6 +220,7 @@ formData.append('photoFromFront',{
       value={studentMyDescription}
       onChangeText={setStudentMyDescription}
       selectionColor={'#FF6100'}
+      multiline numberOfLines={4}  
       placeholderTextColor={isDarkMode ? "white":"#7B7B7B"}
       style={[isDarkMode ? styles.darkInputapropos : styles.lightInputapropos,{color:isDarkMode ?"white":"#7B7B7B"}]}
     />
@@ -227,6 +228,7 @@ formData.append('photoFromFront',{
     <Text
       selectionColor={'#FF6100'}
       placeholderTextColor={isDarkMode ? "white":"#7B7B7B"}
+      multiline numberOfLines={4}  
       style={[isDarkMode ? styles.darkInputapropos : styles.lightInputapropos,{color:isDarkMode ?"white":"#7B7B7B"}]}
     >
       {profilStudent.myDescription}

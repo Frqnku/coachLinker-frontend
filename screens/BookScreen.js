@@ -133,17 +133,20 @@ export default function BookScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-    bookExist : {
-        color: 'grey',
-        backgroundColor:'red',
-    },
     container: {
         flex: 1,
         width: '100%',
         height: '100%',
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 20
+        paddingTop: 15
+        },
+    scrollView: {
+        width: '100%',
+        height: '100%',
+        flex: 1,
+        marginTop: 50,
+        justifyContent: 'flex-start',
         },
     bttnBookText: {
         fontSize : 15,

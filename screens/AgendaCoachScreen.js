@@ -29,6 +29,7 @@ export default function AgendaScreen() {
       token: token,
       planning: completePlanningData
     };
+    console.log(requestBody)
 
       // Send data to backend
       const response = await fetch(`${backend_address}/plannings/new`, {

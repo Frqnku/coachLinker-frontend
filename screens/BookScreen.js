@@ -132,23 +132,56 @@ export default function BookScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-    bookExist : {
-        color: 'grey',
-        backgroundColor:'red',
-    },
     container: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         paddingTop: 15
-    },
-    scrollView: {
-        width: 400,
-        height: '100%',
+        },
+    bookExist : {
+        color: 'grey',
+        backgroundColor:'red',
+        },
+    btnBack: {
+        height: 30,
+        width: 60,
+        padding: 5,
+        backgroundColor: '#FF711A',
+        borderRadius: 25,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 20
+        },
+    bttn: {
+        marginLeft: 30
+        },
+    bttnBook: {
+        height: 40,
+        width: 200,
+        padding: 5,
+        backgroundColor: '#FF711A',
+        borderRadius: 25,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 20
+        },
+    bttnBookText: {
+        fontSize : 15,
+        color: 'white',
+        fontWeight: 'bold',
+        },
+    contain: {
         flex: 1,
-        marginTop: 50,
-        justifyContent: 'flex-start',
-    },
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        paddingTop: 15,
+        },
+    containHour: {
+        flex: 1,
+        marginLeft: 40,
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        },
     containTotal: {
         width: 350,
         height: '40%',
@@ -156,30 +189,18 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         marginTop: 20,
         borderRadius: 15
-    },
-    contain: {
-        flex: 1,
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        paddingTop: 15,
-    },
+        },
+    dayText: {
+        fontSize : 15,
+        color: 'white',
+        },
     dayWeek: {
         marginBottom: 20,
         padding: 5,
         backgroundColor: '#FF711A',
         borderTopEndRadius: 15,
         borderTopStartRadius: 15,
-    },
-    dayText: {
-        fontSize : 15,
-        color: 'white',
-    },
-    containHour: {
-        flex: 1,
-        marginLeft: 40,
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-    },
+        },
     hour: {
         width: 75,
         flexDirection: 'row',
@@ -191,41 +212,21 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         justifyContent: 'center',
         alignItems: 'center',
-    },
-    bttn: {
-        marginLeft: 30
-    },
-    btnBack: {
-        height: 30,
-        width: 60,
-        padding: 5,
-        backgroundColor: '#FF711A',
-        borderRadius: 25,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginBottom: 20
-    },
+        },
+    scrollView: {
+        width: 400,
+        height: '100%',
+        flex: 1,
+        marginTop: 50,
+        justifyContent: 'flex-start',
+        },
+    // darkmode
     lightTextButton: {
         fontSize : 15,
         color: 'white',
-      },
+        },
     darkTextButton: {
         fontSize : 15,
         color: '#2E2E2E',
-      },
-      bttnBook: {
-        height: 40,
-        width: 200,
-        padding: 5,
-        backgroundColor: '#FF711A',
-        borderRadius: 25,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginBottom: 20
-      },
-      bttnBookText: {
-        fontSize : 15,
-        color: 'white',
-        fontWeight: 'bold',
-      }
+        },
 })

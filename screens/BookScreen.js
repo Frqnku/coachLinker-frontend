@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, View, KeyboardAvoidingView, ScrollView, TextInput, Pressable, ActivityIndicator, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Pressable, TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux';
 import { backend_address } from '../backendAddress';
 
@@ -43,7 +43,6 @@ export default function BookScreen({ navigation }) {
         navigation.navigate('TabNavigator', {screen: 'Menu'})
     }
 
-    
     function generateHoursBetween(startHour, endHour) {
         const start = parseInt(startHour.split(":")[0]);
         const end = parseInt(endHour.split(":")[0]);
@@ -52,7 +51,6 @@ export default function BookScreen({ navigation }) {
         for (let i = start; i <= end; i++) {
             hours.push(`${i.toString().padStart(2, "0")}:00`);
         }
-    
         return hours;
     }
 
@@ -63,6 +61,7 @@ export default function BookScreen({ navigation }) {
     const planning = planningCoach.map((day, i ) => {
         if (day.startDay) {
             const hoursBetween = generateHoursBetween(day.startDay, day.endDay);
+            
             return (
                 <View key={i}>
                     <Text>{day.dayOfWeek}</Text>
@@ -131,17 +130,14 @@ export default function BookScreen({ navigation }) {
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      paddingTop: 15
-    },
-/*     scrollView: {
-        width: '100%'
-    }, */
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingTop: 15
+        },
     btnBack: {
         height: 50,
         width: 100,
         backgroundColor: 'red'
-    }
+        }
 })

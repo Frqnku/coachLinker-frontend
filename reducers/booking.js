@@ -9,7 +9,6 @@ export const bookingSlice = createSlice({
   initialState,
   reducers: {
     addBooking: (state, action) => { 
-        // console.log('reçu', action.payload)
         state.value.token = action.payload.token
         state.value.bookings = action.payload.bookings
     }

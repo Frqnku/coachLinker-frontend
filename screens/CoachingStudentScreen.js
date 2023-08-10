@@ -55,7 +55,6 @@ export default function CoachingStudentScreen() {
             </View>
           );
         });
-
         setMyBookings(newBookStudent);
       });
   }, [dispatch, isDarkMode, token]);
@@ -80,12 +79,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 15
   },
-  darkBg: {
-    backgroundColor: '#000'
-  },
-  lightBg: {
-    backgroundColor: '#f2f2f2'
-  },
   bottomScreen: {
     width: 350,
     alignItems: 'center'
@@ -104,36 +97,15 @@ const styles = StyleSheet.create({
     padding: 10, 
     marginTop: 15,
   },
-  darkGeneral: {
-    backgroundColor: '#2E2E2E'
-  },
-  lightGeneral: {
-    backgroundColor: '#ffffff'
-  },
-  darkText: {
-    color: '#fff'
-},
-darkCard: {
-    backgroundColor: '#2E2E2E'
-},
-greyText: {
-    color: 'grey'
-},
-lightBg: {
-    backgroundColor: '#f2f2f2'
-},
-lightCard: {
-    backgroundColor: '#fff'
-},
-lightText: {
-    color: '#000'
-},
   generalMid: {
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
     height: 80,
     paddingLeft: 10,
+  },
+  greyText: {
+    color: 'grey'
   },
   mid1: {
     flex: 1,
@@ -156,40 +128,65 @@ lightText: {
     alignItems: 'flex-end',
     height: 80,
   },
-  lightFirstname: {
-    fontSize: 22,
-    color: '#000000',
-  },
-  darkFirstname: {
-    fontSize: 22,
-    color: '#FFFFFF',
-  },
   sport: {
     fontSize: 13,
     color: '#FF711A',
   },
-  lightDateTime: {
-    fontSize: 15,
-    color: '#000000',
+// darkmode
+darkBg: {
+  backgroundColor: '#000'
   },
-  darkDateTime: {
+lightBg: {
+  backgroundColor: '#f2f2f2'
+  },
+  darkCard: {
+    backgroundColor: '#2E2E2E'
+  },
+lightCard: {
+  backgroundColor: '#fff'
+  },
+darkDateTime: {
     fontSize: 15,
     color: '#FFFFFF',
   },
-  lightPlace: {
+lightDateTime: {
     fontSize: 15,
     color: '#000000',
   },
-  darkPlace: {
+darkFirstname: {
+    fontSize: 22,
+    color: '#FFFFFF',
+  },
+lightFirstname: {
+    fontSize: 22,
+    color: '#000000',
+  },
+darkGeneral: {
+    backgroundColor: '#2E2E2E'
+  },
+lightGeneral: {
+    backgroundColor: '#ffffff'
+  },
+darkPlace: {
     fontSize: 15,
     color: '#FFFFFF',
   },
-  lightPrice: {
+lightPlace: {
+    fontSize: 15,
+    color: '#000000',
+  },
+darkPrice: {
+    fontSize: 18,
+    color: '#FFFFFF',
+  },
+lightPrice: {
     fontSize: 18,
     color: '#000000',
   },
-  darkPrice: {
-    fontSize: 18,
-    color: '#FFFFFF',
+darkText: {
+    color: '#fff'
+  },
+lightText: {
+  color: '#000'
   },
 })

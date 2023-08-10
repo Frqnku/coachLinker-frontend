@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
 import GoodMorning from '../components/GoodMorning';
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { addBooking } from '../reducers/booking';
 import moment from 'moment';
@@ -13,12 +13,8 @@ export default function CoachMenuScreen() {
     const isDarkMode = useSelector(state => state.darkMode.value);
     const dispatch = useDispatch();
     const token = useSelector(state => state.users.value.token)
-    // console.log('coach', token)
     const bookCoach = useSelector(state => state.booking.value.bookings)
-    // console.log('test bookCoach', bookCoach)
 
-  
-    
     useEffect(() => {  
       fetch(`${backend_address}/bookings/coach`, {
           method: 'POST',
@@ -39,8 +35,7 @@ export default function CoachMenuScreen() {
         const dateNaissance = moment(dateNaissanceStr, "DD/MM/YYYY"); // Convertir la chaîne en objet de date à l'aide de moment
         const dateAujourdhui = moment(); // Obtenir la date d'aujourd'hui
         const age = dateAujourdhui.diff(dateNaissance, 'years'); // Calculer la différence entre les deux dates pour obtenir l'âge
-        console.log('lâge est', age)
-        console.log('aurelie', data.studentID.firstname)
+
         return(
         <View key={i}>
           <View style={[styles.general, isDarkMode ? styles.darkGeneral : styles.lightGeneral]}>
@@ -79,26 +74,11 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     paddingTop: 15
-  },
-  darkBg: {
-    backgroundColor: '#000'
-  },
-  lightBg: {
-    backgroundColor: '#f2f2f2'
-  },
+    },
   bottomScreen: {
     width: 350,
     alignItems: 'center'
-  },
-  tutoText: {
-    width: '80%',
-    textAlign: 'center'
-  },
-    left: {
-    height: 80,
-    width: 80,
-    borderRadius: 5
-  },
+    },
   general: {
     width: '100%',
     borderRadius: 5,
@@ -107,20 +87,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 10, 
     marginTop: 15,
-  },
-  darkGeneral: {
-    backgroundColor: '#2E2E2E'
-  },
-  lightGeneral: {
-    backgroundColor: '#ffffff'
-  },
+    },
   generalMid: {
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
     height: 80,
     paddingLeft: 10,
-  },
+    },
+  left: {
+    height: 80,
+    width: 80,
+    borderRadius: 5
+    },
   mid1: {
     flex: 1,
     justifyContent: 'flex-start',
@@ -128,7 +107,7 @@ const styles = StyleSheet.create({
     height: 80,
     paddingLeft: 10,
     marginBottom: 22
-  },
+    },
   mid2: {
     flex: 1,
     justifyContent: 'flex-start',
@@ -136,54 +115,71 @@ const styles = StyleSheet.create({
     height: 80,
     paddingLeft: 10,
     marginBottom: 12
-  },
+    },
   right: {
     justifyContent: 'flex-end',
     alignItems: 'flex-end',
     height: 80,
-  },
-  lightAge: {
-    fontSize: 13,
-    color: '#000000',
-  },
-  darkAge: {
-    fontSize: 13,
-    color: '#FFFFFF',
-  },
-  lightFirstname: {
-    fontSize: 21,
-    color: '#000000',
-  },
-  darkFirstname: {
-    fontSize: 21,
-    color: '#FFFFFF',
-  },
+    },
   sport: {
     fontSize: 13,
     color: '#FF711A',
-  },
-  lightDateTime: {
-    fontSize: 15,
+    },
+  tutoText: {
+    width: '80%',
+    textAlign: 'center'
+    },
+  // darkmode
+  darkAge: {
+    fontSize: 13,
+    color: '#FFFFFF',
+    },
+  lightAge: {
+    fontSize: 13,
     color: '#000000',
-  },
+    },
+  darkBg: {
+    backgroundColor: '#000'
+    },
+  lightBg: {
+    backgroundColor: '#f2f2f2'
+    },
   darkDateTime: {
     fontSize: 15,
     color: '#FFFFFF',
-  },
-  lightPlace: {
+    },
+  lightDateTime: {
     fontSize: 15,
     color: '#000000',
-  },
+    },
+  darkFirstname: {
+    fontSize: 21,
+    color: '#FFFFFF',
+    },
+  lightFirstname: {
+    fontSize: 21,
+    color: '#000000',
+    },
+  darkGeneral: {
+    backgroundColor: '#2E2E2E'
+    },
+  lightGeneral: {
+    backgroundColor: '#ffffff'
+    },
   darkPlace: {
     fontSize: 15,
     color: '#FFFFFF',
-  },
-  lightPrice: {
-    fontSize: 18,
+    },
+  lightPlace: {
+    fontSize: 15,
     color: '#000000',
-  },
+    },
   darkPrice: {
     fontSize: 18,
     color: '#FFFFFF',
-  },
+    },
+  lightPrice: {
+    fontSize: 18,
+    color: '#000000',
+    },
 })

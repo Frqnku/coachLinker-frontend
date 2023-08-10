@@ -159,7 +159,7 @@ return (
           </TouchableOpacity>
       </View>
       <View style={styles.mdp}>
-      <Text style={[styles.text, isDarkMode ? styles.darkText : styles.lightText]}>Le mot de passe doit contenir 8 caractères minimum, une majuscule, une minuscule, un chiffre et un caractère spécial.</Text>
+      <Text style={[styles.textPWD, isDarkMode ? styles.darkText : styles.lightText]}>Le mot de passe doit contenir 8 caractères minimum, une majuscule, une minuscule, un chiffre et un caractère spécial.</Text>
       </View>
         <Text style={[styles.text, {color: pwdColor, textAlign: 'left', fontWeight: 600}]}>{pwdStrength}</Text>
       <View style={styles.eye}>
@@ -237,11 +237,7 @@ emailInp: {
   width : 380,
   paddingLeft: 40,
 },
-inputP2: {
-fontStyle: 'italic'
-},
 darkInputMdp:{
-  marginTop: 10,
   fontSize : 15,
   backgroundColor: '#2E2E2E',
   width : "65%",
@@ -253,9 +249,8 @@ darkInputMdp:{
   color: 'white',
 },
 lightInputMdp:{
-  marginTop: 10,
   fontSize : 15,
-  backgroundColor: '#E8E8E8',
+  backgroundColor: '#F2F2F2',
   width : "65%",
   margin : "3%",
   height: 40,
@@ -269,37 +264,35 @@ eye :{
 },
 text: {
   width: '80%',
-  paddingTop: 10
-},
-text: {
-  width: '80%',
   paddingTop: 10,
+  paddingLeft: 15
+},
+textPWD: {
+  width: '80%',
   fontSize: 10
 },
-input: { 
-},
 darkInput:{
-  marginTop: 10,
   fontSize : 15,
   backgroundColor: '#2E2E2E',
-  width : "75%",
+  width : "70%",
   margin : "3%",
   height: 40,
   borderRadius: 13,
   paddingLeft: 15,
   marginBottom: 10, 
+  marginLeft: 20,
   color: 'white',
 },
 lightInput:{
-  marginTop: 20,
   fontSize : 15,
-  backgroundColor: '#E8E8E8',
-  width : "75%",
+  backgroundColor: '#F2F2F2',
+  width : "70%",
   margin : "3%",
   height: 40,
   borderRadius: 13,
   paddingLeft: 15,
-  marginBottom: 10, 
+  marginBottom: 10,
+  marginLeft: 20,
   color: 'black', 
 },
 darkImg:{

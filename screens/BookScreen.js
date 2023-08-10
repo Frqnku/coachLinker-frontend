@@ -79,7 +79,7 @@ export default function BookScreen({ navigation }) {
                                     <Text key={index}>{hour}</Text>
                                 </TouchableOpacity>}
                                 {bookingExist && <Pressable>
-                                    <Text key={index} style={{color: 'grey'}}>{hour}</Text>
+                                    <Text style={styles.bookExist} key={index} >{hour}</Text>
                                 </Pressable>}
                                 </View>
                             )
@@ -133,6 +133,10 @@ export default function BookScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+    bookExist : {
+        color: 'grey',
+        backgroundColor:'red',
+    },
     container: {
         flex: 1,
         justifyContent: 'center',

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, Pressable, TextInput, TouchableOpacity, KeyboardAvoidingView, Modal, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, KeyboardAvoidingView, Modal, ScrollView } from 'react-native';
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -85,7 +85,6 @@ useEffect(() => {
 
 // Lors de l'inscription, email et password sont envoyés dans le store.
 const handleSignup = () => {
-  console.log('click')
   fetch(`${backend_address}/isExisting`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -93,20 +92,17 @@ const handleSignup = () => {
   })
   .then(response => response.json())
   .then(data => {
-    console.log(data)
     if(!data.result) {
       setErrorSignup(data.error)
     } else {
       if (EMAIL_REGEX.test(signUpEmail) && (signUpPassword === signUpPassword2) && (pwdStrength === 'Fort')){
-
         setErrorSignup('')
         dispatch(signUp({ email: signUpEmail, password: signUpPassword }));
         setSignUpEmail('');
         setSignUpPassword('');
         setSignUpPassword2('');
         navigation.navigate('Localisation');
-  
-  }
+      }
     }
   })
 }
@@ -123,7 +119,6 @@ const handleModal = () => {
             body: JSON.stringify({ email: signInEmail, password: signInPassword }),
         }).then(response => response.json())
             .then(data => {
-        console.log("DATAAAAAAA",data)
                 if (data.result) {
                     dispatch(addToken(data.token));
                     dispatch(addBooking({bookings : data.books, token : data.token}))
@@ -207,142 +202,57 @@ return (
 }
 
 const styles = StyleSheet.create({
-
-darkBg :{
-    backgroundColor: 'black',
-},
-lightBg:{
-    backgroundColor: '#E8E8E8',
-},
-darkReturn:{
-    backgroundColor:"#2E2E2E",
-},
-lightReturn :{
-    backgroundColor: '#ffffff',
-},
-darkPicture:{
-    // backgroundColor:"#2E2E2E",
-},
-lightPicture:{
-    // backgroundColor: '#ffffff',
-},
-lightText: {
-  color: '#000000'
-},
-darkText: {
-  color: '#ffffff'
-},
-emailInp: {
-  marginBottom: 30,
-  width : 380,
-  paddingLeft: 40,
-},
-darkInputMdp:{
-  fontSize : 15,
-  backgroundColor: '#2E2E2E',
-  width : "65%",
-  margin : "3%",
-  height: 40,
-  borderRadius: 13,
-  paddingLeft: 15,
-  marginBottom: 10,
-  color: 'white',
-},
-lightInputMdp:{
-  fontSize : 15,
-  backgroundColor: '#F2F2F2',
-  width : "65%",
-  margin : "3%",
-  height: 40,
-  borderRadius: 13,
-  paddingLeft: 15,
-  color: 'black', 
-},
-eye :{
-  flexDirection: 'row',
-  alignItems: 'center',
-},
-text: {
-  width: '80%',
-  paddingTop: 10,
-  paddingLeft: 15
-},
-textPWD: {
-  width: '80%',
-  fontSize: 10
-},
-darkInput:{
-  fontSize : 15,
-  backgroundColor: '#2E2E2E',
-  width : "70%",
-  margin : "3%",
-  height: 40,
-  borderRadius: 13,
-  paddingLeft: 15,
-  marginBottom: 10, 
-  marginLeft: 20,
-  color: 'white',
-},
-lightInput:{
-  fontSize : 15,
-  backgroundColor: '#F2F2F2',
-  width : "70%",
-  margin : "3%",
-  height: 40,
-  borderRadius: 13,
-  paddingLeft: 15,
-  marginBottom: 10,
-  marginLeft: 20,
-  color: 'black', 
-},
-darkImg:{
-    backgroundColor: '#2E2E2E',
-    borderColor: "#F4A100",
-},
-lightImg:{
-    backgroundColor: '#ffffff',
-    borderColor: "#E8E8E8",
-
-},
-darkIn:{
- backgroundColor: '#2E2E2E',
-},
-lightIn:{
-backgroundColor: '#ffffff',
-},
-
-background:{
-  width: "100%",
-  height: "100%",
-  },
-
+  container: {
+    flex: 1
+    },
+  background:{
+    width: "100%",
+    height: "100%",
+    },
+  boximage:{
+    alignItems: 'center',
+    },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+    },
+  emailInp: {
+    marginBottom: 30,
+    width : 380,
+    paddingLeft: 40,
+    },
+  eye: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    },
   image:{
     width: 200,
     height: 200,
     marginTop: 40,
     borderRadius: 200,
     marginBottom: 30,
-  },
-    container: {
-        flex: 1
     },
-    boximage:{
-      alignItems: 'center',
-      }, 
-
-  lightbutton: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '30%',
-    height: 40,
-    backgroundColor: '#FF711A',
-    borderRadius: 25,
-    marginTop: 30,
-    elevation: 15,
-    shadowColor: '#FF6100',
-    shadowOffset: { width: 50, height: 5 },
-    shadowOpacity: 0.0001,
-  },
+  inputP2: {
+    fontStyle: 'italic'
+    },
+  mdp: {
+    width: '80%',
+    marginLeft: 40
+    },
+  text: {
+    width: '80%',
+    paddingTop: 10,
+    fontSize: 10
+    },
+    // darkmode
+  darkBg :{
+    backgroundColor: 'black',
+    },
+  lightBg:{
+    backgroundColor: '#E8E8E8',
+    },
   darkbutton: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -355,85 +265,20 @@ background:{
     shadowColor: '#FF6100',
     shadowOffset: { width: 50, height: 5 },
     shadowOpacity: 0.0001,
-  },
-  lightTextButton: {
-    fontSize : 15,
-    color: 'white',
-    fontWeight: 'bold',
-  },
-  darkTextButton: {
-    fontSize : 15,
-    color: '#2E2E2E',
-    fontWeight: 'bold',
-  },
-  darksignin: {
-    fontSize : 18,
-    marginTop: 50,
-    marginBottom: 50,
-    color : '#AAAAAA',
-    fontWeight: 'bold',
-    // backgroundColor: '#58FD0B',
-    textShadowColor: 'rgba(255, 165, 0, 1)',  //'rgba(255, 165, 0, 1)', Couleur de l'ombre (noir avec opacité 0.75)
-    textShadowOffset: { width: 0.5, height: 0.5 }, // Décalage de l'ombre (effet relief)
-    textShadowRadius: 20, // Rayon de l'ombre (effet relief)
-  },
-  lightsignin: {
-    fontSize : 18,
-    marginTop: 50,
-    marginBottom: 50,
-    color : 'black',
-    fontWeight: 'bold',
-    // backgroundColor: '#58FD0B',
-    textShadowColor: 'rgba(255, 100, 0, 0.5)',  //'rgba(255, 165, 0, 1)', Couleur de l'ombre (noir avec opacité 0.75)
-    textShadowOffset: { width: 0.5, height: 0.5 }, // Décalage de l'ombre (effet relief)
-    textShadowRadius: 1, // Rayon de l'ombre (effet relief)
-  },
-  centeredView: {
-    flex: 1,
+    },
+  lightbutton: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 22,
-  },
-  lightmodalView: {
-    padding: 50,
-    alignItems: 'center',
-    borderColor: "black",
-    borderWidth: 2,        
-    borderRadius: 25,
-    width: 300,
-  },
-  darkmodalView: {
-    padding: 50,
-    alignItems: 'center',
-    borderColor: "white",
-    borderWidth: 1,        
-    borderRadius: 25,
-    width: 300,
-  },
-  darkInput2:{
-    marginTop: 20,
-    fontSize : 15,
-    backgroundColor: '#2E2E2E',
-    width : 200,
+    width: '30%',
     height: 40,
-    margin : "2%",
-    borderRadius: 13,
-    paddingLeft: 15,
-    marginBottom: 10,
-    color: 'white',  
-  },
-  lightInput2: {
-    marginTop: 20,
-    fontSize : 15,
-    backgroundColor: '#E8E8E8',
-    width : 200,
-    height: 40,
-    margin : "2%",
-    borderRadius: 13,
-    paddingLeft: 15,
-    marginBottom: 10,
-    color: 'black',
-  },
+    backgroundColor: '#FF711A',
+    borderRadius: 25,
+    marginTop: 30,
+    elevation: 15,
+    shadowColor: '#FF6100',
+    shadowOffset: { width: 50, height: 5 },
+    shadowOpacity: 0.0001,
+    },
   darkButton2: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -446,7 +291,7 @@ background:{
     shadowColor: '#FF6100',
     shadowOffset: { width: 50, height: 5,},
     shadowOpacity: 0.0001,
-  },
+    },
   lightButton2: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -459,9 +304,148 @@ background:{
     shadowColor: '#FF6100',
     shadowOffset: { width: 50, height: 5,},
     shadowOpacity: 0.0001,
-  },
-  mdp: {
-    width: '80%',
-    marginLeft: 40
-  }
+    },
+  darkImg:{
+    backgroundColor: '#2E2E2E',
+    borderColor: "#F4A100",
+    },
+  lightImg:{
+    backgroundColor: '#ffffff',
+    borderColor: "#E8E8E8",
+    },
+  darkIn:{
+    backgroundColor: '#2E2E2E',
+    },
+  lightIn:{
+    backgroundColor: '#ffffff',
+    },
+  darkInput:{
+    marginTop: 10,
+    fontSize : 15,
+    backgroundColor: '#2E2E2E',
+    width : "75%",
+    margin : "3%",
+    height: 40,
+    borderRadius: 13,
+    paddingLeft: 15,
+    marginBottom: 10, 
+    color: 'white',
+    },
+  lightInput:{
+    marginTop: 20,
+    fontSize : 15,
+    backgroundColor: '#E8E8E8',
+    width : "75%",
+    margin : "3%",
+    height: 40,
+    borderRadius: 13,
+    paddingLeft: 15,
+    marginBottom: 10, 
+    color: 'black', 
+    },
+  darkInput2:{
+    marginTop: 20,
+    fontSize : 15,
+    backgroundColor: '#2E2E2E',
+    width : 200,
+    height: 40,
+    margin : "2%",
+    borderRadius: 13,
+    paddingLeft: 15,
+    marginBottom: 10,
+    color: 'white',  
+    },
+  lightInput2: {
+    marginTop: 20,
+    fontSize : 15,
+    backgroundColor: '#E8E8E8',
+    width : 200,
+    height: 40,
+    margin : "2%",
+    borderRadius: 13,
+    paddingLeft: 15,
+    marginBottom: 10,
+    color: 'black',
+    },
+  darkInputMdp:{
+    marginTop: 10,
+    fontSize : 15,
+    backgroundColor: '#2E2E2E',
+    width : "65%",
+    margin : "3%",
+    height: 40,
+    borderRadius: 13,
+    paddingLeft: 15,
+    marginBottom: 10,
+    color: 'white',
+    },
+  lightInputMdp:{
+    marginTop: 10,
+    fontSize : 15,
+    backgroundColor: '#E8E8E8',
+    width : "65%",
+    margin : "3%",
+    height: 40,
+    borderRadius: 13,
+    paddingLeft: 15,
+    color: 'black', 
+    },
+  darkmodalView: {
+    padding: 50,
+    alignItems: 'center',
+    borderColor: "white",
+    borderWidth: 1,        
+    borderRadius: 25,
+    width: 300,
+    },
+  lightmodalView: {
+    padding: 50,
+    alignItems: 'center',
+    borderColor: "black",
+    borderWidth: 2,        
+    borderRadius: 25,
+    width: 300,
+    },
+  darkReturn:{
+    backgroundColor:"#2E2E2E",
+    },
+  lightReturn :{
+    backgroundColor: '#ffffff',
+    },
+  darksignin: {
+    fontSize : 18,
+    marginTop: 50,
+    marginBottom: 50,
+    color : '#AAAAAA',
+    fontWeight: 'bold',
+    textShadowColor: 'rgba(255, 165, 0, 1)',  //'rgba(255, 165, 0, 1)', Couleur de l'ombre (noir avec opacité 0.75)
+    textShadowOffset: { width: 0.5, height: 0.5 }, // Décalage de l'ombre (effet relief)
+    textShadowRadius: 20, // Rayon de l'ombre (effet relief)
+    },
+  lightsignin: {
+    fontSize : 18,
+    marginTop: 50,
+    marginBottom: 50,
+    color : 'black',
+    fontWeight: 'bold',
+    textShadowColor: 'rgba(255, 100, 0, 0.5)',  //'rgba(255, 165, 0, 1)', Couleur de l'ombre (noir avec opacité 0.75)
+    textShadowOffset: { width: 0.5, height: 0.5 }, // Décalage de l'ombre (effet relief)
+    textShadowRadius: 1, // Rayon de l'ombre (effet relief)
+    },
+  darkText: {
+    color: '#ffffff'
+    },
+  lightText: {
+    color: '#000000'
+    },
+  darkTextButton: {
+    fontSize : 15,
+    color: '#2E2E2E',
+    fontWeight: 'bold',
+    },
+  lightTextButton: {
+    fontSize : 15,
+    color: 'white',
+    fontWeight: 'bold',
+    },
 })

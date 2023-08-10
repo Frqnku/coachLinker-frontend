@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 
 export default function VerificationScreen() {
 
-  const isDarkMode = useSelector(state => state.darkMode.value)
+const isDarkMode = useSelector(state => state.darkMode.value)
 
   return (
     <View style={styles.container}>
@@ -19,45 +19,52 @@ export default function VerificationScreen() {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    text1: {
-      fontWeight: 'bold',
-      fontSize: 60,
-      marginBottom: 50,
-      marginTop: 200
-    },
-    text2: {
-      fontWeight: 'bold',
-      fontSize: 30,
-      textAlign: 'center',
-      flex: 1,
-    },
-    text3: {
-      fontWeight: 'bold',
-      fontSize: 20,
-      marginBottom: 50
-    },
-    background: {
-      height: '100%',
-      width: '100%',
-      justifyContent: 'center',
-      alignItems: 'center'
-    },
-    darkText: {
-      color: '#FFFFFF'
-      },
-    lightText: {
-      color:  'black'
-      },
-    darkText1: {
-      color: '#FF711A'
-    },
-    lightText1: {
-      color: "#FF711A"
-    }
+container: {
+  flex: 1,
+  justifyContent: 'center',
+  alignItems: 'center',
+},
+
+background: {
+  height: '100%',
+  width: '100%',
+  justifyContent: 'center',
+  alignItems: 'center'
+},
+    
+text1: {
+  fontWeight: 'bold',
+  fontSize: 60,
+  marginBottom: 50,
+  marginTop: 200
+},
+    
+text2: {
+  fontWeight: 'bold',
+  fontSize: 30,
+  textAlign: 'center',
+  flex: 1,
+},
+    
+text3: {
+  fontWeight: 'bold',
+  fontSize: 20,
+  marginBottom: 50
+},
+   
+darkText: {
+  color: '#FFFFFF'
+},
+
+lightText: {
+  color:  'black'
+},
+
+darkText1: {
+  color: '#FF711A'
+},
+lightText1: {
+  color: "#FF711A"
+},
 
 })

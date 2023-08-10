@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
-import { StyleSheet, Text, View, Pressable, SafeAreaView} from 'react-native'
-import { useSelector, useDispatch } from 'react-redux';
+import React from 'react'
+import { StyleSheet, Text, Pressable, SafeAreaView} from 'react-native'
+import { useSelector } from 'react-redux';
 import ConfettiCannon from 'react-native-confetti-cannon';
 
 export default function CongratsScreen({ navigation }) {
@@ -21,22 +21,7 @@ const styles = StyleSheet.create({
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-    },
-    darkBg: {
-      backgroundColor: '#000'
-    },
-    lightBg: {
-        backgroundColor: '#fff'
-    },
-    darkText: {
-        color: '#fff'
-    },
-    lightText: {
-        color: '#000'
-    },
-    text: {
-      fontSize: 16
-    },
+      },
     btnBack: {
       width: '80%',
       marginVertical: 25,
@@ -44,11 +29,26 @@ const styles = StyleSheet.create({
       backgroundColor: '#FF711A',
       borderRadius: 5,
       alignItems: 'center'
-    },
+      },
     congrats: {
       fontSize: 30,
       fontWeight: 500,
       color: '#FF711A',
       marginBottom: 10
-    }
+      },
+    text: {
+      fontSize: 16
+      },
+    darkBg: {
+      backgroundColor: '#000'
+      },
+    lightBg: {
+      backgroundColor: '#fff'
+      },
+    darkText: {
+      color: '#fff'
+      },
+    lightText: {
+      color: '#000'
+    },
 })

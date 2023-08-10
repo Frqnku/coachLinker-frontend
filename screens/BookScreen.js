@@ -64,9 +64,9 @@ export default function BookScreen({ navigation }) {
             const hoursBetween = generateHoursBetween(day.startDay, day.endDay);
             
             return (
-                <View key={i} style={styles.containTotal}>
+                <View key={i} style={[styles.containTotal, isDarkMode ? styles.darkContainTotal : styles.lightContainTotal]}>
                     <View style={styles.dayWeek}>
-                        <Text style={styles.dayText}>   {day.dayOfWeek}</Text>
+                        <Text style={[styles.dayText, isDarkMode ? styles.darkDayText : styles.lightDayText]}>   {day.dayOfWeek}</Text>
                     </View>
                     <View style={styles.containHour}>
                     {hoursBetween.map((hour, index) => {
@@ -113,7 +113,7 @@ export default function BookScreen({ navigation }) {
     }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, isDarkMode ? styles.darkBg : styles.lightBg]}>
         <ScrollView contentContainerStyle={styles.scrollView}>
             <View style={styles.bttn}>
                 <TouchableOpacity style={styles.btnBack} onPress={handleNavBack}><Text style={[ isDarkMode ? styles.darkTextButton : styles.lightTextButton]}>Retour</Text></TouchableOpacity>
@@ -121,9 +121,9 @@ export default function BookScreen({ navigation }) {
             {planning[0] ?
             <View style={styles.contain}>
                 <View>{planning}</View>
-                {booking.date && bookPlace && <Text style={styles.dateBook}>Je réserve le {booking.date.toLowerCase()} à {booking.start}.</Text>}
+                {booking.date && bookPlace && <Text style={[styles.dateBook, isDarkMode ? styles.darkDateBook : styles.lightDateBook]}>Je réserve le {booking.date.toLowerCase()} à {booking.start}.</Text>}
                 <TouchableOpacity onPress={handleBooking} style={styles.bttnBook}>
-                    <Text style={styles.bttnBookText}>Réserver ma séance</Text>
+                    <Text style={[styles.bttnBookText, isDarkMode ? styles.darkBttnBookText : styles.lightBttnBookText]}>Réserver ma séance</Text>
                 </TouchableOpacity>
             </View> : <Text>   Aucune disponibilité</Text>}
         </ScrollView> 
@@ -138,7 +138,13 @@ const styles = StyleSheet.create({
         height: '100%',
         justifyContent: 'center',
         alignItems: 'center',
-        paddingTop: 15
+        paddingTop: 15,
+        },
+    lightBg: {
+        backgroundColor: '#FFFFFF'
+        },
+    darkBg: {
+        backgroundColor: '#000000'
         },
     scrollView: {
         width: '100%',
@@ -149,9 +155,14 @@ const styles = StyleSheet.create({
         },
     bttnBookText: {
         fontSize : 15,
-        color: 'white',
-        fontWeight: 'bold',
+        fontWeight: 'bold'
         },
+    lightBttnBookText: {
+        color: 'white'
+    },
+    darkBttnBookText: {
+        color: '#2E2E2E'
+    },
     contain: {
         flex: 1,
         justifyContent: 'space-around',
@@ -167,15 +178,25 @@ const styles = StyleSheet.create({
     containTotal: {
         width: 350,
         height: '40%',
-        backgroundColor:'#E8E8E8',
         justifyContent: 'flex-start',
         marginTop: 20,
         borderRadius: 15
         },
+    lightContainTotal: {
+        backgroundColor:'#E8E8E8',
+        },
+    darkContainTotal: {
+        backgroundColor:'#2E2E2E',
+        },
     dayText: {
         fontSize : 15,
+        },
+    lightDayText: {
         color: 'white',
         },
+    darkDayText: {
+        color: '#2E2E2E',
+    },
     dayWeek: {
         marginBottom: 20,
         padding: 5,
@@ -240,5 +261,11 @@ const styles = StyleSheet.create({
       },
       dateBook: {
         fontSize: 18
+      },
+      lightDateBook: {
+        color: 'black'
+      },
+      darkDateBook: {
+        color: 'white'
       }
 })

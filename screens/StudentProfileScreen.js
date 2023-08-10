@@ -4,9 +4,7 @@ import { Camera, CameraType, FlashMode } from 'expo-camera';
 import { useIsFocused } from "@react-navigation/native";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useSelector, useDispatch } from 'react-redux';
-import { switchMode } from '../reducers/darkMode';
 import { signUp, addPhoto } from '../reducers/users'
-import { updateStudent} from '../reducers/student';
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
 import {StyleSheet, KeyboardAvoidingView, Image, TextInput, View, Text, ScrollView, TouchableOpacity} from 'react-native';
@@ -14,18 +12,13 @@ import {StyleSheet, KeyboardAvoidingView, Image, TextInput, View, Text, ScrollVi
 import { backend_address } from '../backendAddress';
 
 export default function StudentProfileScreen({navigation}) {
-    const dispatch = useDispatch()
-    const isFocused = useIsFocused();
-    const isDarkMode = useSelector(state => state.darkMode.value)
-    const user = useSelector((state) => state.users.value); 
+  const dispatch = useDispatch()
+  const isFocused = useIsFocused();
+  const isDarkMode = useSelector(state => state.darkMode.value)
+  const user = useSelector(state => state.users.value.signUp)
 
-    
-const [selectedImages, setSelectedImages] = useState([]);
 const [studentMyDescription, setStudentMyDescription] = useState('')
-const [studentImage, setStudentImage] = useState('')
-const [studentSports, setStudentSports] = useState('')
 const [isEditing, setIsEditing] = useState(false);
-
 const [hasPermission, setHasPermission] = useState(false);
 const [type, setType] = useState(CameraType.back);
 const [flashMode, setFlashMode] = useState(FlashMode.off);
@@ -34,9 +27,7 @@ let cameraRef = useRef(null);
 
 const student = useSelector((state) => state.users.value) 
 const token = useSelector(state => state.users.value.token)
-console.log('student10', student)
 const profilStudent = useSelector(state => state.users.value.signUp)
-console.log('profilStudent10', profilStudent)
  
 
 useEffect(() => {
@@ -54,7 +45,6 @@ useEffect(() => {
         firstname: data.data.firstname,
         myDescription:data.data.myDescription,
         dateOfBirth:data.data.dateOfBirth,
-        image: user.photo,
         favoriteSport: data.data.favoriteSport,
        }))
         
@@ -116,6 +106,11 @@ formData.append('photoFromFront',{
     }).then((response) => response.json())
       .then((data) => { 
         if (data.result) {
+          fetch(`${backend_address}/students/update`, { // fetch modifié comme sur AddinfStudentScreen
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({image: data.url}),
+          }).then((response) => response.json())
           dispatch(signUp({image: data.url}))
           dispatch(addPhoto(data.url));
           setHasPermission(false);
@@ -152,8 +147,6 @@ formData.append('photoFromFront',{
       body: JSON.stringify({
         token: token,
         myDescription: studentMyDescription,
-        image: studentImage, // Ajoutez l'image mise à jour ici
-        favoriteSport: studentSports, // Ajoutez les sports préférés mis à jour ici
       }),
     });
 
@@ -185,28 +178,28 @@ formData.append('photoFromFront',{
         style={styles.background}
         >
            <View style={styles.picture}>
-                  <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={{uri:user.photo}} />
+                  <Image style={[styles.image, isDarkMode ? styles.darkPicture : styles.lightPicture]} source={{uri: user.image}} />
                   <TouchableOpacity onPress={() => requestCameraPermission() && pickImage()} >
                   <Image  style={styles.crayon} source={require('../assets/crayon.png')} />
                   </TouchableOpacity>
-                  <Text style={[ isDarkMode ? styles.darksignin : styles.lightsignin]}>Good morning {profilStudent.firstname}!</Text>
+                  <Text style={[ isDarkMode ? styles.darksignin : styles.lightsignin]}>       Good morning {profilStudent.firstname}!</Text>
           </View>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>  
  
  <View style={styles.inputView}>
 
- <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "white":"#7B7B7B"}]}>Informations générales </Text>
-   <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilStudent.name}</Text>
-   <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilStudent.firstname}</Text>
-   <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilStudent.dateOfBirth}</Text>
-   <View style={styles.View}>
-   <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "white":"#7B7B7B"}]}>Sports favoris </Text>
+ <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "#FF711A":"black"}]}>Informations générales </Text>
+   <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"#7B7B7B"}]}>{profilStudent.name}</Text>
+   <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"#7B7B7B"}]}>{profilStudent.firstname}</Text>
+   <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"#7B7B7B"}]}>{profilStudent.dateOfBirth}</Text>
+   <View style={styles.inputView}>
+   <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "#FF711A":"black"}]}>Sports favoris </Text>
   </View >
-   <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "#AAAAAA":"#7B7B7B"}]}>{profilStudent.favoriteSport}</Text>
+   <Text  style={[styles.input, isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"#7B7B7B"}]}>{profilStudent.favoriteSport}</Text>
  </View>
 
- <View style={styles.View}>
-   <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "white":"#7B7B7B"}]}>A propos de moi </Text>
+ <View style={styles.View2}>
+   <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ?"#FF711A":"black"}]}>A propos de moi </Text>
    <TouchableOpacity onPress={() => {
         if (isEditing) {
           saveDescription();
@@ -227,14 +220,16 @@ formData.append('photoFromFront',{
       value={studentMyDescription}
       onChangeText={setStudentMyDescription}
       selectionColor={'#FF6100'}
-      placeholderTextColor={isDarkMode ? "#AAAAAA" : "#7B7B7B"}
-      style={[isDarkMode ? styles.darkInputapropos : styles.lightInputapropos]}
+      multiline numberOfLines={4}  
+      placeholderTextColor={isDarkMode ? "white":"#7B7B7B"}
+      style={[isDarkMode ? styles.darkInputapropos : styles.lightInputapropos,{color:isDarkMode ?"white":"#7B7B7B"}]}
     />
   ) : (
     <Text
       selectionColor={'#FF6100'}
-      placeholderTextColor={isDarkMode ? "#AAAAAA" : "#7B7B7B"}
-      style={[isDarkMode ? styles.darkInputapropos : styles.lightInputapropos]}
+      placeholderTextColor={isDarkMode ? "white":"#7B7B7B"}
+      multiline numberOfLines={4}  
+      style={[isDarkMode ? styles.darkInputapropos : styles.lightInputapropos,{color:isDarkMode ?"white":"#7B7B7B"}]}
     >
       {profilStudent.myDescription}
     </Text>
@@ -274,18 +269,15 @@ formData.append('photoFromFront',{
 
 }
 
-const styles = StyleSheet.create({
-  View : {
+const styles = StyleSheet.create({ 
+  View2 : {
     flexDirection: 'row',
-    alignItems: 'center',
-    width: '80%',
-    height:70,
+    justifyContent: 'center',
+    alignItems: 'space-between',
+    width : "100%",
+    margin: 10,
+    borderRadius: 20,
   }, 
-  crayon2 :{
-    width: 50,
-    height:50,
-    // paddingTop : 40,
-    },
   container: {
     flex:1,
     alignItems: 'center',
@@ -321,35 +313,12 @@ const styles = StyleSheet.create({
     },
   scrollContainer: {
     alignItems: 'center',
-    marginTop: 5,
     },
   aPropos: {
     height: 100,
     width: 350,
     backgroundColor: '#F2F2F2',
     borderRadius: 13
-    },
-  btnPhoto: {
-    height: 60,
-    width: 100,
-    backgroundColor: "#BF5000",
-    margin: 10,
-    justifyContent:'center',
-    alignItems: 'center',
-    borderRadius: 25,
-    },
-  btnValidate: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '30%',
-    height: 40,
-    backgroundColor: '#BF5000',
-    borderRadius: 25,
-    marginTop: 30,
-    elevation: 15,
-    shadowColor: '#FF6100',
-    shadowOffset: { width: 50, height: 5 },
-    shadowOpacity: 0.0001,
     },
   buttonsContainer: {
     flex: 0.1,
@@ -361,11 +330,11 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     },
   cardAbout: {
-    width: 350,
+    width: '80%',
     height: 150,
     justifyContent: 'center',
     alignItems: 'center',
-    margin: 10,
+    marginTop: 20,
     },
   camera: {
     flex: 1
@@ -375,7 +344,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: '80%',
-    marginVertical: 10,
+    marginVertical: 25,
     marginLeft: 40,
     marginRight : 40,
     },
@@ -401,28 +370,11 @@ const styles = StyleSheet.create({
     margin: 10,
     borderRadius: 20,
     },
-  itemName: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginRight: 100,
-    },
-  logos :{
-    margin: 20,
-    height:70,
-    width :90,
-    alignItems: 'center',
-    justifyContent: 'center',
-    },
   removeButton: {
     color: 'black',
     fontWeight: 'bold',
     marginLeft: 10,
     fontSize: 16,
-    },
-  selectedImageContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 5,
     },
   selectedImagesContainer: {
     marginVertical: 10,
@@ -435,16 +387,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-end',
     paddingBottom: 25,
-    },
-  snapContainer2: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    paddingBottom: 25,
-    },
-  sportIcon: {
-    width:60,
-    height:60,
     },
   sports: {
     display: 'none'
@@ -471,6 +413,7 @@ const styles = StyleSheet.create({
     },
   darkInput:{
     marginTop: 10,
+    textAlignVertical: 'center',
     fontSize : 15,
     backgroundColor: '#2E2E2E',
     width : "80%",
@@ -478,45 +421,41 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 13,
     paddingLeft: 15,
-    marginBottom: 10, 
-    color: 'white',
     justifyContent: "center",
     },
   lightInput:{
-    marginTop: 20,
+    marginTop: 10,
+    textAlignVertical: 'center',
     fontSize : 15,
-    backgroundColor: '#E8E8E8',
+    backgroundColor: 'white',
     width : "80%",
     margin : "3%",
     height: 40,
     borderRadius: 13,
     paddingLeft: 15,
-    marginBottom: 10, 
-    color: 'black', 
+    justifyContent: "center",
     },
   darkInputapropos:{
     marginTop: 30,
     fontSize : 15,
     backgroundColor: '#2E2E2E',
-    width : "80%",
+    width : "100%",
+    margin : "3%",
+    height: 150,
+    borderRadius: 13,
+    paddingLeft: 15,
+    marginBottom: 50,
+    },
+  lightInputapropos:{
+    marginTop: 30,
+    fontSize : 15,
+    backgroundColor: 'white',
+    width : "100%",
     margin : "3%",
     height: 150,
     borderRadius: 13,
     paddingLeft: 15,
     marginBottom: 50, 
-    color: 'white',
-    },
-  lightInputapropos:{
-    marginTop: 20,
-    fontSize : 15,
-    backgroundColor: '#E8E8E8',
-    width : "80%",
-    margin : "3%",
-    height: 200,
-    borderRadius: 13,
-    paddingLeft: 15,
-    marginBottom: 10, 
-    color: 'black', 
     },
   darkImg:{
     borderColor: "#FF6100",
@@ -529,27 +468,6 @@ const styles = StyleSheet.create({
     color: '#FFFFFF'
     },
   lightText: {
-    color: 'black'
-    },
-  darkSelectedImagesContainer: {
-    // backgroundColor: '#2E2E2E'
-    },
-  lightSelectedImagesContainer: {
-    // backgroundColor: '#FFFFFF'
-    },
-  darkItemName: {
-    color: '#FF6100'
-    },
-  lightItemName: {
-    color: 'black'
-    },
-  darkRemoveButton: {
-    color: '#FF6100',
-    textShadowColor: 'white',  //'rgba(255, 165, 0, 1)', Couleur de l'ombre (noir avec opacité 0.75)
-    textShadowOffset: { width: 0.5, height: 1 }, // Décalage de l'ombre (effet relief)
-    textShadowRadius: 20,
-    },
-  lightRemoveButton: {
     color: 'black'
     },
   darksignin: {
@@ -566,6 +484,7 @@ const styles = StyleSheet.create({
     },
   lightsignin: {
     width : "80%",
+    alignItems: 'center',
     justifyContent: 'center',
     fontSize : 15,
     marginTop: 30,
@@ -579,39 +498,38 @@ const styles = StyleSheet.create({
   lightbutton: {
     justifyContent: 'center',
     alignItems: 'center',
-    width: '30%',
-    height: 40,
-    backgroundColor: '#FF711A',
+    width: 70,
+    height: 20,
     borderRadius: 25,
-    marginTop: 30,
+    marginTop: 20,
+    marginLeft : 15,
     elevation: 15,
+    backgroundColor: '#FF711A',
     shadowColor: '#FF6100',
-    shadowOffset: { width: 50, height: 5 },
+    shadowOffset: { width: 50, height: 5,},
     shadowOpacity: 0.0001,
     },
   darkbutton: {
     justifyContent: 'center',
     alignItems: 'center',
-    width: 80,
+    width: 70,
     height: 20,
-    marginTop: 15,
-    marginLeft : 70,
     borderRadius: 25,
-    // marginTop: 20,
-    // marginBottom: 40,
+    marginTop: 20,
     elevation: 15,
+    marginLeft : 15,
     backgroundColor: '#BF5000',
     shadowColor: '#FF6100',
     shadowOffset: { width: 50, height: 5,},
     shadowOpacity: 0.0001,
     },
   lightTextButton: {
-    fontSize : 15,
+    fontSize : 12,
     color: 'white',
     fontWeight: 'bold',
     },
   darkTextButton: {
-    fontSize : 15,
+    fontSize : 12,
     color: '#2E2E2E',
     fontWeight: 'bold',
   },

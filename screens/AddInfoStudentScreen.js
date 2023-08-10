@@ -1,13 +1,11 @@
 import React from 'react'
 import {StyleSheet, KeyboardAvoidingView, Image, TextInput, View, Text, ScrollView, TouchableOpacity} from 'react-native';
-import GoodMorning from '../components/GoodMorning';
 import { useState, useRef } from 'react';
 import { Camera, CameraType, FlashMode } from 'expo-camera';
 import { useIsFocused } from "@react-navigation/native";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useSelector, useDispatch } from 'react-redux';
 import { addPhoto} from '../reducers/users';
-import { updateStudent,updateSport} from '../reducers/student';
 import { signUp } from '../reducers/users'
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -16,14 +14,12 @@ import { backend_address } from '../backendAddress';
 
 export default function AddInfoStudentScreen({navigation}) {
 
-
   const dispatch = useDispatch()
   const isFocused = useIsFocused();
   const isDarkMode = useSelector(state => state.darkMode.value)
   const user = useSelector((state) => state.users.value);
   const student = useSelector((state) => state.users.value);
  
-
   const [studentName, setStudentName] = useState('')
   const [studentFirstname, setStudentFirstname] = useState('')
   const [studentDateOfBirth, setStudentDateOfBirth] = useState('')
@@ -31,7 +27,6 @@ export default function AddInfoStudentScreen({navigation}) {
   const [studentSports, setStudentSports] = useState('')
   const [selectedImages, setSelectedImages] = useState([]);
   const [errorNew, setErrorNew] = useState('')
-
 
   // const camera : 
   const [hasPermission, setHasPermission] = useState(false);
@@ -71,7 +66,6 @@ export default function AddInfoStudentScreen({navigation}) {
       }
     };
 
-
     // sélection des sports
     const handleImageSelect = (image, imageName) => {
       if (selectedImages.length < 3 && !selectedImages.some((item) => item.image === image)) {
@@ -86,6 +80,7 @@ export default function AddInfoStudentScreen({navigation}) {
         const removedImage = updatedImages.splice(index, 1)[0];
         return updatedImages;
       });
+
       setStudentSports((prevSports) => {
         const updatedSports = [...prevSports];
         updatedSports.splice(index, 1); // Retire le sport de la liste
@@ -93,10 +88,7 @@ export default function AddInfoStudentScreen({navigation}) {
       });
     };  
     
-
-
 const handleValidate = async () => {
-  console.log(studentSports);
   try { 
     await dispatch(signUp({
       name: studentName, 
@@ -125,13 +117,13 @@ const handleValidate = async () => {
     });
 
     const responseBody = await response.text();
-    console.log('Response from server:', responseBody);
 
     const data = JSON.parse(responseBody);
-    console.log('dataresult', data);
+
     if(!data.result) {
       setErrorNew(data.error)
     } 
+
     if (data.result) { 
       setErrorNew('');
       console.log("salut");
@@ -143,9 +135,6 @@ const handleValidate = async () => {
   }
 }
 
-    
-    
-    
         const requestCameraPermission = async () => { 
           const { status } = await Camera.requestCameraPermissionsAsync();
           setHasPermission(status === 'granted');
@@ -159,8 +148,6 @@ const handleValidate = async () => {
           name: 'photo.jpg',
           type: 'image/jpeg',
         });
-       
-        console.log('formData', formData)
 
         fetch(`${backend_address}/upload`, {
           method: 'POST',
@@ -188,10 +175,10 @@ const handleValidate = async () => {
     return (
         <KeyboardAvoidingView style={[styles.container, isDarkMode ? styles.darkBg : styles.lightBg]} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
             <LinearGradient
-        colors={isDarkMode ? DARK_COLORS : LIGHT_COLORS}
-        start={isDarkMode ? DarkStart : LightStart}
-        end={isDarkMode ? DarkEnd : LightEnd}
-        style={styles.background} >
+              colors={isDarkMode ? DARK_COLORS : LIGHT_COLORS}
+              start={isDarkMode ? DarkStart : LightStart}
+              end={isDarkMode ? DarkEnd : LightEnd}
+              style={styles.background} >
        
        <TouchableOpacity  onPress={() => navigation.navigate('ChooseRole')} >
           <Image style={[styles.return, isDarkMode ? styles.darkReturn : styles.lightReturn]} source={require('../assets/bouton-retour.png')}/>
@@ -221,10 +208,9 @@ const handleValidate = async () => {
         style={[ isDarkMode ? styles.darkInputapropos : styles.lightInputapropos]} ></TextInput>
       </View>
       
-           
-            <View>
-                <Text style={styles.favoris}>Choisis jusqu'à 3 sports favoris :</Text>
-            </View>
+      <View>
+        <Text style={styles.favoris}>Choisis jusqu'à 3 sports favoris :</Text>
+      </View>
         
             
    <ScrollView  horizontal={true} style={styles.scroll} showsHorizontalScrollIndicator={false}>
@@ -314,12 +300,28 @@ const handleValidate = async () => {
               </View>
             </Camera>
           );
-        
         }
+
 const styles = StyleSheet.create({
   // Caméra
 camera: {
   flex: 1,
+  },
+container : {
+  flex :1 ,
+  alignItems: 'center',
+  },
+background:{
+  width: "100%",
+  height: "100%",
+  },
+button: {
+  width: 44,
+  height: 44,
+  alignItems: 'center',
+  justifyContent: 'center',
+  backgroundColor: 'rgba(0, 0, 0, 0.2)',
+  borderRadius: 50,
   },
 buttonsContainer: {
   flex: 0.1,
@@ -330,34 +332,61 @@ buttonsContainer: {
   paddingLeft: 20,
   paddingRight: 20,
   },
-button: {
-  width: 44,
-  height: 44,
+cardAbout: {
+  width: 350,
+  height: 150,
+  justifyContent: 'center',
+  alignItems: 'center',
+  margin: 10,
+  },
+crayon :{
+  width:20,
+  height:20,
+  },
+favoris :{
+  fontSize:20,
+  marginTop: "8%",
+  paddingLeft: 20,
+  color: "#7B7B7B",
+  },
+image :{
+  width:100,
+  height:100,
+  backgroundColor: "#fff",
+  borderRadius: 50,
+  marginLeft : 20,
+  },
+inputView: {
+  justifyContent: 'center',
+  alignItems: 'center',
+  width : "80%",
+  margin: 10,
+  borderRadius: 20,
+  },
+itemName: {
+  fontWeight: 'bold',
+  marginRight: 100,
+  fontSize: 20,
+  },
+logos :{
+  margin: 20,
+  height:70,
+  width :90,
   alignItems: 'center',
   justifyContent: 'center',
-  backgroundColor: 'rgba(0, 0, 0, 0.2)',
-  borderRadius: 50,
   },
-snapContainer: {
-flex: 1,
-alignItems: 'center',
-justifyContent: 'flex-end',
-paddingBottom: 25,
+picture : {
+  flexDirection: 'row',
+  justifyContent: 'center',
+  alignItems: 'center',
+  width: '80%',
+  marginVertical: 10
   },
-
- container : {
-    flex :1 ,
-    alignItems: 'center',
-    },
-  background:{
-      width: "100%",
-      height: "100%",
-    },
-  darkBg :{
-      backgroundColor: 'black',
-  },
-  lightBg:{
-      backgroundColor: '#E8E8E8',
+removeButton: {
+  color: 'black',
+  fontWeight: 'bold',
+  marginLeft: 10,
+  fontSize: 16,
   },
 return : {
   width:40,
@@ -367,20 +396,142 @@ return : {
   marginTop: "8%",
   borderRadius: 100,
   },
-darkReturn:{
-  backgroundColor:"#2E2E2E",
-  },
-lightReturn :{
-  backgroundColor: '#fff',
+scroll:{
+  marginLeft: 40,
+  marginRight : 40,
+  marginTop: 10,
   },
 scrollContainer: {
   alignItems: 'center',
   marginTop: 5,
   },
-scroll:{
-  marginLeft: 40,
-  marginRight : 40,
+selectedImageContainer: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  marginVertical: 5,
+  },
+selectedImagesContainer: {
+  marginVertical: 10,
+  alignItems: 'center',
+  width: 300,
+  marginBottom: 60,
+  },
+snapContainer: {
+  flex: 1,
+  alignItems: 'center',
+  justifyContent: 'flex-end',
+  paddingBottom: 25,
+  },
+sports: {
+  display: 'none'
+  },
+sportIcon: {
+  width:60,
+  height:60,
+  },
+// darkmode
+darkBg :{
+  backgroundColor: 'black',
+  },
+lightBg:{
+  backgroundColor: '#E8E8E8',
+  },
+darkbutton: {
+  justifyContent: 'center',
+  alignItems: 'center',
+  width: 150,
+  height: 50,
+  borderRadius: 25,
+  marginTop: 20,
+  marginBottom: 40,
+  elevation: 15,
+  backgroundColor: '#BF5000',
+  shadowColor: '#FF6100',
+  shadowOffset: { width: 50, height: 5,},
+  shadowOpacity: 0.0001,
+  },
+darkImg:{
+  // backgroundColor: '#2E2E2E',
+  borderColor: "#F4A100",
+  },
+lightImg:{
+  // backgroundColor: '#fff',
+  // borderColor: "#E8E8E8",
+  },
+darkInput:{
   marginTop: 10,
+  fontSize : 15,
+  backgroundColor: '#2E2E2E',
+  width : "80%",
+  margin : "3%",
+  height: 40,
+  borderRadius: 13,
+  paddingLeft: 15,
+  marginBottom: 10, 
+  color: 'white',
+  },
+lightInput:{
+  marginTop: 20,
+  fontSize : 15,
+  backgroundColor: '#E8E8E8',
+  width : "80%",
+  margin : "3%",
+  height: 40,
+  borderRadius: 13,
+  paddingLeft: 15,
+  marginBottom: 10, 
+  color: 'black', 
+  },
+darkInputapropos: {
+  marginTop: 30,
+  fontSize : 15,
+  backgroundColor: '#2E2E2E',
+  width : "85%",
+  margin : "3%",
+  height: 150,
+  borderRadius: 13,
+  paddingLeft: 15,
+  marginBottom: 50, 
+  color: 'white',
+  },
+lightInputapropos: {
+  marginTop: 20,
+  fontSize : 15,
+  backgroundColor: '#E8E8E8',
+width : "85%",
+  margin : "3%",
+  height: 200,
+  borderRadius: 13,
+  paddingLeft: 15,
+  marginBottom: 10, 
+  color: 'black', 
+  },
+darkItemName: {
+  color: '#FF6100'
+  },
+lightItemName: {
+  color: 'black'
+  },
+darkPicture:{
+  backgroundColor:"#505050",
+  },
+lightPicture:{
+  backgroundColor: '#fff',
+  },
+darkRemoveButton: {
+  color: '#FF6100',
+  textShadowColor: 'white',  //'rgba(255, 165, 0, 1)', Couleur de l'ombre (noir avec opacité 0.75)
+  textShadowOffset: { width: 0.5, height: 1 }, // Décalage de l'ombre (effet relief)
+  textShadowRadius: 20,
+  },
+lightRemoveButton: {
+  color: 'black'
+  },
+darkReturn:{
+  backgroundColor:"#2E2E2E",
+  },
+lightReturn :{
+  backgroundColor: '#fff',
   },
 darksignin: {
   width : "80%",
@@ -406,188 +557,14 @@ lightsignin: {
   textShadowOffset: { width: 0.5, height: 0.5 }, // Décalage de l'ombre (effet relief)
   textShadowRadius: 1, // Rayon de l'ombre (effet relief)
   },
-darkPicture:{
-  backgroundColor:"#505050",
-  },
-lightPicture:{
-  backgroundColor: '#fff',
-  },
-picture : {
-  flexDirection: 'row',
-  justifyContent: 'center',
-  alignItems: 'center',
-  width: '80%',
-  marginVertical: 10
-  },
-crayon :{
-  width:20,
-  height:20,
-  },
-inputView: {
-  justifyContent: 'center',
-  alignItems: 'center',
-  width : "80%",
-  margin: 10,
-  borderRadius: 20,
-  },
-input: {
-  },
-darkInput:{
-  marginTop: 10,
-  fontSize : 15,
-  backgroundColor: '#2E2E2E',
-  width : "80%",
-  margin : "3%",
-  height: 40,
-  borderRadius: 13,
-  paddingLeft: 15,
-  marginBottom: 10, 
-  color: 'white',
-
-},
-lightInput:{
-  marginTop: 20,
-  fontSize : 15,
-  backgroundColor: '#E8E8E8',
-  width : "80%",
-  margin : "3%",
-  height: 40,
-  borderRadius: 13,
-  paddingLeft: 15,
-  marginBottom: 10, 
-  color: 'black', 
-},
-cardAbout: {
-  width: 350,
-  height: 150,
-  justifyContent: 'center',
-  alignItems: 'center',
-  margin: 10,
-  },
-darkInputapropos :{
-  marginTop: 30,
-  fontSize : 15,
-  backgroundColor: '#2E2E2E',
-  width : "85%",
-  margin : "3%",
-  height: 150,
-  borderRadius: 13,
-  paddingLeft: 15,
-  marginBottom: 50, 
-  color: 'white',
-},
-lightInputapropos:{
-  marginTop: 20,
-  fontSize : 15,
-  backgroundColor: '#E8E8E8',
-width : "85%",
-  margin : "3%",
-  height: 200,
-  borderRadius: 13,
-  paddingLeft: 15,
-  marginBottom: 10, 
-  color: 'black', 
-  },
-favoris :{
-  fontSize:20,
-  marginTop: "8%",
-  paddingLeft: 20,
-  color: "#7B7B7B",
-  },
-logos :{
-  margin: 20,
-  height:70,
-  width :90,
-  alignItems: 'center',
-  justifyContent: 'center',
-  },
-sportIcon: {
-  width:60,
-  height:60,
-  },
-sports: {
-display: 'none'
-  },
-itemName: {
-  fontWeight: 'bold',
-  marginRight: 100,
-  fontSize: 20,
-  },
-darkItemName: {
-  color: '#FF6100'
-  },
-lightItemName: {
-  color: 'black'
-  },
-darkRemoveButton: {
-  color: '#FF6100',
-  textShadowColor: 'white',  //'rgba(255, 165, 0, 1)', Couleur de l'ombre (noir avec opacité 0.75)
-  textShadowOffset: { width: 0.5, height: 1 }, // Décalage de l'ombre (effet relief)
-  textShadowRadius: 20,
-  },
-lightRemoveButton: {
-  color: 'black'
-  }, 
-selectedImageContainer: {
-  flexDirection: 'row',
-  alignItems: 'center',
-  marginVertical: 5,
-  },
-selectedImagesContainer: {
-  marginVertical: 10,
-  alignItems: 'center',
-  width: 300,
-  marginBottom: 60,
-  },
-darkSelectedImagesContainer: {
-  // backgroundColor: '#2E2E2E'
-  },
-lightSelectedImagesContainer: {
-  // backgroundColor: '#FFFFFF'
-  },
-removeButton: {
-  color: 'black',
-  fontWeight: 'bold',
-  marginLeft: 10,
-  fontSize: 16,
-  },
-darkbutton: {
-  justifyContent: 'center',
-  alignItems: 'center',
-  width: 150,
-  height: 50,
-  borderRadius: 25,
-  marginTop: 20,
-  marginBottom: 40,
-  elevation: 15,
-  backgroundColor: '#BF5000',
-  shadowColor: '#FF6100',
-  shadowOffset: { width: 50, height: 5,},
-  shadowOpacity: 0.0001,
-  },
-lightTextButton: {
-  fontSize : 15,
-  color: 'white',
-  fontWeight: 'bold',
-  },
 darkTextButton: {
   fontSize : 15,
   color: '#2E2E2E',
   fontWeight: 'bold',
   },
-darkImg:{
-    // backgroundColor: '#2E2E2E',
-    borderColor: "#F4A100",
-  },
-lightImg:{
-    // backgroundColor: '#fff',
-    // borderColor: "#E8E8E8",
-  },
-image :{
-  width:100,
-  height:100,
-  backgroundColor: "#fff",
-  borderRadius: 50,
-  marginLeft : 20,
-  },
+lightTextButton: {
+  fontSize : 15,
+  color: 'white',
+  fontWeight: 'bold',
+  } 
 });

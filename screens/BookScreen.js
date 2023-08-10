@@ -104,7 +104,7 @@ export default function BookScreen({ navigation }) {
                 startTime: booking.start,
                 coachingPlace: bookedCoach.coachingPlaces[0], // pouvoir séléctionner l'endroit'
                 coachID: bookedCoach.coachID,
-                selectedSport: bookedCoach.teachedSport[0], // pouvoir séléctionner le sport 
+                selectedSport: bookedCoach.teachedSport[0][0], // pouvoir séléctionner le sport 
             })
         })
         .then(response => response.json())

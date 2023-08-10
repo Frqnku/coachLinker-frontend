@@ -176,8 +176,7 @@ if (!hasPermission || !isFocused) {
 
           <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"#7B7B7B"}]}>Taux horaire :{profilCoach.price} €</Text>
 
-          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"#7B7B7B"}]}>Siret : 
-          </Text>
+          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"#7B7B7B"}]}>Siret : :{profilCoach.siret} </Text>
     
         <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "#FF711A":"black"}]}>Informations de paiements</Text>
           <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"#7B7B7B"}]}>IBAN :{profilCoach.iban} </Text>

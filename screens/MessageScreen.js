@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import socketIOClient from "socket.io-client";
 import { useSelector } from 'react-redux';
 
-const socket = socketIOClient("http://192.168.10.113:3000")
+const socket = socketIOClient("http://192.168.1.145:3000")
  
 export default function MessageScreen(params, {navigation}) { 
 

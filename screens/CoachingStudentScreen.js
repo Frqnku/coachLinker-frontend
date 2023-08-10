@@ -156,10 +156,12 @@ lightDateTime: {
 darkFirstname: {
     fontSize: 22,
     color: '#FFFFFF',
+    height: 28
   },
 lightFirstname: {
     fontSize: 22,
     color: '#000000',
+    height: 28
   },
 darkGeneral: {
     backgroundColor: '#2E2E2E'

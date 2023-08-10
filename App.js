@@ -15,13 +15,14 @@ import users from './reducers/users';
 import coachs from './reducers/coachs';
 import student from './reducers/student';
 import booking from './reducers/booking';
+import { LogBox } from 'react-native';
 
-
+LogBox.ignoreAllLogs()
 // Redux Persist Config
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  blacklist: ['darkMode','users','student','coachs', 'booking'] 
+  blacklist: ['users','student','coachs', 'booking'] 
 };
 const rootReducer = combineReducers({
   darkMode,

@@ -186,6 +186,7 @@ export default function StudentMenuScreen({ navigation }) {
               placeholderTextColor={isDarkMode ? '#AAAAAA' : '#7B7B7B'}
               onChangeText={value => setCity(value)}
               value={city}
+              color={isDarkMode ? '#fff' :  '#000'}
             />
             <TouchableOpacity onPress={handleSubmit}>
                 <FontAwesome name='search' size={24} color={isDarkMode ? '#AAAAAA' : '#7B7B7B'}/>

@@ -30,9 +30,18 @@ const styles = StyleSheet.create({
         backgroundColor: 'grey'
     },
     darkText: {
-        color: '#fff'
+        color : '#AAAAAA',
+        fontWeight: 'bold',
+        textShadowColor: 'rgba(255, 165, 0, 1)',  //'rgba(255, 165, 0, 1)', Couleur de l'ombre (noir avec opacité 0.75)
+        textShadowOffset: { width: 0.5, height: 0.5 }, // Décalage de l'ombre (effet relief)
+        textShadowRadius: 20, // Rayon de l'ombre (effet relief)
     },
     lightText: {
-        color: '#000'
+        color : 'black',
+        fontWeight: 'bold',
+        // backgroundColor: '#58FD0B',
+        textShadowColor: 'rgba(255, 100, 0, 0.5)',  //'rgba(255, 165, 0, 1)', Couleur de l'ombre (noir avec opacité 0.75)
+        textShadowOffset: { width: 0.5, height: 0.5 }, // Décalage de l'ombre (effet relief)
+        textShadowRadius: 1, // Rayon de l'ombre (effet relief)
     },
 })

@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { backend_address } from '../backendAddress';
 
 export default function BookScreen({ navigation }) {
+    const isDarkMode = useSelector(state => state.darkMode.value)
     const bookedCoach = useSelector(state => state.coachs.value.bookedCoach)
     const [planningCoach, setPlanningCoach] = useState([])
     const [unvaible, setUnvaible] = useState([])
@@ -11,7 +12,7 @@ export default function BookScreen({ navigation }) {
     const [bookPlace, setBookPlace] = useState('Parc')
     const [selectedSport, setSelectedSport] = useState('Boxe')
     const token = useSelector((state) => state.users.value.token);
-    console.log(token, bookedCoach, booking)
+    
     
 
     useEffect(() => {
@@ -23,7 +24,7 @@ export default function BookScreen({ navigation }) {
         })
         .then(response => response.json())
         .then(data => {
-            setPlanningCoach(data.data.days)
+            data ? setPlanningCoach(data.data.days) : setPlanningCoach([])
         })
 
         fetch(`${backend_address}/bookings/isAvaible`, {
@@ -36,7 +37,7 @@ export default function BookScreen({ navigation }) {
             setUnvaible(data.bookings)
         })
 
-    }, [])
+    }, [bookedCoach.coachID])
 
     const handleNavBack = () => {
         setBooking({})
@@ -64,23 +65,27 @@ export default function BookScreen({ navigation }) {
         if (day.startDay) {
             const hoursBetween = generateHoursBetween(day.startDay, day.endDay);
             return (
-                <View key={i}>
-                    <Text>{day.dayOfWeek}</Text>
+                <View key={i} style={styles.containTotal}>
+                    <View style={styles.dayWeek}>
+                        <Text style={styles.dayText}>   {day.dayOfWeek}</Text>
+                    </View>
+                    <View style={styles.containHour}>
                     {hoursBetween.map((hour, index) => {
                         const bookingExist = isBookingExist(day.dayOfWeek, hour);
                        
                             return (
-                                <>
+                                <View style={styles.hour}>
                                 {!bookingExist && <TouchableOpacity onPress={() => setBooking({date: day.dayOfWeek, start: hour})}>
                                     <Text key={index}>{hour}</Text>
                                 </TouchableOpacity>}
                                 {bookingExist && <Pressable>
-                                    <Text key={index} style={{color:  'grey'}}>{hour}</Text>
+                                    <Text key={index} style={{color: 'grey'}}>{hour}</Text>
                                 </Pressable>}
-                                </>
+                                </View>
                             )
                         
                     })}
+                    </View>
                 </View>
             )
         }
@@ -88,7 +93,7 @@ export default function BookScreen({ navigation }) {
 
     const handleBooking = () => {
         if(!booking.date) {
-            console.log('Choisissez une séance')
+            return
         }
         fetch(`${backend_address}/bookings/new`, {
             method: 'POST',
@@ -104,44 +109,120 @@ export default function BookScreen({ navigation }) {
         })
         .then(response => response.json())
         .then(data => {
-            console.log(data)
-            navigation.navigate('Congrats')
+            data.result && navigation.navigate('Congrats')
         })
     }
 
   return (
     <View style={styles.container}>
         <ScrollView contentContainerStyle={styles.scrollView}>
-            <Pressable style={styles.btnBack} onPress={handleNavBack}><Text>Retour</Text></Pressable>
-            <View>
-
+            <View style={styles.bttn}>
+                <TouchableOpacity style={styles.btnBack} onPress={handleNavBack}><Text style={[ isDarkMode ? styles.darkTextButton : styles.lightTextButton]}>Retour</Text></TouchableOpacity>
             </View>
-            <Text>BookScreen</Text>
-            <Text>{planning}</Text>
-            <TouchableOpacity onPress={handleBooking}>
-                <Text>Réserver ma séance</Text>
-            {booking.date && bookPlace && <Text>{booking.date} à {booking.start}</Text>}
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('Congrats')}><Text>CONFETTIS</Text></TouchableOpacity>
-        </ScrollView>
-        
+            {planning[0] ?
+            <View style={styles.contain}>
+                <View>{planning}</View>
+                <TouchableOpacity onPress={handleBooking} style={styles.bttnBook}>
+                    <Text style={styles.bttnBookText}>Réserver ma séance</Text>
+                    {booking.date && bookPlace && <Text>{booking.date} à {booking.start}</Text>}
+                </TouchableOpacity>
+            </View> : <Text>Aucune disponibilité</Text>}
+        </ScrollView> 
     </View>
   )
 }
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      paddingTop: 15
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingTop: 15
     },
-/*     scrollView: {
-        width: '100%'
-    }, */
+    scrollView: {
+        width: 400,
+        height: '100%',
+        flex: 1,
+        marginTop: 50,
+        justifyContent: 'flex-start',
+    },
+    containTotal: {
+        width: 350,
+        height: '40%',
+        backgroundColor:'#E8E8E8',
+        justifyContent: 'flex-start',
+        marginTop: 20,
+        borderRadius: 15
+    },
+    contain: {
+        flex: 1,
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        paddingTop: 15,
+    },
+    dayWeek: {
+        marginBottom: 20,
+        padding: 5,
+        backgroundColor: '#FF711A',
+        borderTopEndRadius: 15,
+        borderTopStartRadius: 15,
+    },
+    dayText: {
+        fontSize : 15,
+        color: 'white',
+    },
+    containHour: {
+        flex: 1,
+        marginLeft: 40,
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+    },
+    hour: {
+        width: 75,
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        padding: 12,
+        marginRight : 20,
+        marginBottom: 30,
+        backgroundColor: '#FFB182',
+        borderRadius: 15,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    bttn: {
+        marginLeft: 30
+    },
     btnBack: {
-        height: 50,
-        width: 100,
-        backgroundColor: 'red'
-    }
+        height: 30,
+        width: 60,
+        padding: 5,
+        backgroundColor: '#FF711A',
+        borderRadius: 25,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 20
+    },
+    lightTextButton: {
+        fontSize : 15,
+        color: 'white',
+      },
+    darkTextButton: {
+        fontSize : 15,
+        color: '#2E2E2E',
+      },
+      bttnBook: {
+        height: 40,
+        width: 200,
+        padding: 5,
+        backgroundColor: '#FF711A',
+        borderRadius: 25,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 20
+      },
+      bttnBookText: {
+        fontSize : 15,
+        color: 'white',
+        fontWeight: 'bold',
+      }
 })

@@ -8,7 +8,7 @@ export default function CongratsScreen({ navigation }) {
 
   return (
     <SafeAreaView style={[styles.container, isDarkMode ? styles.darkBg : styles.lightBg]}>
-      <ConfettiCannon count={400} origin={{x: -10, y: 0}} colors={['orange', '#ffd359', 'cream', '#FF711A']} fallSpeed={4000} explosionSpeed={100}/>
+      <ConfettiCannon count={400} origin={{x: -10, y: 0}} colors={['orange', '#ffd359', 'cream', '#FF711A']} fallSpeed={4000} explosionSpeed={100} fadeOut={true}/>
         <Text style={[styles.text, styles.congrats]}>Félicitations</Text>
         <Text style={[styles.text, isDarkMode ? styles.darkText : styles.lightText]}>Votre séance a été reservée avec succès !</Text>
         <Pressable onPress={() => navigation.navigate('TabNavigator', {screen: 'Agenda'})} style={styles.btnBack}><Text style={[styles.text, styles.darkText]}>Revenir au menu</Text></Pressable>

@@ -73,12 +73,12 @@ export default function BookScreen({ navigation }) {
                         const bookingExist = isBookingExist(day.dayOfWeek, hour);
                        
                             return (
-                                <View style={styles.hour}>
+                                <View style={[styles.hour, bookingExist ? styles.hour2 : styles.hour1]}>
                                 {!bookingExist && <TouchableOpacity onPress={() => setBooking({date: day.dayOfWeek, start: hour})}>
                                     <Text key={index}>{hour}</Text>
                                 </TouchableOpacity>}
                                 {bookingExist && <Pressable>
-                                    <Text style={styles.bookExist} key={index} >{hour}</Text>
+                                    <Text key={index} style={{color: 'grey'}}>{hour}</Text>
                                 </Pressable>}
                                 </View>
                             )
@@ -103,7 +103,7 @@ export default function BookScreen({ navigation }) {
                 startTime: booking.start,
                 coachingPlace: bookedCoach.coachingPlaces[0], // pouvoir séléctionner l'endroit'
                 coachID: bookedCoach.coachID,
-                selectedSport: bookedCoach.teachedSport[0][0], // pouvoir séléctionner le sport 
+                selectedSport: bookedCoach.teachedSport[0], // pouvoir séléctionner le sport 
             })
         })
         .then(response => response.json())
@@ -121,11 +121,11 @@ export default function BookScreen({ navigation }) {
             {planning[0] ?
             <View style={styles.contain}>
                 <View>{planning}</View>
+                {booking.date && bookPlace && <Text style={styles.dateBook}>Je réserve le {booking.date.toLowerCase()} à {booking.start}.</Text>}
                 <TouchableOpacity onPress={handleBooking} style={styles.bttnBook}>
                     <Text style={styles.bttnBookText}>Réserver ma séance</Text>
-                    {booking.date && bookPlace && <Text>{booking.date} à {booking.start}</Text>}
                 </TouchableOpacity>
-            </View> : <Text>Aucune disponibilité</Text>}
+            </View> : <Text>   Aucune disponibilité</Text>}
         </ScrollView> 
     </View>
   )
@@ -134,6 +134,8 @@ export default function BookScreen({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        width: '100%',
+        height: '100%',
         justifyContent: 'center',
         alignItems: 'center',
         paddingTop: 15
@@ -141,26 +143,11 @@ const styles = StyleSheet.create({
     bookExist : {
         color: 'grey',
         backgroundColor:'red',
-        },
-    btnBack: {
-        height: 30,
-        width: 60,
-        padding: 5,
-        backgroundColor: '#FF711A',
-        borderRadius: 25,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginBottom: 20
-        },
-    bttn: {
-        marginLeft: 30
-        },
-    bttnBook: {
-        height: 40,
-        width: 200,
-        padding: 5,
-        backgroundColor: '#FF711A',
-        borderRadius: 25,
+    },
+    container: {
+        flex: 1,
+        width: '100%',
+        height: '100%',
         justifyContent: 'center',
         alignItems: 'center',
         marginBottom: 20
@@ -208,19 +195,30 @@ const styles = StyleSheet.create({
         padding: 12,
         marginRight : 20,
         marginBottom: 30,
-        backgroundColor: '#FFB182',
         borderRadius: 15,
         justifyContent: 'center',
         alignItems: 'center',
-        },
-    scrollView: {
-        width: 400,
-        height: '100%',
-        flex: 1,
-        marginTop: 50,
-        justifyContent: 'flex-start',
-        },
-    // darkmode
+    },
+    hour1: {
+        backgroundColor: '#FFB182',
+    },
+    hour2: {
+        backgroundColor: 'lightgrey',
+        color: 'grey'
+    },
+    bttn: {
+        marginLeft: 30
+    },
+    btnBack: {
+        height: 30,
+        width: 60,
+        padding: 5,
+        backgroundColor: '#FF711A',
+        borderRadius: 25,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 20
+    },
     lightTextButton: {
         fontSize : 15,
         color: 'white',
@@ -228,5 +226,24 @@ const styles = StyleSheet.create({
     darkTextButton: {
         fontSize : 15,
         color: '#2E2E2E',
-        },
+      },
+      bttnBook: {
+        height: 40,
+        width: 200,
+        padding: 5,
+        backgroundColor: '#FF711A',
+        borderRadius: 25,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 20,
+        marginTop: 25
+      },
+      bttnBookText: {
+        fontSize : 15,
+        color: 'white',
+        fontWeight: 'bold',
+      },
+      dateBook: {
+        fontSize: 18
+      }
 })

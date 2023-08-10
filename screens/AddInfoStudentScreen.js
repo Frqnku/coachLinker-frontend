@@ -453,6 +453,7 @@ darkbutton: {
 lightbutton: {
   justifyContent: 'center',
   alignItems: 'center',
+  width: 150,
   height: 50,
   borderRadius: 25,
   marginTop: 20,

@@ -44,7 +44,22 @@ const styles = StyleSheet.create({
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-    },
+      },
+    bottom: {
+      justifyContent: 'space-around',
+      alignItems: 'center',
+      width: '100%',
+      height: 200,
+      marginTop: 15
+      },
+    btnLocation: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: '80%',
+      height: 70,
+      backgroundColor: '#F4A100',
+      borderRadius: 5
+      },
     cards: {
       width: '80%',
       paddingVertical: 25,
@@ -56,46 +71,33 @@ const styles = StyleSheet.create({
       shadowOffset: { width: 50, height: 15 },
       shadowOpacity: 0.0001,
     },
-    bottom: {
-      justifyContent: 'space-around',
-      alignItems: 'center',
-      width: '100%',
-      height: 200,
-      marginTop: 15
+    text: {
+      fontSize: 16,
+      fontWeight: 500
     },
-    btnLocation: {
-      justifyContent: 'center',
-      alignItems: 'center',
-      width: '80%',
-      height: 70,
-      backgroundColor: '#F4A100',
-      borderRadius: 5
+    title: {
+      fontSize: 20,
+      fontWeight: 600
     },
+    // darkmode
     darkBg: {
       backgroundColor: '#000'
     },
-    darkText: {
-        color: '#fff'
-    },
-    darkCard: {
-        backgroundColor: '#2E2E2E'
-    },
     lightBg: {
-        backgroundColor: '#f2f2f2'
+      backgroundColor: '#f2f2f2'
     },
-    lightCard: {
-        backgroundColor: '#fff'
-    },
-    lightText: {
-        color: '#000'
-    },
-    text: {
-        fontSize: 16,
-        fontWeight: 500
-    },
-    title: {
-        fontSize: 20,
-        fontWeight: 600
+    darkbutton: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: '70%',
+      height: 40,
+      backgroundColor: '#BF5000',
+      borderRadius: 25,
+      marginTop: 10,
+      elevation: 15,
+      shadowColor: '#FF6100',
+      shadowOffset: { width: 50, height: 5 },
+      shadowOpacity: 0.0001,
     },
     lightbutton: {
       justifyContent: 'center',
@@ -110,18 +112,17 @@ const styles = StyleSheet.create({
       shadowOffset: { width: 50, height: 5 },
       shadowOpacity: 0.0001,
     },
-    darkbutton: {
-      justifyContent: 'center',
-      alignItems: 'center',
-      width: '70%',
-      height: 40,
-      backgroundColor: '#BF5000',
-      borderRadius: 25,
-      marginTop: 10,
-      elevation: 15,
-      shadowColor: '#FF6100',
-      shadowOffset: { width: 50, height: 5 },
-      shadowOpacity: 0.0001,
+    darkCard: {
+      backgroundColor: '#2E2E2E'
+    },
+    lightCard: {
+      backgroundColor: '#fff'
+    },
+    darkText: {
+        color: '#fff'
+    },
+    lightText: {
+        color: '#000'
     },
 })
 

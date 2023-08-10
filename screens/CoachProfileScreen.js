@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, KeyboardAvoidingView, Text, View, TextInput, ScrollView, TouchableOpacity, Image} from 'react-native'
+import { StyleSheet, KeyboardAvoidingView, Text, View, ScrollView, TouchableOpacity, Image} from 'react-native'
 import { useState, useRef, useEffect } from 'react';
 import { Camera, CameraType, FlashMode } from 'expo-camera';
 import { useIsFocused } from "@react-navigation/native";
@@ -61,11 +61,11 @@ export default function CoachProfileScreen() {
       }
     };
 
- 
 const requestCameraPermission = async () => { 
   const { status } = await Camera.requestCameraPermissionsAsync();
   setHasPermission(status === 'granted');
 };
+
 const takePicture = async () => {
     const photo = await cameraRef.takePictureAsync({ quality: 0.3 });
     const formData = new FormData();
@@ -76,14 +76,11 @@ formData.append('photoFromFront',{
   type: 'image/jpeg',
 });
 
-console.log('formData', formData)
-
 fetch(`${backend_address}/upload`, {
   method: 'POST',
   body: formData,
 }).then((response) => response.json())
   .then((data) => { 
-    console.log(data)
     if (data.result) {
       dispatch(signUp({image: data.url}))
       dispatch(addPhoto(data.url));
@@ -124,7 +121,6 @@ useEffect(() => {
         city : data.data.city,
         coachingPlaces : data.data.coachingPlaces,
        }))
-        
     });
 }, []);
 
@@ -176,8 +172,7 @@ if (!hasPermission || !isFocused) {
 
           <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"#7B7B7B"}]}>Taux horaire :{profilCoach.price} €</Text>
 
-          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"#7B7B7B"}]}>Siret : 
-          </Text>
+          <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"#7B7B7B"}]}>Siret : :{profilCoach.siret} </Text>
     
         <Text style={[styles.titre, isDarkMode ? styles.darkText : styles.lightText,{color:isDarkMode ? "#FF711A":"black"}]}>Informations de paiements</Text>
           <Text style={[ isDarkMode ? styles.darkInput : styles.lightInput,{color:isDarkMode ? "white":"#7B7B7B"}]}>IBAN :{profilCoach.iban} </Text>
@@ -212,8 +207,6 @@ return (
         <FontAwesome name='circle-thin' size={95} color='#ffffff' />
       </TouchableOpacity>
     </View>
-
-    
   </Camera>
 );
 }
@@ -223,37 +216,18 @@ const styles = StyleSheet.create({
     flex:1,
     alignItems: 'center',
     },
-  background:{
-    width: "100%",
-    height: "100%",
-    },
-  darkBg :{
-    backgroundColor: 'black',
-    },
-  lightBg:{
-    backgroundColor: '#E8E8E8',
-    },
-  return : {
-    width:40,
-    height:40,
-    alignItems: "center",
-    marginLeft: "3%",
-    marginTop: "8%",
-    borderRadius: 100,
-    },
-  scroll:{
-    marginLeft: 40,
-    marginRight : 40,
-    marginTop: 10,
-    },
-  scrollContainer: {
-    alignItems: 'center',
+  camera: {
+    flex: 1
     },
   aPropos: {
     height: 100,
     width: 350,
     backgroundColor: '#F2F2F2',
     borderRadius: 13
+    },
+  background:{
+    width: "100%",
+    height: "100%",
     },
   buttonsContainer: {
     flex: 0.1,
@@ -271,8 +245,25 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 20,
     },
-  camera: {
-    flex: 1
+  crayon :{
+    width: 10,
+    height:10,
+    marginLeft : 20,
+    },
+  image :{
+    width:50,
+    height:50,
+    backgroundColor: "#fff",
+    borderRadius: 50,
+    marginLeft : 20,
+    marginTop : 40
+    },
+  inputView: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width : "100%",
+    margin: 10,
+    borderRadius: 20,
     },
   picture : {
     flexDirection: 'row',
@@ -283,33 +274,27 @@ const styles = StyleSheet.create({
     marginLeft: 40,
     marginRight : 40,
     },
-  image :{
-    width:50,
-    height:50,
-    backgroundColor: "#fff",
-    borderRadius: 50,
-    marginLeft : 20,
-    marginTop : 40
-    },
-  crayon :{
-    width: 10,
-    height:10,
-    marginLeft : 20,
-    },
-  input: {
-    },
-  inputView: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width : "100%",
-    margin: 10,
-    borderRadius: 20,
-    },
   removeButton: {
     color: 'black',
     fontWeight: 'bold',
     marginLeft: 10,
     fontSize: 16,
+    },
+  return : {
+    width:40,
+    height:40,
+    alignItems: "center",
+    marginLeft: "3%",
+    marginTop: "8%",
+    borderRadius: 100,
+    },
+  scroll:{
+    marginLeft: 40,
+    marginRight : 40,
+    marginTop: 10,
+    },
+  scrollContainer: {
+    alignItems: 'center',
     },
   selectedImagesContainer: {
     marginVertical: 10,
@@ -340,12 +325,34 @@ const styles = StyleSheet.create({
   lightBg:{
     backgroundColor: '#E8E8E8',
     },
-  darkPicture:{
-    backgroundColor:"#505050",
+  darkbutton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 150,
+    height: 50,
+    borderRadius: 25,
+    marginTop: 20,
+    marginBottom: 40,
+    elevation: 15,
+    backgroundColor: '#BF5000',
+    shadowColor: '#FF6100',
+    shadowOffset: { width: 50, height: 5,},
+    shadowOpacity: 0.0001,
     },
-  lightPicture:{
-    backgroundColor: '#fff',
+  lightbutton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '30%',
+    height: 40,
+    backgroundColor: '#FF711A',
+    borderRadius: 25,
+    marginTop: 30,
+    elevation: 15,
+    shadowColor: '#FF6100',
+    shadowOffset: { width: 50, height: 5 },
+    shadowOpacity: 0.0001,
     },
+  
   darkInput:{
     marginTop: 10,
     textAlignVertical: 'center',
@@ -392,11 +399,11 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     marginBottom: 50, 
     },
-  darkText: {
-    color: '#FFFFFF'
+  darkPicture:{
+    backgroundColor:"#505050",
     },
-  lightText: {
-    color: 'black'
+  lightPicture:{
+    backgroundColor: '#fff',
     },
   darksignin: {
     width : "80%",
@@ -423,33 +430,12 @@ const styles = StyleSheet.create({
     textShadowOffset: { width: 0.5, height: 0.5 }, // Décalage de l'ombre (effet relief)
     textShadowRadius: 1, // Rayon de l'ombre (effet relief)
     },
-  lightbutton: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '30%',
-    height: 40,
-    backgroundColor: '#FF711A',
-    borderRadius: 25,
-    marginTop: 30,
-    elevation: 15,
-    shadowColor: '#FF6100',
-    shadowOffset: { width: 50, height: 5 },
-    shadowOpacity: 0.0001,
-    },
-  darkbutton: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 150,
-    height: 50,
-    borderRadius: 25,
-    marginTop: 20,
-    marginBottom: 40,
-    elevation: 15,
-    backgroundColor: '#BF5000',
-    shadowColor: '#FF6100',
-    shadowOffset: { width: 50, height: 5,},
-    shadowOpacity: 0.0001,
-    },
+    darkText: {
+      color: '#FFFFFF'
+      },
+    lightText: {
+      color: 'black'
+      },   
 })
 
 

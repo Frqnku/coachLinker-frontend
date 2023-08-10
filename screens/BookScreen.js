@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, View, KeyboardAvoidingView, ScrollView, TextInput, Pressable, ActivityIndicator, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Pressable, TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux';
 import { backend_address } from '../backendAddress';
 
@@ -44,7 +44,6 @@ export default function BookScreen({ navigation }) {
         navigation.navigate('TabNavigator', {screen: 'Menu'})
     }
 
-    
     function generateHoursBetween(startHour, endHour) {
         const start = parseInt(startHour.split(":")[0]);
         const end = parseInt(endHour.split(":")[0]);
@@ -53,7 +52,6 @@ export default function BookScreen({ navigation }) {
         for (let i = start; i <= end; i++) {
             hours.push(`${i.toString().padStart(2, "0")}:00`);
         }
-    
         return hours;
     }
 
@@ -64,6 +62,7 @@ export default function BookScreen({ navigation }) {
     const planning = planningCoach.map((day, i ) => {
         if (day.startDay) {
             const hoursBetween = generateHoursBetween(day.startDay, day.endDay);
+            
             return (
                 <View key={i} style={styles.containTotal}>
                     <View style={styles.dayWeek}>
@@ -74,7 +73,7 @@ export default function BookScreen({ navigation }) {
                         const bookingExist = isBookingExist(day.dayOfWeek, hour);
                        
                             return (
-                                <View style={styles.hour}>
+                                <View style={[styles.hour, bookingExist ? styles.hour2 : styles.hour1]}>
                                 {!bookingExist && <TouchableOpacity onPress={() => setBooking({date: day.dayOfWeek, start: hour})}>
                                     <Text key={index}>{hour}</Text>
                                 </TouchableOpacity>}
@@ -104,7 +103,7 @@ export default function BookScreen({ navigation }) {
                 startTime: booking.start,
                 coachingPlace: bookedCoach.coachingPlaces[0], // pouvoir séléctionner l'endroit'
                 coachID: bookedCoach.coachID,
-                selectedSport: bookedCoach.teachedSport[0][0], // pouvoir séléctionner le sport 
+                selectedSport: bookedCoach.teachedSport[0], // pouvoir séléctionner le sport 
             })
         })
         .then(response => response.json())
@@ -122,11 +121,11 @@ export default function BookScreen({ navigation }) {
             {planning[0] ?
             <View style={styles.contain}>
                 <View>{planning}</View>
+                {booking.date && bookPlace && <Text style={styles.dateBook}>Je réserve le {booking.date.toLowerCase()} à {booking.start}.</Text>}
                 <TouchableOpacity onPress={handleBooking} style={styles.bttnBook}>
                     <Text style={styles.bttnBookText}>Réserver ma séance</Text>
-                    {booking.date && bookPlace && <Text>{booking.date} à {booking.start}</Text>}
                 </TouchableOpacity>
-            </View> : <Text>Aucune disponibilité</Text>}
+            </View> : <Text>   Aucune disponibilité</Text>}
         </ScrollView> 
     </View>
   )
@@ -135,17 +134,41 @@ export default function BookScreen({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        width: '100%',
+        height: '100%',
         justifyContent: 'center',
         alignItems: 'center',
         paddingTop: 15
+        },
+    bookExist : {
+        color: 'grey',
+        backgroundColor:'red',
     },
-    scrollView: {
-        width: 400,
-        height: '100%',
+    container: {
         flex: 1,
-        marginTop: 50,
-        justifyContent: 'flex-start',
-    },
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 20
+        },
+    bttnBookText: {
+        fontSize : 15,
+        color: 'white',
+        fontWeight: 'bold',
+        },
+    contain: {
+        flex: 1,
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        paddingTop: 15,
+        },
+    containHour: {
+        flex: 1,
+        marginLeft: 40,
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        },
     containTotal: {
         width: 350,
         height: '40%',
@@ -153,30 +176,18 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         marginTop: 20,
         borderRadius: 15
-    },
-    contain: {
-        flex: 1,
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        paddingTop: 15,
-    },
+        },
+    dayText: {
+        fontSize : 15,
+        color: 'white',
+        },
     dayWeek: {
         marginBottom: 20,
         padding: 5,
         backgroundColor: '#FF711A',
         borderTopEndRadius: 15,
         borderTopStartRadius: 15,
-    },
-    dayText: {
-        fontSize : 15,
-        color: 'white',
-    },
-    containHour: {
-        flex: 1,
-        marginLeft: 40,
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-    },
+        },
     hour: {
         width: 75,
         flexDirection: 'row',
@@ -184,10 +195,16 @@ const styles = StyleSheet.create({
         padding: 12,
         marginRight : 20,
         marginBottom: 30,
-        backgroundColor: '#FFB182',
         borderRadius: 15,
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    hour1: {
+        backgroundColor: '#FFB182',
+    },
+    hour2: {
+        backgroundColor: 'lightgrey',
+        color: 'grey'
     },
     bttn: {
         marginLeft: 30
@@ -205,7 +222,7 @@ const styles = StyleSheet.create({
     lightTextButton: {
         fontSize : 15,
         color: 'white',
-      },
+        },
     darkTextButton: {
         fontSize : 15,
         color: '#2E2E2E',
@@ -218,11 +235,15 @@ const styles = StyleSheet.create({
         borderRadius: 25,
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 20
+        marginBottom: 20,
+        marginTop: 25
       },
       bttnBookText: {
         fontSize : 15,
         color: 'white',
         fontWeight: 'bold',
+      },
+      dateBook: {
+        fontSize: 18
       }
 })

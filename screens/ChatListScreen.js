@@ -6,8 +6,6 @@ import { LinearGradient } from 'expo-linear-gradient';
 export default function ChatListScreen  ({ navigation })  {
     const isDarkMode = useSelector(state => state.darkMode.value)
     const chats = useSelector((state) => state.booking.value.bookings)// Utilisez votre propre sélecteur ici
-    console.log("chats",chats);
-    // console.log("CHAAAAAAAT",chats)
 
     const DARK_COLORS = ["black", "#FF6100"];
         const LIGHT_COLORS = ["#FFF8EB", "#FF6100"];
@@ -50,33 +48,11 @@ export default function ChatListScreen  ({ navigation })  {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  darkTitle :{
-    color: 'white',
     },
-  lightTitle:{
-    color: "black",
-    },
- darkChat :{
-        backgroundColor: '#2E2E2E',
-        },
- lightChat:{
-        backgroundColor: 'white',
-        },
-  darkName:{
-            color: 'white',
-            },
-  lightName:{
-            color: "black",
-            },
   background:{
     width: "100%",
     height: "100%",
     },
-  scroller: {
-    paddingHorizontal: 10,
-    paddingVertical: 30,
-  },
   chatItem: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -85,7 +61,7 @@ const styles = StyleSheet.create({
     backgroundColor:'#fff',
     marginTop: 20,
     borderRadius: 30,
-  },
+    },
   chatName: {
     color: 'black',
     fontSize: 20,
@@ -93,25 +69,47 @@ const styles = StyleSheet.create({
     paddingLeft: 6,
     marginTop: "8%",
     paddingBottom: 20,
-  },
+    },
   image :{
     width:60,
     height:60,
     borderRadius: 50,
     marginLeft : 30,
     },
-    title:{
+  name:{
+    flexDirection:'row',
+    justifyContent: 'center',
+    },
+  picture :{
+    justifyContent: 'center',
+    },
+  scroller: {
+    paddingHorizontal: 10,
+    paddingVertical: 30,
+    },
+  title:{
     fontSize: 40,
     marginTop: 80,
     marginLeft: 100,
-       
     },
-    picture :{
-      justifyContent: 'center',
+// darkmode
+  darkChat :{
+    backgroundColor: '#2E2E2E',
     },
-    name:{
-      flexDirection:'row',
-      justifyContent: 'center',
+  lightChat:{
+    backgroundColor: 'white',
+    },
+  darkName:{
+    color: 'white',
+    },
+  lightName:{
+    color: "black",
+    },
+  darkTitle :{
+    color: 'white',
+    },
+  lightTitle:{
+    color: "black",
     },
 });
 
